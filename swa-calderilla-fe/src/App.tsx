@@ -2,6 +2,7 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
+import { OtherEndpointsClient } from './api/apiClient.g.nswag'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -10,21 +11,23 @@ function App() {
   const [error, setError] = useState<string | null>(null) // State to handle errors
 
   const fetchApiData = async () => {
-    setLoading(true)
-    setError(null) // Clear previous errors
+    setLoading(true);
+    setError(null); // Clear previous errors
     try {
-      const response = await fetch('/api/GetMessage')
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`)
-      }
-      const data = await response.json()
-      setApiResponse(JSON.stringify(data, null, 2)) // Format the response as JSON
+      // Instantiate the OtherEndpointsClient
+      const client = new OtherEndpointsClient();
+  
+      // Call the getMessage method
+      const message = await client.getMessage();
+  
+      // Update the state with the result
+      setApiResponse(message);
     } catch (err: any) {
-      setError(err.message)
+      setError(err.message || 'An unexpected error occurred');
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <>
