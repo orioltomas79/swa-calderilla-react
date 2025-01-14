@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { OtherEndpointsClient } from '../../api/apiClient.g.nswag';
+import { useState } from "react";
+import { OtherEndpointsClient } from "../../api/apiClient.g.nswag";
 
 const WelcomeMessage = () => {
   const [loading, setLoading] = useState(false);
@@ -14,7 +14,7 @@ const WelcomeMessage = () => {
       const message = await client.getMessage();
       setApiResponse(message);
     } catch (err: any) {
-      setError(err.message || 'An unexpected error occurred');
+      setError(err.message || "An unexpected error occurred");
     } finally {
       setLoading(false);
     }
@@ -23,11 +23,13 @@ const WelcomeMessage = () => {
   return (
     <div>
       <button onClick={fetchApiData} disabled={loading}>
-        {loading ? 'Loading...' : 'Fetch API Data'}
+        {loading ? "Loading..." : "Fetch API Data"}
       </button>
-      {error && <p style={{ color: 'red' }}>Error: {error}</p>}
+      {error && <p style={{ color: "red" }}>Error: {error}</p>}
       {apiResponse && (
-        <pre style={{ textAlign: 'left', marginTop: '1rem' }}>{apiResponse}</pre>
+        <pre style={{ textAlign: "left", marginTop: "1rem" }}>
+          {apiResponse}
+        </pre>
       )}
     </div>
   );
