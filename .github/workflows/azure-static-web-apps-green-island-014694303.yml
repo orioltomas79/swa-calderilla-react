@@ -22,7 +22,7 @@ jobs:
       - name: Run Unit Tests (Vitest)
         id: run-vite-tests
         run: |
-          pnpm test
+          npm test
       - name: Run Backend Unit Tests
         id: run-backend-tests
         run: |
