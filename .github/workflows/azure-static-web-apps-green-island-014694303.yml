@@ -19,8 +19,12 @@ jobs:
         with:
           submodules: true
           lfs: false
-      - name: Run Unit Tests
-        id: run-tests
+      - name: Run Unit Tests (Vitest)
+        id: run-vite-tests
+        run: |
+          pnpm test
+      - name: Run Backend Unit Tests
+        id: run-backend-tests
         run: |
           dotnet test ./swa-calderilla-api/Tests/Calderilla.Services.Tests
       - name: Build And Deploy
