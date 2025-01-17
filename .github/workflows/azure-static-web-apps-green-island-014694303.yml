@@ -19,6 +19,9 @@ jobs:
         with:
           submodules: true
           lfs: false
+      - name: Install Frontend Dependencies
+        run: |
+          npm --prefix ./swa-calderilla-fe install
       - name: Run Unit Tests (Vitest)
         id: run-vite-tests
         run: |
