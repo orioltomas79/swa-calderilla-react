@@ -24,7 +24,7 @@ namespace Calderilla.Api.Functions
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(string), Description = "Returns a message")]
         public IActionResult GetMessage([Microsoft.Azure.Functions.Worker.HttpTrigger(AuthorizationLevel.Anonymous, "get", "post")] HttpRequest req)
         {
-            _logger.LogInformation("C# HTTP trigger function processed a request.");
+            _logger.LogInformation("C# HTTP trigger function processed a request!");
 
             var claimsPrincipal = StaticWebAppsAuth.GetClaimsPrincipal(req);
 
