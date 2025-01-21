@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
 import { useState } from "react";
 import { OtherEndpointsClient } from "../../api/apiClient.g.nswag";
 
@@ -13,8 +14,12 @@ const WelcomeMessage = () => {
       const client = new OtherEndpointsClient();
       const message = await client.getMessage();
       setApiResponse(message);
-    } catch (err: any) {
-      setError(err.message || "An unexpected error occurred");
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(err.message || "An unexpected error occurred");
+      } else {
+        setError("An unexpected error occurred");
+      }
     } finally {
       setLoading(false);
     }
