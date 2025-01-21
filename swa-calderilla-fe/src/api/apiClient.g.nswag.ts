@@ -18,7 +18,7 @@ export class OtherEndpointsClient {
 
   constructor(
     baseUrl?: string,
-    http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> },
+    http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }
   ) {
     this.http = http ? http : (window as any);
     this.baseUrl = baseUrl ?? "http://localhost:7072/api";
@@ -65,7 +65,7 @@ export class OtherEndpointsClient {
           "An unexpected server error occurred.",
           status,
           _responseText,
-          _headers,
+          _headers
         );
       });
     }
@@ -83,7 +83,7 @@ export class UsersClient {
 
   constructor(
     baseUrl?: string,
-    http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> },
+    http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }
   ) {
     this.http = http ? http : (window as any);
     this.baseUrl = baseUrl ?? "http://localhost:7072/api";
@@ -130,7 +130,7 @@ export class UsersClient {
           "An unexpected server error occurred.",
           status,
           _responseText,
-          _headers,
+          _headers
         );
       });
     }
@@ -155,7 +155,7 @@ export class ApiException extends Error {
     status: number,
     response: string,
     headers: { [key: string]: any },
-    result: any,
+    result: any
   ) {
     super();
 
@@ -178,7 +178,7 @@ function throwException(
   status: number,
   response: string,
   headers: { [key: string]: any },
-  result?: any,
+  result?: any
 ): any {
   if (result !== null && result !== undefined) throw result;
   else throw new ApiException(message, status, response, headers, null);
