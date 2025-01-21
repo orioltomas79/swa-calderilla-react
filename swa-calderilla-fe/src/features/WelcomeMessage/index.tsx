@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import { useState } from "react";
-import { OtherEndpointsClient } from "../../api/apiClient.g.nswag";
+import apiClient from "../../api/apiClient";
 
 const WelcomeMessage = () => {
   const [loading, setLoading] = useState(false);
@@ -11,8 +11,8 @@ const WelcomeMessage = () => {
     setLoading(true);
     setError(null); // Clear previous errors
     try {
-      const client = new OtherEndpointsClient();
-      const message = await client.getMessage();
+
+      const message = await apiClient.otherEndpoints.getMessage();
       setApiResponse(message);
     } catch (err) {
       if (err instanceof Error) {
