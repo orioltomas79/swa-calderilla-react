@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "./App.css";
 import WelcomeMessage from "./features/WelcomeMessage";
+import Button from "@mui/material/Button";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -22,6 +23,9 @@ function App() {
           Edit <code>src/App.tsx</code> and save to test HMR
         </p>
         <WelcomeMessage />
+      </div>
+      <div>
+        <Button variant="contained">Hello Material UI</Button>
       </div>
     </>
   );
