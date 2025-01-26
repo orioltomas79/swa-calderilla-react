@@ -21,10 +21,10 @@ namespace Calderilla.Api.Functions.Dev
         }
 
         [Function(nameof(GetMessage))]
-        [OpenApiOperation(operationId: nameof(GetMessage), tags: [Constants.DevEndpointsTag], Summary = "Returns a message")]
+        [OpenApiOperation(operationId: nameof(GetMessage), tags: [ApiEndpoints.DevEndpointsTag], Summary = "Returns a message")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(string), Description = "Returns a message")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.InternalServerError, contentType: "application/json", bodyType: typeof(string), Description = "Returns a 500 error message")]
-        public IActionResult GetMessage([HttpTrigger(AuthorizationLevel.Anonymous, "get")] HttpRequest req)
+        public IActionResult GetMessage([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = ApiEndpoints.GetMessage)] HttpRequest req)
         {
             _logger.LogInformation("C# HTTP trigger function processed a request.");
 

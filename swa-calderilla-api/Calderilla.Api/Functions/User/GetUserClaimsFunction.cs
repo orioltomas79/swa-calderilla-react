@@ -2,6 +2,7 @@ using System.Net;
 using Calderilla.Api.Functions.Dev;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Extensions.Logging;
@@ -18,9 +19,9 @@ namespace Calderilla.Api.Functions.User
         }
 
         [Function(nameof(GetUserClaims))]
-        [OpenApiOperation(operationId: nameof(GetUserClaims), tags: [Constants.UsersEndpointsTag], Summary = "Gets current user claims")]
+        [OpenApiOperation(operationId: nameof(GetUserClaims), tags: [ApiEndpoints.UsersEndpointsTag], Summary = "Gets current user claims")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(UserClaims), Description = "The OK response")]
-        public IActionResult GetUserClaims([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)] HttpRequest req)
+        public IActionResult GetUserClaims([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = ApiEndpoints.GetUserClaims)] HttpRequest req)
         {
             _logger.LogInformation("GetUserClaims function processed a request.");
 

@@ -29,7 +29,7 @@ export class UserEndpointsClient {
    * @return The OK response
    */
   getUserClaims(): Promise<UserClaims> {
-    let url_ = this.baseUrl + "/GetUserClaims";
+    let url_ = this.baseUrl + "/user/get-user-claims";
     url_ = url_.replace(/[?&]$/, "");
 
     let options_: RequestInit = {
@@ -93,7 +93,7 @@ export class DevEndpointsClient {
    * Returns a 404 error
    */
   get404Error(): Promise<void> {
-    let url_ = this.baseUrl + "/Get404Error";
+    let url_ = this.baseUrl + "/dev/get-404-error";
     url_ = url_.replace(/[?&]$/, "");
 
     let options_: RequestInit = {
@@ -160,7 +160,7 @@ export class DevEndpointsClient {
    * @return Returns an exception
    */
   getThrowException(): Promise<string> {
-    let url_ = this.baseUrl + "/GetThrowException";
+    let url_ = this.baseUrl + "/dev/get-throw-exception";
     url_ = url_.replace(/[?&]$/, "");
 
     let options_: RequestInit = {
@@ -223,7 +223,7 @@ export class DevEndpointsClient {
    * @return Returns a message
    */
   getMessage(): Promise<string> {
-    let url_ = this.baseUrl + "/GetMessage";
+    let url_ = this.baseUrl + "/dev/get-message";
     url_ = url_.replace(/[?&]$/, "");
 
     let options_: RequestInit = {
