@@ -1,5 +1,6 @@
 ﻿using Microsoft.Azure.Functions.Worker.Builder;
 using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Builder;
 
 namespace Calderilla.Api
 {
@@ -11,6 +12,8 @@ namespace Calderilla.Api
             var builder = FunctionsApplication.CreateBuilder(args);
 
             builder.ConfigureFunctionsWebApplication();
+
+            builder.UseMiddleware<ExceptionHandlingMiddleware>();
 
             builder.Build().Run();
         }
