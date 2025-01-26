@@ -1,10 +1,20 @@
-﻿namespace Calderilla.Services
+﻿using Calderilla.DataAccess;
+
+namespace Calderilla.Services
 {
     public class Service1
     {
-        public static string GetMessage(string userName)
+        private readonly IBlobRepo _blobRepo;
+
+        public Service1(IBlobRepo blobRepo)
         {
-            return $"Welcome to Calderilla Service {userName}!";
+            _blobRepo = blobRepo;
+        }
+
+        public string GetMessage(string userName)
+        {
+            var repoMessage = _blobRepo.GetMessage();
+            return $"Welcome to Calderilla Service {userName}! {repoMessage}";
         }
     }
 }

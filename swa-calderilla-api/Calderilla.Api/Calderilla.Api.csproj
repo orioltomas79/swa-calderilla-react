@@ -15,6 +15,7 @@
     <PackageReference Include="Microsoft.Azure.Functions.Worker.Sdk" Version="2.0.0" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Calderilla.DataAccess\Calderilla.DataAccess.csproj" />
     <ProjectReference Include="..\Calderilla.Services\Calderilla.Services.csproj" />
   </ItemGroup>
   <ItemGroup>

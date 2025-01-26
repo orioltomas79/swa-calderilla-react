@@ -2,7 +2,8 @@
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
-using Calderilla.Api.Repo;
+using Calderilla.DataAccess;
+using Calderilla.Services;
 
 namespace Calderilla.Api
 {
@@ -17,6 +18,7 @@ namespace Calderilla.Api
 
             builder.UseMiddleware<ExceptionHandlingMiddleware>();
 
+            builder.Services.AddSingleton<Service1>();
             builder.Services.AddSingleton<IBlobRepo, BlobRepo>();
 
             builder.Build().Run();

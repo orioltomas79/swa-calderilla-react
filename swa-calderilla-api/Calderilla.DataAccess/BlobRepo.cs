@@ -1,4 +1,4 @@
-﻿namespace Calderilla.Api.Repo
+﻿namespace Calderilla.DataAccess
 {
     public class BlobRepo : IBlobRepo
     {
