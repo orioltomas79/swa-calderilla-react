@@ -14,13 +14,19 @@ namespace Calderilla.Api
         {
             var builder = FunctionsApplication.CreateBuilder(args);
 
+            // ASP.NET Core integration
             builder.ConfigureFunctionsWebApplication();
 
+            // Add middleware
+            // https://learn.microsoft.com/en-us/azure/azure-functions/dotnet-isolated-process-guide?tabs=ihostapplicationbuilder%2Cwindows#start-up-and-configuration
             builder.UseMiddleware<ExceptionHandlingMiddleware>();
 
+            // Dependecy injection
+            // https://learn.microsoft.com/en-us/azure/azure-functions/functions-dotnet-dependency-injection
             builder.Services.AddSingleton<Service1>();
             builder.Services.AddSingleton<IBlobRepo, BlobRepo>();
 
+            // Build and Run the host
             builder.Build().Run();
         }
     }

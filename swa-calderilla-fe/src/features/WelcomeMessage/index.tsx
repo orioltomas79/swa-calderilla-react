@@ -11,7 +11,7 @@ const WelcomeMessage = () => {
     setLoading(true);
     setError(null); // Clear previous errors
     try {
-      const message = await apiClient.otherEndpoints.getMessage();
+      const message = await apiClient.devEndpointsClient.getMessage();
       setApiResponse(message);
     } catch (err) {
       if (err instanceof Error) {

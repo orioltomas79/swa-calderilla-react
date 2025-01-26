@@ -1,25 +1,24 @@
 using System.Net;
+using Calderilla.Api.Functions.Dev;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Extensions.Logging;
 
-namespace Calderilla.Api.Functions
+namespace Calderilla.Api.Functions.User
 {
-    public class Users
+    public class GetUserClaimsFunction
     {
-        private const string UsersTag = "Users";
+        private readonly ILogger<GetUserClaimsFunction> _logger;
 
-        private readonly ILogger<Users> _logger;
-
-        public Users(ILogger<Users> logger)
+        public GetUserClaimsFunction(ILogger<GetUserClaimsFunction> logger)
         {
             _logger = logger;
         }
 
         [Function(nameof(GetUserClaims))]
-        [OpenApiOperation(tags: [UsersTag], operationId: nameof(GetUserClaims), Summary = "Gets current user claims")]
+        [OpenApiOperation(operationId: nameof(GetUserClaims), tags: [Constants.UsersEndpointsTag], Summary = "Gets current user claims")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(UserClaims), Description = "The OK response")]
         public IActionResult GetUserClaims([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)] HttpRequest req)
         {

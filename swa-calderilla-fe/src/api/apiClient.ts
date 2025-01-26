@@ -1,10 +1,10 @@
-import { OtherEndpointsClient } from "./apiClient.g.nswag";
+import { DevEndpointsClient } from "./apiClient.g.nswag";
 
 class ApiClient {
-  public readonly otherEndpoints: OtherEndpointsClient;
+  public readonly devEndpointsClient: DevEndpointsClient;
 
   constructor() {
-    this.otherEndpoints = new OtherEndpointsClient("/api");
+    this.devEndpointsClient = new DevEndpointsClient("/api");
   }
 }
 
