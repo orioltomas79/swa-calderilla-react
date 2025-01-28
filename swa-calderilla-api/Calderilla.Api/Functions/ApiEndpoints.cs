@@ -1,6 +1,6 @@
 ﻿namespace Calderilla.Api.Functions.Dev
 {
-    public class ApiEndpoints
+    public static class ApiEndpoints
     {
         public const string DevEndpointsTag = "DevEndpoints";
         public const string GetNotFoundError = "dev/get-not-found-error";

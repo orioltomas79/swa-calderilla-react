@@ -30,12 +30,15 @@ public class ExceptionHandlingMiddleware : IFunctionsWorkerMiddleware
             _logger.LogError(ex, "An unhandled exception occurred.");
 
             var httpResponse = context.GetHttpResponseData();
+            string instance = string.Empty;
+
             if (httpResponse == null)
             {
                 var request = await context.GetHttpRequestDataAsync();
                 if (request != null)
                 {
                     httpResponse = request.CreateResponse();
+                    instance = request.Url.AbsolutePath;
                 }
             }
 
@@ -43,10 +46,11 @@ public class ExceptionHandlingMiddleware : IFunctionsWorkerMiddleware
             {
                 var problemDetails = new ProblemDetails
                 {
+                    Type = "https://datatracker.ietf.org/doc/html/rfc7231#section-6.6.1",
                     Status = (int?)HttpStatusCode.InternalServerError,
                     Title = "An internal server error occurred.",
                     Detail = ex.Message,
-                    Instance = context.InvocationId.ToString()
+                    Instance = instance
                 };
 
                 httpResponse.StatusCode = HttpStatusCode.InternalServerError;
