@@ -38,7 +38,7 @@ namespace Calderilla.Api.ErrorHandling
             return new ObjectResult(problemDetails)
             {
                 StatusCode = (int)statusCode,
-                ContentTypes = { "application/problem+json" }
+                ContentTypes = { "application/json" }
             };
 
         }

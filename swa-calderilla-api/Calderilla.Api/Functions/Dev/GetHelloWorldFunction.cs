@@ -23,7 +23,7 @@ namespace Calderilla.Api.Functions.Dev
         [Function(nameof(GetHelloWorldMessage))]
         [OpenApiOperation(operationId: nameof(GetHelloWorldMessage), tags: [ApiEndpoints.DevEndpointsTag], Summary = "Returns a message")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(string), Description = "Returns a message")]
-        [OpenApiResponseWithBody(statusCode: HttpStatusCode.InternalServerError, contentType: "application/json", bodyType: typeof(string), Description = "Returns a 500 error message")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.InternalServerError, contentType: "application/json", bodyType: typeof(ProblemDetails), Description = "Returns a 500 error message")]
         public IActionResult GetHelloWorldMessage([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = ApiEndpoints.GetHelloWorldMessage)] HttpRequest req)
         {
             _logger.LogInformation("C# HTTP trigger function processed a request.");
