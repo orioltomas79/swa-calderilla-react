@@ -90,10 +90,136 @@ export class DevEndpointsClient {
   }
 
   /**
+   * Returns a message
+   * @return Returns a message
+   */
+  getHelloWorldMessage(): Promise<string> {
+    let url_ = this.baseUrl + "/dev/get-hello-world-message";
+    url_ = url_.replace(/[?&]$/, "");
+
+    let options_: RequestInit = {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+      },
+    };
+
+    return this.http.fetch(url_, options_).then((_response: Response) => {
+      return this.processGetHelloWorldMessage(_response);
+    });
+  }
+
+  protected processGetHelloWorldMessage(response: Response): Promise<string> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && response.headers.forEach) {
+      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+    }
+    if (status === 200) {
+      return response.text().then((_responseText) => {
+        let result200: any = null;
+        result200 =
+          _responseText === ""
+            ? null
+            : (JSON.parse(_responseText, this.jsonParseReviver) as string);
+        return result200;
+      });
+    } else if (status === 500) {
+      return response.text().then((_responseText) => {
+        let result500: any = null;
+        result500 =
+          _responseText === ""
+            ? null
+            : (JSON.parse(_responseText, this.jsonParseReviver) as string);
+        return throwException(
+          "Returns a 500 error message",
+          status,
+          _responseText,
+          _headers,
+          result500
+        );
+      });
+    } else if (status !== 200 && status !== 204) {
+      return response.text().then((_responseText) => {
+        return throwException(
+          "An unexpected server error occurred.",
+          status,
+          _responseText,
+          _headers
+        );
+      });
+    }
+    return Promise.resolve<string>(null as any);
+  }
+
+  /**
+   * Returns an exception
+   * @return Returns an exception
+   */
+  getInternalServerError(): Promise<string> {
+    let url_ = this.baseUrl + "/dev/get-internal-server-exception";
+    url_ = url_.replace(/[?&]$/, "");
+
+    let options_: RequestInit = {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+      },
+    };
+
+    return this.http.fetch(url_, options_).then((_response: Response) => {
+      return this.processGetInternalServerError(_response);
+    });
+  }
+
+  protected processGetInternalServerError(response: Response): Promise<string> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && response.headers.forEach) {
+      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+    }
+    if (status === 200) {
+      return response.text().then((_responseText) => {
+        let result200: any = null;
+        result200 =
+          _responseText === ""
+            ? null
+            : (JSON.parse(_responseText, this.jsonParseReviver) as string);
+        return result200;
+      });
+    } else if (status === 500) {
+      return response.text().then((_responseText) => {
+        let result500: any = null;
+        result500 =
+          _responseText === ""
+            ? null
+            : (JSON.parse(_responseText, this.jsonParseReviver) as string);
+        return throwException(
+          "Returns a 500 error message",
+          status,
+          _responseText,
+          _headers,
+          result500
+        );
+      });
+    } else if (status !== 200 && status !== 204) {
+      return response.text().then((_responseText) => {
+        return throwException(
+          "An unexpected server error occurred.",
+          status,
+          _responseText,
+          _headers
+        );
+      });
+    }
+    return Promise.resolve<string>(null as any);
+  }
+
+  /**
    * Returns a 404 error
    */
-  get404Error(): Promise<void> {
-    let url_ = this.baseUrl + "/dev/get-404-error";
+  getNotFoundError(): Promise<void> {
+    let url_ = this.baseUrl + "/dev/get-not-found-error";
     url_ = url_.replace(/[?&]$/, "");
 
     let options_: RequestInit = {
@@ -102,11 +228,11 @@ export class DevEndpointsClient {
     };
 
     return this.http.fetch(url_, options_).then((_response: Response) => {
-      return this.processGet404Error(_response);
+      return this.processGetNotFoundError(_response);
     });
   }
 
-  protected processGet404Error(response: Response): Promise<void> {
+  protected processGetNotFoundError(response: Response): Promise<void> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -153,132 +279,6 @@ export class DevEndpointsClient {
       });
     }
     return Promise.resolve<void>(null as any);
-  }
-
-  /**
-   * Returns an exception
-   * @return Returns an exception
-   */
-  getThrowException(): Promise<string> {
-    let url_ = this.baseUrl + "/dev/get-throw-exception";
-    url_ = url_.replace(/[?&]$/, "");
-
-    let options_: RequestInit = {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-      },
-    };
-
-    return this.http.fetch(url_, options_).then((_response: Response) => {
-      return this.processGetThrowException(_response);
-    });
-  }
-
-  protected processGetThrowException(response: Response): Promise<string> {
-    const status = response.status;
-    let _headers: any = {};
-    if (response.headers && response.headers.forEach) {
-      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
-    }
-    if (status === 200) {
-      return response.text().then((_responseText) => {
-        let result200: any = null;
-        result200 =
-          _responseText === ""
-            ? null
-            : (JSON.parse(_responseText, this.jsonParseReviver) as string);
-        return result200;
-      });
-    } else if (status === 500) {
-      return response.text().then((_responseText) => {
-        let result500: any = null;
-        result500 =
-          _responseText === ""
-            ? null
-            : (JSON.parse(_responseText, this.jsonParseReviver) as string);
-        return throwException(
-          "Returns a 500 error message",
-          status,
-          _responseText,
-          _headers,
-          result500
-        );
-      });
-    } else if (status !== 200 && status !== 204) {
-      return response.text().then((_responseText) => {
-        return throwException(
-          "An unexpected server error occurred.",
-          status,
-          _responseText,
-          _headers
-        );
-      });
-    }
-    return Promise.resolve<string>(null as any);
-  }
-
-  /**
-   * Returns a message
-   * @return Returns a message
-   */
-  getMessage(): Promise<string> {
-    let url_ = this.baseUrl + "/dev/get-message";
-    url_ = url_.replace(/[?&]$/, "");
-
-    let options_: RequestInit = {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-      },
-    };
-
-    return this.http.fetch(url_, options_).then((_response: Response) => {
-      return this.processGetMessage(_response);
-    });
-  }
-
-  protected processGetMessage(response: Response): Promise<string> {
-    const status = response.status;
-    let _headers: any = {};
-    if (response.headers && response.headers.forEach) {
-      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
-    }
-    if (status === 200) {
-      return response.text().then((_responseText) => {
-        let result200: any = null;
-        result200 =
-          _responseText === ""
-            ? null
-            : (JSON.parse(_responseText, this.jsonParseReviver) as string);
-        return result200;
-      });
-    } else if (status === 500) {
-      return response.text().then((_responseText) => {
-        let result500: any = null;
-        result500 =
-          _responseText === ""
-            ? null
-            : (JSON.parse(_responseText, this.jsonParseReviver) as string);
-        return throwException(
-          "Returns a 500 error message",
-          status,
-          _responseText,
-          _headers,
-          result500
-        );
-      });
-    } else if (status !== 200 && status !== 204) {
-      return response.text().then((_responseText) => {
-        return throwException(
-          "An unexpected server error occurred.",
-          status,
-          _responseText,
-          _headers
-        );
-      });
-    }
-    return Promise.resolve<string>(null as any);
   }
 }
 

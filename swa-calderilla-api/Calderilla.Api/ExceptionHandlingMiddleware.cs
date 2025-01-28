@@ -1,3 +1,5 @@
+using System.Net;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Azure.Functions.Worker.Middleware;
@@ -39,12 +41,16 @@ public class ExceptionHandlingMiddleware : IFunctionsWorkerMiddleware
 
             if (httpResponse != null)
             {
-                httpResponse.StatusCode = System.Net.HttpStatusCode.InternalServerError;
-                await httpResponse.WriteAsJsonAsync(new
+                var problemDetails = new ProblemDetails
                 {
-                    Message = "An internal server error occurred.",
-                    Details = ex.Message 
-                });
+                    Status = (int?)HttpStatusCode.InternalServerError,
+                    Title = "An internal server error occurred.",
+                    Detail = ex.Message,
+                    Instance = context.InvocationId.ToString()
+                };
+
+                httpResponse.StatusCode = HttpStatusCode.InternalServerError;
+                await httpResponse.WriteAsJsonAsync(problemDetails);
             }
         }
     }

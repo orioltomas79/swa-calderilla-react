@@ -7,23 +7,23 @@ using Microsoft.Extensions.Logging;
 
 namespace Calderilla.Api.Functions.Dev
 {
-    public class Get500ErrorFunction
+    public class GetInternalServerErrorFunction
     {
-        private readonly ILogger<Get500ErrorFunction> _logger;
+        private readonly ILogger<GetInternalServerErrorFunction> _logger;
 
-        public Get500ErrorFunction(ILogger<Get500ErrorFunction> logger)
+        public GetInternalServerErrorFunction(ILogger<GetInternalServerErrorFunction> logger)
         {
             _logger = logger;
         }
 
-        [Function("GetThrowException")]
+        [Function("GetInternalServerError")]
 
-        [OpenApiOperation(operationId: nameof(GetThrowException), tags: [ApiEndpoints.DevEndpointsTag], Summary = "Returns an exception")]
+        [OpenApiOperation(operationId: nameof(GetInternalServerError), tags: [ApiEndpoints.DevEndpointsTag], Summary = "Returns an exception")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(string), Description = "Returns an exception")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.InternalServerError, contentType: "application/json", bodyType: typeof(string), Description = "Returns a 500 error message")]
-        public IActionResult GetThrowException([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = ApiEndpoints.GetThrowException)] HttpRequest req)
+        public IActionResult GetInternalServerError([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = ApiEndpoints.GetInternalServerError)] HttpRequest req)
         {
-            throw new Exception("This is an exception");
+            throw new Exception("This is an unhandled exception");
         }
     }
 }

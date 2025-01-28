@@ -9,22 +9,22 @@ using Microsoft.OpenApi.Models;
 
 namespace Calderilla.Api.Functions.Dev
 {
-    public class GetMessageFunction
+    public class GetHelloWorldFunction
     {
-        private readonly ILogger<GetMessageFunction> _logger;
+        private readonly ILogger<GetHelloWorldFunction> _logger;
         private readonly Service1 _service1;
 
-        public GetMessageFunction(ILogger<GetMessageFunction> logger, Service1 service1)
+        public GetHelloWorldFunction(ILogger<GetHelloWorldFunction> logger, Service1 service1)
         {
             _logger = logger;
             _service1 = service1;
         }
 
-        [Function(nameof(GetMessage))]
-        [OpenApiOperation(operationId: nameof(GetMessage), tags: [ApiEndpoints.DevEndpointsTag], Summary = "Returns a message")]
+        [Function(nameof(GetHelloWorldMessage))]
+        [OpenApiOperation(operationId: nameof(GetHelloWorldMessage), tags: [ApiEndpoints.DevEndpointsTag], Summary = "Returns a message")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(string), Description = "Returns a message")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.InternalServerError, contentType: "application/json", bodyType: typeof(string), Description = "Returns a 500 error message")]
-        public IActionResult GetMessage([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = ApiEndpoints.GetMessage)] HttpRequest req)
+        public IActionResult GetHelloWorldMessage([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = ApiEndpoints.GetHelloWorldMessage)] HttpRequest req)
         {
             _logger.LogInformation("C# HTTP trigger function processed a request.");
 
