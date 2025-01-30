@@ -12,10 +12,10 @@ namespace Calderilla.Api.ErrorHandling
             string detail)
         {
             return GetProblemDetailsResponse(
-                httpRequest, 
-                HttpStatusCode.NotFound, 
-                "https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.4", 
-                title, 
+                httpRequest,
+                HttpStatusCode.NotFound,
+                "https://datatracker.ietf.org/doc/html/rfc9110#name-404-not-found",
+                title,
                 detail);
         }
 

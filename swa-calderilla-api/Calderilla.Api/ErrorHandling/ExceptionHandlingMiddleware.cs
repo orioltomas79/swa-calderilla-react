@@ -46,7 +46,7 @@ public class ExceptionHandlingMiddleware : IFunctionsWorkerMiddleware
             {
                 var problemDetails = new ProblemDetails
                 {
-                    Type = "https://datatracker.ietf.org/doc/html/rfc7231#section-6.6.1",
+                    Type = "https://datatracker.ietf.org/doc/html/rfc9110#name-500-internal-server-error",
                     Status = (int?)HttpStatusCode.InternalServerError,
                     Title = "An internal server error occurred.",
                     Detail = ex.Message,
