@@ -2,11 +2,11 @@
 
 namespace Calderilla.Services
 {
-    public class Service1
+    public class GetMessageService: IGetMessageService
     {
         private readonly IBlobRepo _blobRepo;
 
-        public Service1(IBlobRepo blobRepo)
+        public GetMessageService(IBlobRepo blobRepo)
         {
             _blobRepo = blobRepo;
         }

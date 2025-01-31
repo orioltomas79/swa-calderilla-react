@@ -9,22 +9,22 @@ using Microsoft.OpenApi.Models;
 
 namespace Calderilla.Api.Functions.Dev
 {
-    public class GetHelloWorldFunction
+    public class GetMessageFunction
     {
-        private readonly ILogger<GetHelloWorldFunction> _logger;
-        private readonly Service1 _service1;
+        private readonly ILogger<GetMessageFunction> _logger;
+        private readonly IGetMessageService _getMessageService;
 
-        public GetHelloWorldFunction(ILogger<GetHelloWorldFunction> logger, Service1 service1)
+        public GetMessageFunction(ILogger<GetMessageFunction> logger, IGetMessageService getMessageService)
         {
             _logger = logger;
-            _service1 = service1;
+            _getMessageService = getMessageService;
         }
 
-        [Function(nameof(GetHelloWorldMessage))]
-        [OpenApiOperation(operationId: nameof(GetHelloWorldMessage), tags: [ApiEndpoints.DevEndpointsTag], Summary = "Returns a message")]
+        [Function(nameof(GetMessage))]
+        [OpenApiOperation(operationId: nameof(GetMessage), tags: [ApiEndpoints.DevEndpointsTag], Summary = "Returns a message")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(string), Description = "Returns a message")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.InternalServerError, contentType: "application/json", bodyType: typeof(ProblemDetails), Description = "Returns a 500 error message")]
-        public IActionResult GetHelloWorldMessage([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = ApiEndpoints.GetHelloWorldMessage)] HttpRequest req)
+        public IActionResult GetMessage([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = ApiEndpoints.GetMessage)] HttpRequest req)
         {
             _logger.LogInformation("C# HTTP trigger function processed a request.");
 
@@ -32,9 +32,9 @@ namespace Calderilla.Api.Functions.Dev
 
             var userName = claimsPrincipal.GetUserId();
 
-            var message = _service1.GetMessage(userName);
+            var message = _getMessageService.GetMessage(userName);
 
-            return new JsonResult(message);
+            return new OkObjectResult(message);
         }
     }
 }

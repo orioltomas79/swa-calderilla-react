@@ -23,7 +23,7 @@ namespace Calderilla.Api
 
             // Dependecy injection
             // https://learn.microsoft.com/en-us/azure/azure-functions/functions-dotnet-dependency-injection
-            builder.Services.AddSingleton<Service1>();
+            builder.Services.AddSingleton<IGetMessageService, GetMessageService>();
             builder.Services.AddSingleton<IBlobRepo, BlobRepo>();
 
             // Build and Run the host

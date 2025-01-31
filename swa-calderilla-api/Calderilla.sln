@@ -20,6 +20,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Calderilla.DataAccess", "Ca
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Calderilla.Api.Tests", "Tests\Calderilla.Api.Tests\Calderilla.Api.Tests.csproj", "{77097EA6-DD2B-49AB-8403-EDE37CF79421}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Calderilla.DataAccess.Tests", "Tests\Calderilla.DataAccess.Tests\Calderilla.DataAccess.Tests.csproj", "{573E66F2-1E4B-4BE5-8230-F16AAEBBF015}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -46,6 +48,10 @@ Global
 		{77097EA6-DD2B-49AB-8403-EDE37CF79421}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{77097EA6-DD2B-49AB-8403-EDE37CF79421}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{77097EA6-DD2B-49AB-8403-EDE37CF79421}.Release|Any CPU.Build.0 = Release|Any CPU
+		{573E66F2-1E4B-4BE5-8230-F16AAEBBF015}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{573E66F2-1E4B-4BE5-8230-F16AAEBBF015}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{573E66F2-1E4B-4BE5-8230-F16AAEBBF015}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{573E66F2-1E4B-4BE5-8230-F16AAEBBF015}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -53,5 +59,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{FE6F64CB-E2B0-4006-8F8F-06E51794A233} = {786B674C-CFDD-49FD-99E1-93BFE3C2142B}
 		{77097EA6-DD2B-49AB-8403-EDE37CF79421} = {786B674C-CFDD-49FD-99E1-93BFE3C2142B}
+		{573E66F2-1E4B-4BE5-8230-F16AAEBBF015} = {786B674C-CFDD-49FD-99E1-93BFE3C2142B}
 	EndGlobalSection
 EndGlobal
