@@ -29,7 +29,9 @@ jobs:
       - name: Run Backend Unit Tests
         id: run-backend-tests
         run: |
-          dotnet test ./swa-calderilla-api/Tests/Calderilla.Services.Tests
+          for test_project in ./swa-calderilla-api/Tests/**/*.csproj; do
+            dotnet test "$test_project"
+          done
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
