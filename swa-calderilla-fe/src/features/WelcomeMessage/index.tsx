@@ -1,18 +1,19 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import { useState } from "react";
 import apiClient from "../../api/apiClient";
+import { Operation } from "../../api/types";
 
 const WelcomeMessage = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [apiResponse, setApiResponse] = useState<string | null>(null);
+  const [apiResponse, setApiResponse] = useState<Operation[] | null>(null);
 
   const fetchApiData = async () => {
     setLoading(true);
     setError(null); // Clear previous errors
     try {
-      const message = await apiClient.devEndpointsClient.getHelloWorldMessage();
-      setApiResponse(message);
+      const listOperations = await apiClient.operationsEndpointsClient.getOperations(2025,1);
+      setApiResponse(listOperations);
     } catch (err) {
       if (err instanceof Error) {
         setError(err.message || "An unexpected error occurred");
@@ -31,9 +32,14 @@ const WelcomeMessage = () => {
       </button>
       {error && <p style={{ color: "red" }}>Error: {error}</p>}
       {apiResponse && (
-        <pre style={{ textAlign: "left", marginTop: "1rem" }}>
-          {apiResponse}
-        </pre>
+        <div style={{ textAlign: "left", marginTop: "1rem" }}>
+          {apiResponse.map((operation) => (
+            <div key={operation.id} style={{ marginBottom: "1rem" }}>
+              <p><strong>ID:</strong> {operation.id}</p>
+              <p><strong>Amount:</strong> {operation.amount}</p>
+            </div>
+          ))}
+        </div>
       )}
     </div>
   );

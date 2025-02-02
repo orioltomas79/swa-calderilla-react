@@ -26,7 +26,7 @@ namespace Calderilla.Api.Functions.Operation
         [OpenApiOperation(operationId: nameof(GetOperations), tags: [ApiEndpoints.OperationsEndpointsTag], Summary = "Returns a list of operations")]
         [OpenApiParameter(name: "year", In = ParameterLocation.Path, Required = true, Type = typeof(int), Description = "The year of the operations")]
         [OpenApiParameter(name: "month", In = ParameterLocation.Path, Required = true, Type = typeof(int), Description = "The month of the operations")]
-        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(string), Description = "Returns a list of operations")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(List<Domain.Operation>), Description = "Returns a list of operations")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.InternalServerError, contentType: "application/json", bodyType: typeof(ProblemDetails), Description = "Returns a 500 error message")]
         public IActionResult GetOperations([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = ApiEndpoints.GetOperations)] HttpRequest req, int year, int month)
         {

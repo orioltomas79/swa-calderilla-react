@@ -95,7 +95,7 @@ export class OperationsEndpointsClient {
    * @param month The month of the operations
    * @return Returns a list of operations
    */
-  getOperations(year: number, month: number): Promise<string> {
+  getOperations(year: number, month: number): Promise<Operation[]> {
     let url_ = this.baseUrl + "/operations/{year}/{month}";
     if (year === undefined || year === null)
       throw new Error("The parameter 'year' must be defined.");
@@ -117,7 +117,7 @@ export class OperationsEndpointsClient {
     });
   }
 
-  protected processGetOperations(response: Response): Promise<string> {
+  protected processGetOperations(response: Response): Promise<Operation[]> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -129,7 +129,7 @@ export class OperationsEndpointsClient {
         result200 =
           _responseText === ""
             ? null
-            : (JSON.parse(_responseText, this.jsonParseReviver) as string);
+            : (JSON.parse(_responseText, this.jsonParseReviver) as Operation[]);
         return result200;
       });
     } else if (status === 500) {
@@ -160,7 +160,7 @@ export class OperationsEndpointsClient {
         );
       });
     }
-    return Promise.resolve<string>(null as any);
+    return Promise.resolve<Operation[]>(null as any);
   }
 }
 
@@ -455,6 +455,21 @@ export class DevEndpointsClient {
     }
     return Promise.resolve<void>(null as any);
   }
+}
+
+export interface Operation {
+  id?: string | null;
+  monthOperationNumber?: number | null;
+  operationDate?: string | null;
+  description?: string | null;
+  valueDate?: string | null;
+  amount?: number | null;
+  balance?: number | null;
+  payer?: string | null;
+  ignore?: boolean | null;
+  type?: string | null;
+  notes?: string | null;
+  reviewed?: boolean | null;
 }
 
 export interface ProblemDetails {
