@@ -29,7 +29,7 @@ namespace Calderilla.Api.Functions.Dev
                 { "Email", new[] { "The Email field is required.", "The Email field must be a valid email address." } },
                 { "Password", new[] { "The Password field must be at least 8 characters long.", "The Password field must contain at least one uppercase letter, one lowercase letter, and one number." } }
             };
-            return ValidationProblemDetailsHelper.ValidationProblemDetails(req, "The item was not found", string.Empty, errors);
+            return ValidationProblemDetailsHelper.ValidationProblemDetails(req, errors);
         }
     }
 }

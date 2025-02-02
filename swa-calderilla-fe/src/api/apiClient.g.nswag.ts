@@ -73,7 +73,7 @@ export class UserEndpointsClient {
   }
 }
 
-export class DevEndpointsClient {
+export class OperationsEndpointsClient {
   private http: {
     fetch(url: RequestInfo, init?: RequestInit): Promise<Response>;
   };
@@ -90,11 +90,19 @@ export class DevEndpointsClient {
   }
 
   /**
-   * Returns a message
-   * @return Returns a message
+   * Returns a list of operations
+   * @param year The year of the operations
+   * @param month The month of the operations
+   * @return Returns a list of operations
    */
-  getHelloWorldMessage(): Promise<string> {
-    let url_ = this.baseUrl + "/dev/get-hello-world-message";
+  getOperations(year: number, month: number): Promise<string> {
+    let url_ = this.baseUrl + "/operations/{year}/{month}";
+    if (year === undefined || year === null)
+      throw new Error("The parameter 'year' must be defined.");
+    url_ = url_.replace("{year}", encodeURIComponent("" + year));
+    if (month === undefined || month === null)
+      throw new Error("The parameter 'month' must be defined.");
+    url_ = url_.replace("{month}", encodeURIComponent("" + month));
     url_ = url_.replace(/[?&]$/, "");
 
     let options_: RequestInit = {
@@ -105,11 +113,11 @@ export class DevEndpointsClient {
     };
 
     return this.http.fetch(url_, options_).then((_response: Response) => {
-      return this.processGetHelloWorldMessage(_response);
+      return this.processGetOperations(_response);
     });
   }
 
-  protected processGetHelloWorldMessage(response: Response): Promise<string> {
+  protected processGetOperations(response: Response): Promise<string> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -130,7 +138,10 @@ export class DevEndpointsClient {
         result500 =
           _responseText === ""
             ? null
-            : (JSON.parse(_responseText, this.jsonParseReviver) as string);
+            : (JSON.parse(
+                _responseText,
+                this.jsonParseReviver
+              ) as ProblemDetails);
         return throwException(
           "Returns a 500 error message",
           status,
@@ -150,6 +161,23 @@ export class DevEndpointsClient {
       });
     }
     return Promise.resolve<string>(null as any);
+  }
+}
+
+export class DevEndpointsClient {
+  private http: {
+    fetch(url: RequestInfo, init?: RequestInit): Promise<Response>;
+  };
+  private baseUrl: string;
+  protected jsonParseReviver: ((key: string, value: any) => any) | undefined =
+    undefined;
+
+  constructor(
+    baseUrl?: string,
+    http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }
+  ) {
+    this.http = http ? http : (window as any);
+    this.baseUrl = baseUrl ?? "http://localhost:7072/api";
   }
 
   /**
@@ -193,7 +221,76 @@ export class DevEndpointsClient {
         result500 =
           _responseText === ""
             ? null
+            : (JSON.parse(
+                _responseText,
+                this.jsonParseReviver
+              ) as ProblemDetails);
+        return throwException(
+          "Returns a 500 error message",
+          status,
+          _responseText,
+          _headers,
+          result500
+        );
+      });
+    } else if (status !== 200 && status !== 204) {
+      return response.text().then((_responseText) => {
+        return throwException(
+          "An unexpected server error occurred.",
+          status,
+          _responseText,
+          _headers
+        );
+      });
+    }
+    return Promise.resolve<string>(null as any);
+  }
+
+  /**
+   * Returns a message
+   * @return Returns a message
+   */
+  getMessage(): Promise<string> {
+    let url_ = this.baseUrl + "/dev/get-message";
+    url_ = url_.replace(/[?&]$/, "");
+
+    let options_: RequestInit = {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+      },
+    };
+
+    return this.http.fetch(url_, options_).then((_response: Response) => {
+      return this.processGetMessage(_response);
+    });
+  }
+
+  protected processGetMessage(response: Response): Promise<string> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && response.headers.forEach) {
+      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+    }
+    if (status === 200) {
+      return response.text().then((_responseText) => {
+        let result200: any = null;
+        result200 =
+          _responseText === ""
+            ? null
             : (JSON.parse(_responseText, this.jsonParseReviver) as string);
+        return result200;
+      });
+    } else if (status === 500) {
+      return response.text().then((_responseText) => {
+        let result500: any = null;
+        result500 =
+          _responseText === ""
+            ? null
+            : (JSON.parse(
+                _responseText,
+                this.jsonParseReviver
+              ) as ProblemDetails);
         return throwException(
           "Returns a 500 error message",
           status,
@@ -244,7 +341,10 @@ export class DevEndpointsClient {
         result404 =
           _responseText === ""
             ? null
-            : (JSON.parse(_responseText, this.jsonParseReviver) as string);
+            : (JSON.parse(
+                _responseText,
+                this.jsonParseReviver
+              ) as ProblemDetails);
         return throwException(
           "Returns a 404 error message",
           status,
@@ -259,7 +359,82 @@ export class DevEndpointsClient {
         result500 =
           _responseText === ""
             ? null
-            : (JSON.parse(_responseText, this.jsonParseReviver) as string);
+            : (JSON.parse(
+                _responseText,
+                this.jsonParseReviver
+              ) as ProblemDetails);
+        return throwException(
+          "Returns a 500 error message",
+          status,
+          _responseText,
+          _headers,
+          result500
+        );
+      });
+    } else if (status !== 200 && status !== 204) {
+      return response.text().then((_responseText) => {
+        return throwException(
+          "An unexpected server error occurred.",
+          status,
+          _responseText,
+          _headers
+        );
+      });
+    }
+    return Promise.resolve<void>(null as any);
+  }
+
+  /**
+   * Returns a 400 error
+   */
+  getValidationError(): Promise<void> {
+    let url_ = this.baseUrl + "/dev/get-bad-request-error";
+    url_ = url_.replace(/[?&]$/, "");
+
+    let options_: RequestInit = {
+      method: "GET",
+      headers: {},
+    };
+
+    return this.http.fetch(url_, options_).then((_response: Response) => {
+      return this.processGetValidationError(_response);
+    });
+  }
+
+  protected processGetValidationError(response: Response): Promise<void> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && response.headers.forEach) {
+      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+    }
+    if (status === 400) {
+      return response.text().then((_responseText) => {
+        let result400: any = null;
+        result400 =
+          _responseText === ""
+            ? null
+            : (JSON.parse(
+                _responseText,
+                this.jsonParseReviver
+              ) as ValidationProblemDetails);
+        return throwException(
+          "Returns a 400 error message",
+          status,
+          _responseText,
+          _headers,
+          result400
+        );
+      });
+    } else if (status === 500) {
+      return response.text().then((_responseText) => {
+        let result500: any = null;
+        result500 =
+          _responseText === ""
+            ? null
+            : (JSON.parse(
+                _responseText,
+                this.jsonParseReviver
+              ) as ProblemDetails);
         return throwException(
           "Returns a 500 error message",
           status,
@@ -282,9 +457,28 @@ export class DevEndpointsClient {
   }
 }
 
+export interface ProblemDetails {
+  type?: string | null;
+  title?: string | null;
+  status?: number | null;
+  detail?: string | null;
+  instance?: string | null;
+  extensions?: { [key: string]: any } | null;
+}
+
 export interface UserClaims {
   name?: string | null;
   authType?: string | null;
+}
+
+export interface ValidationProblemDetails {
+  errors?: { [key: string]: string[] } | null;
+  type?: string | null;
+  title?: string | null;
+  status?: number | null;
+  detail?: string | null;
+  instance?: string | null;
+  extensions?: { [key: string]: any } | null;
 }
 
 export class ApiException extends Error {

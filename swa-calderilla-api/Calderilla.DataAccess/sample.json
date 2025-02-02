@@ -1,0 +1,30 @@
+﻿[
+    {
+        "Id": "175956b0-42e6-4cec-9518-631559e187b4",
+        "MonthOperationNumber": 3,
+        "OperationDate": "2025-01-29T00:00:00",
+        "Description": "Pago en PELUQUERIA ES",
+        "ValueDate": "2025-01-29T00:00:00",
+        "Amount": -15.50,
+        "Balance": 127.93,
+        "Payer": "Others",
+        "Ignore": false,
+        "Type": "Pelu",
+        "Notes": "",
+        "Reviewed": false
+    },
+    {
+        "Id": "733a7ccb-f76c-4928-b298-7e645362f9a2",
+        "MonthOperationNumber": 4,
+        "OperationDate": "2025-01-29T00:00:00",
+        "Description": "Pago en OP. UNIV.",
+        "ValueDate": "2025-01-29T00:00:00",
+        "Amount": -192.60,
+        "Balance": 143.43,
+        "Payer": "Others",
+        "Ignore": false,
+        "Type": "Compres Ori",
+        "Notes": "",
+        "Reviewed": false
+    }
+]

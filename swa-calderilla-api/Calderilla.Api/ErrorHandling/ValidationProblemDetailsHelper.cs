@@ -8,43 +8,23 @@ namespace Calderilla.Api.ErrorHandling
     {
         public static ObjectResult ValidationProblemDetails(
             HttpRequest httpRequest,
-            string title,
-            string detail,
-            IDictionary<string, string[]> errors)
-        {
-            return GetValidationProblemDetailsResponse(
-                httpRequest,
-                HttpStatusCode.BadRequest,
-                "https://datatracker.ietf.org/doc/html/rfc9110#name-400-bad-request",
-                title,
-                detail,
-                errors);
-        }
-
-        private static ObjectResult GetValidationProblemDetailsResponse(
-            HttpRequest httpRequest,
-            HttpStatusCode statusCode,
-            string type,
-            string title,
-            string detail,
             IDictionary<string, string[]> errors)
         {
             var validationProblemDetails = new ValidationProblemDetails
             {
-                Type = type,
-                Title = title,
-                Detail = detail,
-                Status = (int)statusCode,
+                Type = "https://datatracker.ietf.org/doc/html/rfc9110#name-400-bad-request",
+                Title = "Validation errors occurred.",
+                Detail = "Please refer to the errors property for additional details.",
+                Status = (int?)HttpStatusCode.BadRequest,
                 Instance = httpRequest.Path,
                 Errors = errors
             };
 
             return new ObjectResult(validationProblemDetails)
             {
-                StatusCode = (int)statusCode,
+                StatusCode = (int)HttpStatusCode.BadRequest,
                 ContentTypes = { "application/json" }
             };
-
         }
     }
 }

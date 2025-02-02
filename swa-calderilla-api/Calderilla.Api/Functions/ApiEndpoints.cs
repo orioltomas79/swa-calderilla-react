@@ -10,5 +10,8 @@
 
         public const string UsersEndpointsTag = "UserEndpoints";
         public const string GetUserClaims = "user/get-user-claims";
+
+        public const string OperationsEndpointsTag = "OperationsEndpoints";
+        public const string GetOperations = "operations/{year:int}/{month:int}";
     }
 }

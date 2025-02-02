@@ -18,6 +18,7 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\..\Calderilla.Api\Calderilla.Api.csproj" />
+	  <ProjectReference Include="..\Calderilla.Test.Utils\Calderilla.Test.Utils.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

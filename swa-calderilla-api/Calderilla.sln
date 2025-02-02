@@ -22,6 +22,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Calderilla.Api.Tests", "Tes
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Calderilla.DataAccess.Tests", "Tests\Calderilla.DataAccess.Tests\Calderilla.DataAccess.Tests.csproj", "{573E66F2-1E4B-4BE5-8230-F16AAEBBF015}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Calderilla.Domain", "Calderilla.Domain\Calderilla.Domain.csproj", "{52DBFB1D-61BE-4EFE-B7FF-289D0F67FB58}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Calderilla.Test.Utils", "Tests\Calderilla.Test.Utils\Calderilla.Test.Utils.csproj", "{813ADF18-21C3-474A-8DBC-4C69C974A81B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -52,6 +56,14 @@ Global
 		{573E66F2-1E4B-4BE5-8230-F16AAEBBF015}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{573E66F2-1E4B-4BE5-8230-F16AAEBBF015}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{573E66F2-1E4B-4BE5-8230-F16AAEBBF015}.Release|Any CPU.Build.0 = Release|Any CPU
+		{52DBFB1D-61BE-4EFE-B7FF-289D0F67FB58}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{52DBFB1D-61BE-4EFE-B7FF-289D0F67FB58}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{52DBFB1D-61BE-4EFE-B7FF-289D0F67FB58}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{52DBFB1D-61BE-4EFE-B7FF-289D0F67FB58}.Release|Any CPU.Build.0 = Release|Any CPU
+		{813ADF18-21C3-474A-8DBC-4C69C974A81B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{813ADF18-21C3-474A-8DBC-4C69C974A81B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{813ADF18-21C3-474A-8DBC-4C69C974A81B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{813ADF18-21C3-474A-8DBC-4C69C974A81B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -60,5 +72,6 @@ Global
 		{FE6F64CB-E2B0-4006-8F8F-06E51794A233} = {786B674C-CFDD-49FD-99E1-93BFE3C2142B}
 		{77097EA6-DD2B-49AB-8403-EDE37CF79421} = {786B674C-CFDD-49FD-99E1-93BFE3C2142B}
 		{573E66F2-1E4B-4BE5-8230-F16AAEBBF015} = {786B674C-CFDD-49FD-99E1-93BFE3C2142B}
+		{813ADF18-21C3-474A-8DBC-4C69C974A81B} = {786B674C-CFDD-49FD-99E1-93BFE3C2142B}
 	EndGlobalSection
 EndGlobal
