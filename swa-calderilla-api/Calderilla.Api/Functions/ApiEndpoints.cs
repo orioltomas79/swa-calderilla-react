@@ -13,5 +13,6 @@
 
         public const string OperationsEndpointsTag = "OperationsEndpoints";
         public const string GetOperations = "operations/{year:int}/{month:int}";
+        public const string AddOperation = "operations/operation";
     }
 }

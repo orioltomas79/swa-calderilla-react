@@ -4,6 +4,8 @@ namespace Calderilla.Services
 {
     public interface IOperationsService
     {
-        public List<Operation> GetOperations(int month, int year);
+        Task<IEnumerable<Operation>> GetOperationsAsync(string userId, int year, int month);
+
+        Task AddOperationAsync(string userId, Operation operation);
     }
 }

@@ -1,3 +1,1 @@
-export type {
-    Operation
-  } from "./apiClient.g.nswag";
+export type { Operation } from "./apiClient.g.nswag";

@@ -12,7 +12,9 @@ const WelcomeMessage = () => {
     setLoading(true);
     setError(null); // Clear previous errors
     try {
-      const listOperations = await apiClient.operationsEndpointsClient.getOperations(2025,1);
+      await apiClient.operationsEndpointsClient.addOperation();
+      const listOperations =
+        await apiClient.operationsEndpointsClient.getOperations(2025, 2);
       setApiResponse(listOperations);
     } catch (err) {
       if (err instanceof Error) {
@@ -35,8 +37,12 @@ const WelcomeMessage = () => {
         <div style={{ textAlign: "left", marginTop: "1rem" }}>
           {apiResponse.map((operation) => (
             <div key={operation.id} style={{ marginBottom: "1rem" }}>
-              <p><strong>ID:</strong> {operation.id}</p>
-              <p><strong>Amount:</strong> {operation.amount}</p>
+              <p>
+                <strong>ID:</strong> {operation.id}
+              </p>
+              <p>
+                <strong>Amount:</strong> {operation.amount}
+              </p>
             </div>
           ))}
         </div>
