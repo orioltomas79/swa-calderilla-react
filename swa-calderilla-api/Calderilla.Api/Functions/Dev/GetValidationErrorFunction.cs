@@ -20,6 +20,7 @@ namespace Calderilla.Api.Functions.Dev
         [Function("GetValidationError")]
         [OpenApiOperation(operationId: nameof(GetValidationError), tags: [ApiEndpoints.DevEndpointsTag], Summary = "Returns a 400 error")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "application/json", bodyType: typeof(ValidationProblemDetails), Description = "Returns a 400 error message")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.Unauthorized, contentType: "application/json", bodyType: typeof(ProblemDetails), Description = "Returns a 401 error message")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.InternalServerError, contentType: "application/json", bodyType: typeof(ProblemDetails), Description = "Returns a 500 error message")]
 
         public IActionResult GetValidationError([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = ApiEndpoints.GetValidationError)] HttpRequest req)

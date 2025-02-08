@@ -19,6 +19,7 @@ namespace Calderilla.Api
 
             // Add middleware
             // https://learn.microsoft.com/en-us/azure/azure-functions/dotnet-isolated-process-guide?tabs=ihostapplicationbuilder%2Cwindows#start-up-and-configuration
+            builder.UseMiddleware<ValidateUserMiddleware>();
             builder.UseMiddleware<ExceptionHandlingMiddleware>();
 
             // Dependecy injection

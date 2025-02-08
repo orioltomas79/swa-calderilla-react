@@ -19,6 +19,19 @@ namespace Calderilla.Api.ErrorHandling
                 detail);
         }
 
+        public static ObjectResult UnauthorizedProblemDetails(
+            HttpRequest httpRequest,
+            string title,
+            string detail)
+        {
+            return GetProblemDetailsResponse(
+                httpRequest,
+                HttpStatusCode.Unauthorized,
+                "https://datatracker.ietf.org/doc/html/rfc9110#name-401-unauthorized",
+                title,
+                detail);
+        }
+
         private static ObjectResult GetProblemDetailsResponse(
             HttpRequest httpRequest,
             HttpStatusCode statusCode,

@@ -1,4 +1,5 @@
 using System.Net;
+using Calderilla.Api.ErrorHandling;
 using Calderilla.Api.Functions.Dev;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -20,6 +21,8 @@ namespace Calderilla.Api.Functions.User
         [Function(nameof(GetUserClaims))]
         [OpenApiOperation(operationId: nameof(GetUserClaims), tags: [ApiEndpoints.UsersEndpointsTag], Summary = "Gets current user claims")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(UserClaims), Description = "The OK response")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.Unauthorized, contentType: "application/json", bodyType: typeof(ProblemDetails), Description = "Returns a 401 error message")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.InternalServerError, contentType: "application/json", bodyType: typeof(ProblemDetails), Description = "Returns a 500 error message")]
         public IActionResult GetUserClaims([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = ApiEndpoints.GetUserClaims)] HttpRequest req)
         {
             _logger.LogInformation("GetUserClaims function processed a request.");
@@ -28,7 +31,7 @@ namespace Calderilla.Api.Functions.User
 
             if (claimsPrincipal.Identity == null)
             {
-                return new UnauthorizedResult();
+                return ProblemDetailsHelper.UnauthorizedProblemDetails(req, "Unable to get the user claims", string.Empty);
             }
 
             var userClaims = new UserClaims()

@@ -20,6 +20,7 @@ namespace Calderilla.Api.Functions.Dev
 
         [OpenApiOperation(operationId: nameof(GetInternalServerError), tags: [ApiEndpoints.DevEndpointsTag], Summary = "Returns an exception")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(string), Description = "Returns an exception")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.Unauthorized, contentType: "application/json", bodyType: typeof(ProblemDetails), Description = "Returns a 401 error message")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.InternalServerError, contentType: "application/json", bodyType: typeof(ProblemDetails), Description = "Returns a 500 error message")]
         public IActionResult GetInternalServerError([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = ApiEndpoints.GetInternalServerError)] HttpRequest req)
         {

@@ -43,7 +43,7 @@ namespace Calderilla.Api
                     IdentityProvider = "github",
                     UserId = "fake-user-id",
                     UserDetails = "fake-user-name",
-                    UserRoles = ["authenticated"]
+                    UserRoles = ["authenticated", "user"]
                 };
             }
 #endif
