@@ -14,5 +14,8 @@
         public const string OperationsEndpointsTag = "OperationsEndpoints";
         public const string GetOperations = "operations/{year:int}/{month:int}";
         public const string AddOperation = "operations/operation";
+
+        public const string CurrentAccountsEndpointsTag = "CurrentAccountsEndpoints";
+        public const string GetCurrentAccounts = "current-accounts";
     }
 }

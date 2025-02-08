@@ -1,5 +1,4 @@
 ﻿using System.Net;
-using System.Security.Claims;
 using Calderilla.Api.ErrorHandling;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Azure.Functions.Worker;
