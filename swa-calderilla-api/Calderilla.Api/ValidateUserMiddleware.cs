@@ -33,7 +33,7 @@ namespace Calderilla.Api
                 return;
             }
 
-            var userRoles = claimsPrincipal.FindAll(ClaimTypes.Role).Select(c => c.Value).ToList();
+            var userRoles = claimsPrincipal.GetRoles();
 
             if (!userRoles.Contains("user"))
             {

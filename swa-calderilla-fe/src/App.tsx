@@ -1,10 +1,11 @@
 import { useState } from "react";
+import { TextField } from "@mui/material";
 import "./App.css";
-import WelcomeMessage from "./features/WelcomeMessage";
-import Button from "@mui/material/Button";
+import MonthOperationsTable from "./features/MonthOperationsTable";
 
 function App() {
-  const [count, setCount] = useState(0);
+  const [year, setYear] = useState(2025);
+  const [month, setMonth] = useState(1);
 
   return (
     <>
@@ -14,18 +15,23 @@ function App() {
       <div>
         <a href="/.auth/logout">Log out</a>
       </div>
-      <h1>Vite + React</h1>
+      <h1>Calderilla</h1>
+      <TextField
+        id="yearTextField"
+        label="Year"
+        variant="outlined"
+        value={year}
+        onChange={(e) => setYear(Number(e.target.value) || 0)}
+      />
+      <TextField
+        id="monthTextField"
+        label="Month"
+        variant="outlined"
+        value={month}
+        onChange={(e) => setMonth(Number(e.target.value) || 0)}
+      />
       <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-        <WelcomeMessage />
-      </div>
-      <div>
-        <Button variant="contained">Hello Material UI</Button>
+        <MonthOperationsTable year={year} month={month} />
       </div>
     </>
   );

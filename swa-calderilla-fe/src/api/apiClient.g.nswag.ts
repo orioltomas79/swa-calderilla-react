@@ -216,108 +216,6 @@ export class OperationsEndpointsClient {
     }
     return Promise.resolve<Operation[]>(null as any);
   }
-
-  /**
-   * Adds a new operation
-   * @return The created operation
-   */
-  addOperation(): Promise<Operation> {
-    let url_ = this.baseUrl + "/operations/operation";
-    url_ = url_.replace(/[?&]$/, "");
-
-    let options_: RequestInit = {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-      },
-    };
-
-    return this.http.fetch(url_, options_).then((_response: Response) => {
-      return this.processAddOperation(_response);
-    });
-  }
-
-  protected processAddOperation(response: Response): Promise<Operation> {
-    const status = response.status;
-    let _headers: any = {};
-    if (response.headers && response.headers.forEach) {
-      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
-    }
-    if (status === 201) {
-      return response.text().then((_responseText) => {
-        let result201: any = null;
-        result201 =
-          _responseText === ""
-            ? null
-            : (JSON.parse(_responseText, this.jsonParseReviver) as Operation);
-        return result201;
-      });
-    } else if (status === 400) {
-      return response.text().then((_responseText) => {
-        let result400: any = null;
-        result400 =
-          _responseText === ""
-            ? null
-            : (JSON.parse(
-                _responseText,
-                this.jsonParseReviver
-              ) as ValidationProblemDetails);
-        return throwException(
-          "Returns a 400 error message",
-          status,
-          _responseText,
-          _headers,
-          result400
-        );
-      });
-    } else if (status === 401) {
-      return response.text().then((_responseText) => {
-        let result401: any = null;
-        result401 =
-          _responseText === ""
-            ? null
-            : (JSON.parse(
-                _responseText,
-                this.jsonParseReviver
-              ) as ProblemDetails);
-        return throwException(
-          "Returns a 401 error message",
-          status,
-          _responseText,
-          _headers,
-          result401
-        );
-      });
-    } else if (status === 500) {
-      return response.text().then((_responseText) => {
-        let result500: any = null;
-        result500 =
-          _responseText === ""
-            ? null
-            : (JSON.parse(
-                _responseText,
-                this.jsonParseReviver
-              ) as ProblemDetails);
-        return throwException(
-          "Returns a 500 error message",
-          status,
-          _responseText,
-          _headers,
-          result500
-        );
-      });
-    } else if (status !== 200 && status !== 204) {
-      return response.text().then((_responseText) => {
-        return throwException(
-          "An unexpected server error occurred.",
-          status,
-          _responseText,
-          _headers
-        );
-      });
-    }
-    return Promise.resolve<Operation>(null as any);
-  }
 }
 
 export class DevEndpointsClient {
@@ -602,18 +500,18 @@ export class DevEndpointsClient {
 }
 
 export interface Operation {
-  id?: string | null;
-  monthOperationNumber?: number | null;
-  operationDate?: string | null;
-  description?: string | null;
-  valueDate?: string | null;
-  amount?: number | null;
-  balance?: number | null;
-  payer?: string | null;
-  ignore?: boolean | null;
+  id: string;
+  monthOperationNumber: number;
+  operationDate: string;
+  description: string;
+  valueDate: string;
+  amount: number;
+  balance: number;
+  payer: string;
+  ignore: boolean;
   type?: string | null;
   notes?: string | null;
-  reviewed?: boolean | null;
+  reviewed: boolean;
 }
 
 export interface ProblemDetails {

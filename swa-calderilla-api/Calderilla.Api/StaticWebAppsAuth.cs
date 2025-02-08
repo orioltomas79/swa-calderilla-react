@@ -63,9 +63,19 @@ namespace Calderilla.Api
             return new ClaimsPrincipal(identity);
         }
 
-        public static string GetUserId(this ClaimsPrincipal input)
+        public static string GetNameIdentifier(this ClaimsPrincipal input)
         {
             return input.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)!.Value;
+        }
+
+        public static string GetName(this ClaimsPrincipal input)
+        {
+            return input.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)!.Value;
+        }
+
+        public static List<string> GetRoles(this ClaimsPrincipal input)
+        {
+            return input.FindAll(ClaimTypes.Role).Select(c => c.Value).ToList();
         }
     }
 }
