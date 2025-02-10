@@ -11,23 +11,14 @@ namespace Calderilla.DataAccess
             _blobRepository = blobRepository;
         }
 
-        public async Task AddOperationAsync(string userId, Operation operation)
+        public async Task<IEnumerable<Operation>> GetOperationsAsync(string userId, Guid currentAccount, int year, int month)
         {
-            var blobName = GetBlobName(userId, operation.OperationDate.Year, operation.OperationDate.Month);
-
-            var operations = await _blobRepository.ReadListAsync<Operation>(blobName).ConfigureAwait(false);
-            operations.Add(operation);
-            await _blobRepository.WriteListAsync(blobName, operations).ConfigureAwait(false);
+            return await _blobRepository.ReadListAsync<Operation>(GetBlobName(userId, currentAccount, year, month)).ConfigureAwait(false);
         }
 
-        public async Task<IEnumerable<Operation>> GetOperationsAsync(string userId, int year, int month)
+        private static string GetBlobName(string userId, Guid currentAccount, int year, int month)
         {
-            return await _blobRepository.ReadListAsync<Operation>(GetBlobName(userId, year, month)).ConfigureAwait(false);
-        }
-
-        private static string GetBlobName(string userId, int year, int month)
-        {
-            return $"{userId}/{year}/{month}.json";
+            return $"{userId}/{currentAccount}/{year}/{month}.json";
         }
     }
 }

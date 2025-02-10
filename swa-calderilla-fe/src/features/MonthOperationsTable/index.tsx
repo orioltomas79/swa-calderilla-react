@@ -30,7 +30,7 @@ const MonthOperationsTable = ({
     setError(null); // Clear previous errors
     try {
       const listOperations =
-        await apiClient.operationsEndpointsClient.getOperations(year, month);
+        await apiClient.operationsEndpointsClient.getOperations('00114bee-b8cc-4d36-82d5-f27aabfb4db4', year, month);
       setApiResponse(listOperations);
     } catch (err) {
       if (err instanceof Error) {

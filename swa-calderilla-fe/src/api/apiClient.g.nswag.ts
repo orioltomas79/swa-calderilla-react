@@ -127,12 +127,23 @@ export class OperationsEndpointsClient {
 
   /**
    * Returns a list of operations
+   * @param currentAccount The current account
    * @param year The year of the operations
    * @param month The month of the operations
    * @return Returns a list of operations
    */
-  getOperations(year: number, month: number): Promise<Operation[]> {
-    let url_ = this.baseUrl + "/operations/{year}/{month}";
+  getOperations(
+    currentAccount: string,
+    year: number,
+    month: number
+  ): Promise<Operation[]> {
+    let url_ = this.baseUrl + "/operations/{currentAccount}/{year}/{month}";
+    if (currentAccount === undefined || currentAccount === null)
+      throw new Error("The parameter 'currentAccount' must be defined.");
+    url_ = url_.replace(
+      "{currentAccount}",
+      encodeURIComponent("" + currentAccount)
+    );
     if (year === undefined || year === null)
       throw new Error("The parameter 'year' must be defined.");
     url_ = url_.replace("{year}", encodeURIComponent("" + year));
@@ -215,6 +226,112 @@ export class OperationsEndpointsClient {
       });
     }
     return Promise.resolve<Operation[]>(null as any);
+  }
+}
+
+export class CurrentAccountsEndpointsClient {
+  private http: {
+    fetch(url: RequestInfo, init?: RequestInit): Promise<Response>;
+  };
+  private baseUrl: string;
+  protected jsonParseReviver: ((key: string, value: any) => any) | undefined =
+    undefined;
+
+  constructor(
+    baseUrl?: string,
+    http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }
+  ) {
+    this.http = http ? http : (window as any);
+    this.baseUrl = baseUrl ?? "http://localhost:7072/api";
+  }
+
+  /**
+   * Returns a list of current accounts
+   * @return Returns a list of current accounts
+   */
+  getCurrentAccounts(): Promise<CurrentAccount[]> {
+    let url_ = this.baseUrl + "/GetCurrentAccounts";
+    url_ = url_.replace(/[?&]$/, "");
+
+    let options_: RequestInit = {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+      },
+    };
+
+    return this.http.fetch(url_, options_).then((_response: Response) => {
+      return this.processGetCurrentAccounts(_response);
+    });
+  }
+
+  protected processGetCurrentAccounts(
+    response: Response
+  ): Promise<CurrentAccount[]> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && response.headers.forEach) {
+      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+    }
+    if (status === 200) {
+      return response.text().then((_responseText) => {
+        let result200: any = null;
+        result200 =
+          _responseText === ""
+            ? null
+            : (JSON.parse(
+                _responseText,
+                this.jsonParseReviver
+              ) as CurrentAccount[]);
+        return result200;
+      });
+    } else if (status === 401) {
+      return response.text().then((_responseText) => {
+        let result401: any = null;
+        result401 =
+          _responseText === ""
+            ? null
+            : (JSON.parse(
+                _responseText,
+                this.jsonParseReviver
+              ) as ProblemDetails);
+        return throwException(
+          "Returns a 401 error message",
+          status,
+          _responseText,
+          _headers,
+          result401
+        );
+      });
+    } else if (status === 500) {
+      return response.text().then((_responseText) => {
+        let result500: any = null;
+        result500 =
+          _responseText === ""
+            ? null
+            : (JSON.parse(
+                _responseText,
+                this.jsonParseReviver
+              ) as ProblemDetails);
+        return throwException(
+          "Returns a 500 error message",
+          status,
+          _responseText,
+          _headers,
+          result500
+        );
+      });
+    } else if (status !== 200 && status !== 204) {
+      return response.text().then((_responseText) => {
+        return throwException(
+          "An unexpected server error occurred.",
+          status,
+          _responseText,
+          _headers
+        );
+      });
+    }
+    return Promise.resolve<CurrentAccount[]>(null as any);
   }
 }
 
@@ -497,6 +614,12 @@ export class DevEndpointsClient {
     }
     return Promise.resolve<void>(null as any);
   }
+}
+
+export interface CurrentAccount {
+  id: string;
+  name: string;
+  type: string;
 }
 
 export interface Operation {

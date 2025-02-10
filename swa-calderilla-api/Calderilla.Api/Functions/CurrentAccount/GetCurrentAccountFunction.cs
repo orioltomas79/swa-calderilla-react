@@ -29,13 +29,13 @@ namespace Calderilla.Api.Functions.CurrentAccount
             {
                 new ()
                 {
-                    Id = 1,
+                    Id = new Guid("00114bee-b8cc-4d36-82d5-f27aabfb4db4"),
                     Name = "Oriol",
                     Type = "Ing"
                 },
                 new ()
                 {
-                    Id = 2,
+                    Id = new Guid("55650334-1291-4cb4-a798-ce8dcb82b728"),
                     Name = "Comuna",
                     Type = "Sabadell"
                 }

@@ -24,12 +24,13 @@ namespace Calderilla.Api.Functions.Operation
 
         [Function(nameof(GetOperationsAsync))]
         [OpenApiOperation(operationId: nameof(GetOperationsAsync), tags: [ApiEndpoints.OperationsEndpointsTag], Summary = "Returns a list of operations")]
+        [OpenApiParameter(name: "currentAccount", In = ParameterLocation.Path, Required = true, Type = typeof(Guid), Description = "The current account")]
         [OpenApiParameter(name: "year", In = ParameterLocation.Path, Required = true, Type = typeof(int), Description = "The year of the operations")]
         [OpenApiParameter(name: "month", In = ParameterLocation.Path, Required = true, Type = typeof(int), Description = "The month of the operations")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(List<Domain.Operation>), Description = "Returns a list of operations")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.Unauthorized, contentType: "application/json", bodyType: typeof(ProblemDetails), Description = "Returns a 401 error message")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.InternalServerError, contentType: "application/json", bodyType: typeof(ProblemDetails), Description = "Returns a 500 error message")]
-        public async Task<IActionResult> GetOperationsAsync([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = ApiEndpoints.GetOperations)] HttpRequest req, int year, int month)
+        public async Task<IActionResult> GetOperationsAsync([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = ApiEndpoints.GetOperations)] HttpRequest req, Guid currentAccount, int year, int month)
         {
             var errors = new Dictionary<string, string[]>();
 
@@ -49,7 +50,7 @@ namespace Calderilla.Api.Functions.Operation
             }
 
             var claimsPrincipal = StaticWebAppsAuth.GetClaimsPrincipal(req);
-            var result = await _operationsService.GetOperationsAsync(claimsPrincipal.GetName(), year, month);
+            var result = await _operationsService.GetOperationsAsync(claimsPrincipal.GetName(), currentAccount, year, month);
 
             return new OkObjectResult(result);
         }

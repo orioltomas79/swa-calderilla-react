@@ -19,7 +19,7 @@ namespace Calderilla.Api.Tests.Functions.Operations
 
             var serviceMock = new Mock<IOperationsService>();
             var fakeOperations = FakeOperationGenerator.GetFakeOperations(5);
-            serviceMock.Setup(service => service.GetOperationsAsync(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>())).ReturnsAsync(fakeOperations);
+            serviceMock.Setup(service => service.GetOperationsAsync(It.IsAny<string>(), It.IsAny<Guid>(), It.IsAny<int>(), It.IsAny<int>())).ReturnsAsync(fakeOperations);
 
             var function = new GetOperationsFunction(loggerMock.Object, serviceMock.Object);
 
@@ -28,7 +28,7 @@ namespace Calderilla.Api.Tests.Functions.Operations
             request.Method = "GET";
 
             // Act
-            var result = await function.GetOperationsAsync(request, 2025, 1);
+            var result = await function.GetOperationsAsync(request, Guid.NewGuid() ,2025, 1);
 
             // Assert
             var objectResult = Assert.IsType<OkObjectResult>(result);
@@ -44,7 +44,7 @@ namespace Calderilla.Api.Tests.Functions.Operations
 
             var serviceMock = new Mock<IOperationsService>();
             var fakeOperations = FakeOperationGenerator.GetFakeOperations(5);
-            serviceMock.Setup(service => service.GetOperationsAsync(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>())).ReturnsAsync(fakeOperations);
+            serviceMock.Setup(service => service.GetOperationsAsync(It.IsAny<string>(), It.IsAny<Guid>(), It.IsAny<int>(), It.IsAny<int>())).ReturnsAsync(fakeOperations);
 
             var function = new GetOperationsFunction(loggerMock.Object, serviceMock.Object);
 
@@ -53,7 +53,7 @@ namespace Calderilla.Api.Tests.Functions.Operations
             request.Method = "GET";
 
             // Act
-            var result = await function.GetOperationsAsync(request, 0, 0);
+            var result = await function.GetOperationsAsync(request, Guid.NewGuid(), 0, 0);
 
             // Assert
             var objectResult = Assert.IsType<ObjectResult>(result);
