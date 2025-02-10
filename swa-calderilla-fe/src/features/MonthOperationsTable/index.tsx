@@ -13,11 +13,13 @@ import {
 } from "@mui/material";
 
 interface MonthOperationsTableProps {
+  currentAccount: string;
   year: number;
   month: number;
 }
 
 const MonthOperationsTable = ({
+  currentAccount,
   year,
   month,
 }: MonthOperationsTableProps): JSX.Element => {
@@ -30,7 +32,7 @@ const MonthOperationsTable = ({
     setError(null); // Clear previous errors
     try {
       const listOperations =
-        await apiClient.operationsEndpointsClient.getOperations('00114bee-b8cc-4d36-82d5-f27aabfb4db4', year, month);
+        await apiClient.operationsEndpointsClient.getOperations(currentAccount, year, month);
       setApiResponse(listOperations);
     } catch (err) {
       if (err instanceof Error) {

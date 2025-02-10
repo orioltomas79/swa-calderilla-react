@@ -1,11 +1,29 @@
-import { useState } from "react";
-import { TextField } from "@mui/material";
+import { useEffect, useState } from "react";
+import { MenuItem, TextField } from "@mui/material";
 import "./App.css";
 import MonthOperationsTable from "./features/MonthOperationsTable";
+import { CurrentAccount } from "./api/types";
+import apiClient from "./api/apiClient";
 
 function App() {
   const [year, setYear] = useState(2025);
   const [month, setMonth] = useState(1);
+  const [currentAccount, setCurrentAccount] = useState("");
+  const [apiResponse, setApiResponse] = useState<CurrentAccount[] | null>(null);
+
+  const fetchApiData = async () => {
+    try {
+      const listCurrentAccounts =
+        await apiClient.currentAccountEndpointsClient.getCurrentAccounts();
+      setApiResponse(listCurrentAccounts);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  useEffect(() => {
+    fetchApiData().catch((err) => console.error(err));
+  }, []);
 
   return (
     <>
@@ -16,6 +34,22 @@ function App() {
         <a href="/.auth/logout">Log out</a>
       </div>
       <h1>Calderilla</h1>
+      {apiResponse && (
+        <TextField
+          id="currentAccountSelect"
+          select
+          label="Current Account"
+          value={currentAccount}
+          onChange={(e) => setCurrentAccount(e.target.value)}
+          variant="outlined"
+        >
+          {apiResponse.map((account) => (
+            <MenuItem key={account.id} value={account.id}>
+              {account.name}
+            </MenuItem>
+          ))}
+        </TextField>
+      )}
       <TextField
         id="yearTextField"
         label="Year"
@@ -31,7 +65,11 @@ function App() {
         onChange={(e) => setMonth(Number(e.target.value) || 0)}
       />
       <div className="card">
-        <MonthOperationsTable year={year} month={month} />
+        <MonthOperationsTable
+          currentAccount={currentAccount}
+          year={year}
+          month={month}
+        />
       </div>
     </>
   );
