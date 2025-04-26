@@ -12,8 +12,6 @@
 - **Dependency Injection**: Implements DI for cleaner, testable, and maintainable code.  
   [Learn more about dependency injection in Azure Functions](https://learn.microsoft.com/en-us/azure/azure-functions/functions-dotnet-dependency-injection).
 
----
-
 ## **Solution Structure**
 
 The solution is organized into multiple projects to ensure separation of concerns, modularity, and scalability:
@@ -56,8 +54,6 @@ flowchart TD
 - **Dependencies**:
   - Depends on `Calderilla.Services` for business logic.
 
----
-
 ### 2. **Calderilla.Services**
 - **Description**: This project encapsulates the business logic and serves as the intermediary between the API and the data access layer.
 - **Responsibilities**:
@@ -66,15 +62,11 @@ flowchart TD
 - **Dependencies**:
   - Depends on `Calderilla.DataAccess` for data storage operations.
 
----
-
 ### 3. **Calderilla.DataAccess**
 - **Description**: This project handles all interactions with Azure Blob Storage.
 - **Responsibilities**:
   - Provides an abstraction layer for blob storage operations.
   - Manages data persistence and retrieval.
-
----
 
 ### 4. **Tests Folder**
 - **Description**: Contains unit and integration test projects for the solution.
