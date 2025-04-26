@@ -1,3 +1,6 @@
+// The host.json metadata file contains configuration options that affect all functions in a function app instance
+// host.json reference for Azure Functions 2.x and later: https://learn.microsoft.com/en-us/azure/azure-functions/functions-host-json
 {
+    // Specifies the version of host.json.
     "version": "2.0"
 }

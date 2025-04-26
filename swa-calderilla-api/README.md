@@ -18,6 +18,35 @@
 
 The solution is organized into multiple projects to ensure separation of concerns, modularity, and scalability:
 
+```mermaid
+flowchart TD
+
+  subgraph Application
+    Api --> Services
+    Services --> DataAccess
+  end
+
+  subgraph Common libraries
+    Api --> Domain
+    Services --> Domain
+    DataAccess --> Domain
+  end
+
+  subgraph Tests
+    Api.Tests --> Api
+    Services.Tests --> Services
+    DataAccess.Tests --> DataAccess
+  end
+
+  subgraph Tests utilities
+    Api.Tests --> Test.Utils
+    Services.Tests --> Test.Utils
+    DataAccess.Tests --> Test.Utils
+    Test.Utils --> Domain
+  end
+
+```
+
 ### 1. **Calderilla.API**
 - **Description**: This project contains the HTTP-triggered Azure Functions and serves as the entry point for the application.
 - **Responsibilities**:
@@ -26,7 +55,6 @@ The solution is organized into multiple projects to ensure separation of concern
   - Returns responses to clients.
 - **Dependencies**:
   - Depends on `Calderilla.Services` for business logic.
-  - Depends on `Calderilla.DataAccess` for data storage operations.
 
 ---
 
@@ -35,6 +63,8 @@ The solution is organized into multiple projects to ensure separation of concern
 - **Responsibilities**:
   - Processes business rules and transformations.
   - Delegates data access responsibilities to `Calderilla.DataAccess`.
+- **Dependencies**:
+  - Depends on `Calderilla.DataAccess` for data storage operations.
 
 ---
 
@@ -92,3 +122,4 @@ The solution is organized into multiple projects to ensure separation of concern
      ```bash
      dotnet test
      ```
+
