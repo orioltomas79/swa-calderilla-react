@@ -52,3 +52,8 @@ This API uses a **custom middleware** called: `ExceptionHandlingMiddleware`. Its
 `StaticWebAppsAuth.cs` provides utilities for handling authentication in **Azure Static Web Apps**. It parses the `x-ms-client-principal` header to extract user information, such as **identity provider**, **user ID**, **user details**, and **roles**, and converts them into a `ClaimsPrincipal`. In debug mode, it supports local testing by creating a mock `ClientPrincipal` if the header is absent. The class also includes extension methods to retrieve the user's name, ID, and roles from a `ClaimsPrincipal`. This enables seamless integration of authentication data into the application.
 
 `ValidateUserMiddleware.cs` is a **custom middleware** that validates user authentication and authorization. It uses `StaticWebAppsAuth` to extract a `ClaimsPrincipal` from the HTTP request. If the user claims are missing or the user lacks the required role, it returns an unauthorized response with appropriate problem details. The middleware logs unauthorized access attempts and ensures **only authorized users can proceed to the next middleware or function**.
+
+## The functions folder
+
+The **functions folder contains the Azure Functions** that are part of the API. 
+**Each function** is defined in its **own class**, and the folder structure reflects the organization of the API endpoints.

@@ -32,6 +32,18 @@ namespace Calderilla.Api.ErrorHandling
                 detail);
         }
 
+        public static ObjectResult InternalServerError(
+            HttpRequest httpRequest,
+            string detail)
+        {
+            return GetProblemDetailsResponse(
+                httpRequest,
+                HttpStatusCode.InternalServerError,
+                "https://datatracker.ietf.org/doc/html/rfc9110#name-500-internal-server-error",
+                "An internal server error occurred.",
+                detail);
+        }
+
         private static ObjectResult GetProblemDetailsResponse(
             HttpRequest httpRequest,
             HttpStatusCode statusCode,
