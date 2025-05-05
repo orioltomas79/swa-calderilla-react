@@ -1,3 +1,6 @@
+// In the isolated model, the Program.cs configurations only apply to the worker code you author, 
+// and they don't directly influence the configuration of the Functions host or triggers and bindings.
+// To make changes to the functions host or trigger and binding configuration, you still need to use the host.json file.
 // The host.json metadata file contains configuration options that affect all functions in a function app instance
 // host.json reference for Azure Functions 2.x and later: https://learn.microsoft.com/en-us/azure/azure-functions/functions-host-json
 {

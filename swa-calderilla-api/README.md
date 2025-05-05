@@ -1,16 +1,6 @@
 # **Calderilla**
 
-## Overview
-**Calderilla** is a .NET 8.0 Azure Function app built using the **Isolated Worker Model**. This architecture allows for greater flexibility, full control over the hosting environment, and enhanced dependency injection capabilities.
-
-### Key Features:
-- **.NET 8.0 Function App**: Leverages the latest features and performance improvements in .NET 8.0.
-- **Isolated Worker Model**: Offers a decoupled hosting model for better flexibility.  
-  [Learn more about the isolated process model](https://learn.microsoft.com/en-us/azure/azure-functions/dotnet-isolated-process-guide?tabs=hostbuilder%2Cwindows).
-- **`IHostApplicationBuilder` Support**: Simplifies application startup and configuration.  
-  [Read more about `IHostApplicationBuilder`](https://learn.microsoft.com/en-us/azure/azure-functions/dotnet-isolated-process-guide?tabs=ihostapplicationbuilder%2Cwindows#start-up-and-configuration).
-- **Dependency Injection**: Implements DI for cleaner, testable, and maintainable code.  
-  [Learn more about dependency injection in Azure Functions](https://learn.microsoft.com/en-us/azure/azure-functions/functions-dotnet-dependency-injection).
+​This directory contains the backend of the solution, implemented as a RESTful API using Azure Functions.
 
 ## **Solution Structure**
 
@@ -54,6 +44,8 @@ flowchart TD
 - **Dependencies**:
   - Depends on `Calderilla.Services` for business logic.
 
+For more information, you can refer to the project's README file: [Calderilla.Api](Calderilla.Api/README.md)
+
 ### 2. **Calderilla.Services**
 - **Description**: This project encapsulates the business logic and serves as the intermediary between the API and the data access layer.
 - **Responsibilities**:
@@ -62,11 +54,15 @@ flowchart TD
 - **Dependencies**:
   - Depends on `Calderilla.DataAccess` for data storage operations.
 
+For more information, you can refer to the project's README file: [Calderilla.Services](Calderilla.Services/README.md)
+
 ### 3. **Calderilla.DataAccess**
 - **Description**: This project handles all interactions with Azure Blob Storage.
 - **Responsibilities**:
   - Provides an abstraction layer for blob storage operations.
   - Manages data persistence and retrieval.
+
+For more information, you can refer to the project's README file: [Calderilla.DataAccess](Calderilla.DataAccess/README.md)
 
 ### 4. **Tests Folder**
 - **Description**: Contains unit and integration test projects for the solution.
