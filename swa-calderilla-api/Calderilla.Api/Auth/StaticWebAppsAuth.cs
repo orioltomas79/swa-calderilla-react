@@ -5,7 +5,14 @@ using Microsoft.AspNetCore.Http;
 
 namespace Calderilla.Api.Auth
 {
-
+    /// <summary>
+    /// StaticWebAppsAuth.cs provides utilities for handling authentication in Azure Static Web Apps. 
+    /// It parses the x-ms-client-principal header to extract user information, such as 
+    /// identity provider, user ID, user details, and roles, and converts them into a ClaimsPrincipal. 
+    /// In debug mode, it supports local testing by creating a mock ClientPrincipal if the header is absent. 
+    /// The class also includes extension methods to retrieve the user's name, ID, and roles from a ClaimsPrincipa`. 
+    /// This enables seamless integration of authentication data into the application.
+    /// </summary>
     public static class StaticWebAppsAuth
     {
         private class ClientPrincipal

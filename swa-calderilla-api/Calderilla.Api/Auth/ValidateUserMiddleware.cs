@@ -7,6 +7,12 @@ using Microsoft.Extensions.Logging;
 
 namespace Calderilla.Api.Auth
 {
+    /// <summary>
+    /// ValidateUserMiddleware.cs is a custom middleware that validates user authentication and authorization.
+    /// It uses StaticWebAppsAuth to extract a ClaimsPrincipal from the HTTP request. 
+    /// If the user claims are missing or the user lacks the required role, it returns an unauthorized response with appropriate problem details. 
+    /// The middleware logs unauthorized access attempts and ensures only authorized users can proceed to the next middleware or function.
+    /// </summary>
     public class ValidateUserMiddleware : IFunctionsWorkerMiddleware
     {
         private readonly ILogger _logger;
