@@ -8,6 +8,7 @@ using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Calderilla.Api.ErrorHandling;
+using Calderilla.Api.Auth;
 
 namespace Calderilla.Api.Functions.Operation
 {

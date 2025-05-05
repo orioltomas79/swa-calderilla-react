@@ -3,7 +3,7 @@ using System.Text;
 using System.Text.Json;
 using Microsoft.AspNetCore.Http;
 
-namespace Calderilla.Api
+namespace Calderilla.Api.Auth
 {
 
     public static class StaticWebAppsAuth

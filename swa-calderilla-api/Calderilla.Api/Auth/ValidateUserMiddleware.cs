@@ -5,7 +5,7 @@ using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Middleware;
 using Microsoft.Extensions.Logging;
 
-namespace Calderilla.Api
+namespace Calderilla.Api.Auth
 {
     public class ValidateUserMiddleware : IFunctionsWorkerMiddleware
     {
@@ -18,7 +18,13 @@ namespace Calderilla.Api
 
         public async Task Invoke(FunctionContext context, FunctionExecutionDelegate next)
         {
-            HttpContext httpContext = context.GetHttpContext();
+            HttpContext? httpContext = context.GetHttpContext();
+
+            if (httpContext == null)
+            {
+                _logger.LogError("HttpContext is null. Unable to process the request.");
+                return;
+            }
 
             var req = httpContext.Request;
             var claimsPrincipal = StaticWebAppsAuth.GetClaimsPrincipal(req);

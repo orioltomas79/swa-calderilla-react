@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Calderilla.DataAccess;
 using Calderilla.Services;
+using Calderilla.Api.Auth;
 
 namespace Calderilla.Api
 {
