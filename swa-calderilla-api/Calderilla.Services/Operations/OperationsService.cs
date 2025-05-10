@@ -1,7 +1,7 @@
 using Calderilla.DataAccess;
 using Calderilla.Domain;
 
-namespace Calderilla.Services
+namespace Calderilla.Services.Operations
 {
     public class OperationsService : IOperationsService
     {

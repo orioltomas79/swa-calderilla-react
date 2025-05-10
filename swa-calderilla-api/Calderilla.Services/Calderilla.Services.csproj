@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="NPOI" Version="2.7.*" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Calderilla.DataAccess\Calderilla.DataAccess.csproj" />
   </ItemGroup>
 

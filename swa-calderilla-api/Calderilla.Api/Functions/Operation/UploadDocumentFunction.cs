@@ -5,7 +5,6 @@ using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using Calderilla.Api.Auth;
 using Calderilla.Api.ErrorHandling;
 using Calderilla.DataAccess;
 using Calderilla.Api.Functions.Dev;
@@ -43,8 +42,6 @@ namespace Calderilla.Api.Functions.Operation
                 return ValidationProblemDetailsHelper.ValidationProblemDetails(req, errors);
             }
 
-            string fileName = file.FileName;
-
             // 3. Read the file into a byte[]
             using var ms = new MemoryStream();
             await file.OpenReadStream().CopyToAsync(ms);
@@ -52,7 +49,7 @@ namespace Calderilla.Api.Functions.Operation
 
             // ... your processing logic here ...
 
-            return new OkObjectResult($"Received {fileName} ({content.Length} bytes)");
+            return new OkResult();
         }
 
         public class UploadDocumentRequest
