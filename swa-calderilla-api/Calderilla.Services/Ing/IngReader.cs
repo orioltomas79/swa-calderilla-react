@@ -1,0 +1,92 @@
+﻿using System.Text;
+using NPOI.HSSF.UserModel;
+using NPOI.SS.UserModel;
+
+namespace Calderilla.Services.Ing
+{
+    public class IngReader
+    {
+        public static ExtractDataResult ExtractData(Stream stream, int month, int year)
+        {
+            using var workbook = new HSSFWorkbook(stream);
+
+            return GetAllIngOperations(workbook.GetSheetAt(0), month, year);
+        }
+
+        public class ExtractDataResult
+        {
+            public required string CsvData { get; set; }
+            public required List<IngOperation> Operations { get; set; }
+        }
+
+        private static ExtractDataResult GetAllIngOperations(ISheet sheet, int month, int year)
+        {
+            var operationsList = new List<IngOperation>();
+            var headerRowNum = GetHeaderRowNum(sheet);
+
+            var stringBuilder = new StringBuilder();
+
+            for (int i = 0; i <= sheet.LastRowNum; i++)
+            {
+                var row = sheet.GetRow(i);
+                if (row == null) continue;
+
+                var rowValues = ExtractRowValues(row);
+                stringBuilder.AppendLine(string.Join(",", rowValues));
+
+                if ( i > headerRowNum)
+                {
+                    var ingOperation = new IngOperation(row);
+                    if (ingOperation.Date.Month == month && ingOperation.Date.Year == year)
+                    {
+                        operationsList.Add(ingOperation);
+                    }
+                }
+            }
+
+            return new ExtractDataResult
+            {
+                CsvData = stringBuilder.ToString(),
+                Operations = operationsList
+            };
+        }
+
+        private static int GetHeaderRowNum(ISheet sheet)
+        {
+            for (int i = sheet.FirstRowNum; i <= sheet.LastRowNum; i++)
+            {
+                var row = sheet.GetRow(i);
+                if (row != null && row.Cells.Count >= 7 && IsTheHeaderRow(row))
+                {
+                    return i;
+                }
+            }
+
+            throw new InvalidOperationException("The header row was not found in the spreadsheet.");
+        }
+
+        private static bool IsTheHeaderRow(IRow row)
+        {
+            for (int j = 0; j < 7; j++)
+            {
+                var cell = row.GetCell(j);
+                if (cell == null || string.IsNullOrWhiteSpace(cell.ToString()))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        private static List<string> ExtractRowValues(IRow row)
+        {
+            var rowValues = new List<string>();
+            for (int j = 0; j < row.LastCellNum; j++)
+            {
+                var cell = row.GetCell(j);
+                rowValues.Add(cell?.ToString() ?? string.Empty);
+            }
+            return rowValues;
+        }
+    }
+}

@@ -3,7 +3,7 @@ using Calderilla.Services.Operations;
 using Calderilla.Test.Utils;
 using Moq;
 
-namespace Calderilla.Services.Tests
+namespace Calderilla.Services.Tests.Operations
 {
     public class OperationsServiceTests
     {
