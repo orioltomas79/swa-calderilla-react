@@ -15,10 +15,10 @@ namespace Calderilla.Services.Tests.Ing
             using var workbook = new HSSFWorkbook();
             var sheet = workbook.CreateSheet();
             Utils.CreateHeaderRows(sheet);
-            Utils.CreateMockDataRow(sheet, 4, "15/11/2023", "Mock Description 1", "100.00", "1,000.00");
-            Utils.CreateMockDataRow(sheet, 5, "01/12/2023", "Mock Description 2", "200.00", "1,200.00");
-            Utils.CreateMockDataRow(sheet, 6, "15/12/2023", "Mock Description 3", "300.00", "1,500.00");
-            Utils.CreateMockDataRow(sheet, 7, "01/01/2024", "Mock Description 4", "400.00", "1,900.00");
+            Utils.CreateMockDataRow(sheet, 4, "15/11/2023", "Mock Description 1", "100,00", "1.000,00");
+            Utils.CreateMockDataRow(sheet, 5, "01/12/2023", "Mock Description 2", "200,00", "1.200,00");
+            Utils.CreateMockDataRow(sheet, 6, "15/12/2023", "Mock Description 3", "300,00", "1.500,00");
+            Utils.CreateMockDataRow(sheet, 7, "01/01/2024", "Mock Description 4", "400,00", "1.900,00");
 
             // Act  
             var result = IngReader.ExtractData(workbook, TestMonth, TestYear);
@@ -27,7 +27,7 @@ namespace Calderilla.Services.Tests.Ing
             Assert.NotNull(result.CsvData);
             var csvLines = result.CsvData.Split("\r\n");
             Assert.Equal("F. VALOR,CATEGORÍA,SUBCATEGORÍA,DESCRIPCIÓN,COMENTARIO,IMAGEN,IMPORTE (€),SALDO (€)", csvLines[3]);
-            Assert.Equal("15/11/2023,Categoría,Subcategoría,Mock Description 1,,No,100.00,1,000.00", csvLines[4]);
+            Assert.Equal("15/11/2023,Categoría,Subcategoría,Mock Description 1,,No,100,00,1.000,00", csvLines[4]);
 
             Assert.NotNull(result.Operations);
             Assert.Equal(2, result.Operations.Count);
@@ -51,7 +51,7 @@ namespace Calderilla.Services.Tests.Ing
             using var workbook = new HSSFWorkbook();
             var sheet = workbook.CreateSheet();
             Utils.CreateHeaderRows(sheet);
-            Utils.CreateMockDataRow(sheet, 4, "31/31/2023", "Mock Description 1", "100.00", "1,000.00");
+            Utils.CreateMockDataRow(sheet, 4, "31/31/2023", "Mock Description 1", "100.00", "1.000,00");
 
             // Act & Assert  
             Assert.Throws<FormatException>(() => IngReader.ExtractData(workbook, TestMonth, TestYear));
