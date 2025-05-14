@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Calderilla.DataAccess;
 using Calderilla.Api.Auth;
 using Calderilla.Services.Operations;
+using Calderilla.Services.Ing;
 
 namespace Calderilla.Api
 {
@@ -45,6 +46,7 @@ namespace Calderilla.Api
             // DataAccess
             builder.Services.AddSingleton<IBlobRepository, BlobRepository>();
             builder.Services.AddSingleton<IOperationsRepository, OperationsRepository>();
+            builder.Services.AddSingleton<IIngService, IngService>();
         }
     }
 }

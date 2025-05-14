@@ -16,8 +16,11 @@
         // Operations endpoints
         public const string OperationsEndpointsTag = "OperationsEndpoints";
         public const string GetOperations = "operations/{currentAccount:guid}/{year:int}/{month:int}";
-        public const string UploadDocument = "operations/upload-document";
-        // upload operations ing
+
+        // Ing operations
+        public const string IngEndpointsTag = "IngEndpoints";
+        public const string UploadIngBankExtract = "ing/upload-bank-extract/{currentAccount:guid}/{year:int}/{month:int}";
+
         // upload operations Sabadell
         // patch an operation
         // get monthly summary
