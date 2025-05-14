@@ -12,8 +12,8 @@ namespace Calderilla.Services.Ing
         {
             Date = DateOnly.Parse(row.GetCell(0).ToString()!, CultureES);
             Description = row.GetCell(3).ToString()!;
-            Amount = decimal.Parse(row.GetCell(6).ToString()!, CultureUS);
-            Total = decimal.Parse(row.GetCell(7).ToString()!, CultureUS);
+            Amount = decimal.Parse(row.GetCell(6).ToString()!, CultureES);
+            Total = decimal.Parse(row.GetCell(7).ToString()!, CultureES);
         }
 
         public DateOnly Date { get; set; }

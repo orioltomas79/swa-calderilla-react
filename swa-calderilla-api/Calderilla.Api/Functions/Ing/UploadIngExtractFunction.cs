@@ -10,6 +10,9 @@ using Calderilla.DataAccess;
 using Calderilla.Api.Functions.Dev;
 using Calderilla.Services.Operations;
 using Calderilla.Services.Ing;
+using NPOI.HSSF.UserModel;
+using NPOI.XSSF.UserModel;
+using System.IO;
 
 namespace Calderilla.Api.Functions.Ing
 {
@@ -52,9 +55,11 @@ namespace Calderilla.Api.Functions.Ing
             // 3. Read the file into a memory stream
             using var ms = new MemoryStream();
             await file.OpenReadStream().CopyToAsync(ms);
+            ms.Position = 0; 
+            var workbook = new HSSFWorkbook(ms);
 
             // 4. Call the service to get the data
-            var result = _ingService.GetBankExtractData(ms, month, year);
+            var result = _ingService.GetBankExtractData(workbook, month, year);
 
             var response = new UploadIngExtractResponse()
             {

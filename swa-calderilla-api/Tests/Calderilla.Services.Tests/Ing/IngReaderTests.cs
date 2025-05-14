@@ -20,10 +20,8 @@ namespace Calderilla.Services.Tests.Ing
             Utils.CreateMockDataRow(sheet, 6, "15/12/2023", "Mock Description 3", "300.00", "1,500.00");
             Utils.CreateMockDataRow(sheet, 7, "01/01/2024", "Mock Description 4", "400.00", "1,900.00");
 
-            using var memoryStream = Utils.WriteWorkbookToMemoryStream(workbook);
-
             // Act  
-            var result = IngReader.ExtractData(memoryStream, TestMonth, TestYear);
+            var result = IngReader.ExtractData(workbook, TestMonth, TestYear);
 
             // Assert  
             Assert.NotNull(result.CsvData);
@@ -55,10 +53,8 @@ namespace Calderilla.Services.Tests.Ing
             Utils.CreateHeaderRows(sheet);
             Utils.CreateMockDataRow(sheet, 4, "31/31/2023", "Mock Description 1", "100.00", "1,000.00");
 
-            using var memoryStream = Utils.WriteWorkbookToMemoryStream(workbook);
-
             // Act & Assert  
-            Assert.Throws<FormatException>(() => IngReader.ExtractData(memoryStream, TestMonth, TestYear));
+            Assert.Throws<FormatException>(() => IngReader.ExtractData(workbook, TestMonth, TestYear));
         }
 
         [Fact]
@@ -70,10 +66,8 @@ namespace Calderilla.Services.Tests.Ing
             Utils.CreateHeaderRows(sheet);
             Utils.CreateMockDataRow(sheet, 4, "01/01/2023", "Mock Description 1", "1.000,00", "2,000.00");
 
-            using var memoryStream = Utils.WriteWorkbookToMemoryStream(workbook);
-
             // Act & Assert  
-            Assert.Throws<FormatException>(() => IngReader.ExtractData(memoryStream, TestMonth, TestYear));
+            Assert.Throws<FormatException>(() => IngReader.ExtractData(workbook, TestMonth, TestYear));
         }
 
         [Fact]
@@ -86,10 +80,8 @@ namespace Calderilla.Services.Tests.Ing
             sheet.CreateRow(0);
             sheet.CreateRow(1);
 
-            using var memoryStream = Utils.WriteWorkbookToMemoryStream(workbook);
-
             // Act & Assert  
-            Assert.Throws<InvalidOperationException>(() => IngReader.ExtractData(memoryStream, TestMonth, TestYear));
+            Assert.Throws<InvalidOperationException>(() => IngReader.ExtractData(workbook, TestMonth, TestYear));
         }
     }
 }

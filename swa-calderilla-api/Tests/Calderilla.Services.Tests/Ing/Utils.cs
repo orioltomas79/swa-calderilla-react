@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NPOI.HSSF.UserModel;
-using NPOI.SS.UserModel;
+﻿using NPOI.SS.UserModel;
 
 namespace Calderilla.Services.Tests.Ing
 {
@@ -45,14 +39,6 @@ namespace Calderilla.Services.Tests.Ing
             row.CreateCell(5).SetCellValue("No");
             row.CreateCell(6).SetCellValue(importe);
             row.CreateCell(7).SetCellValue(saldo);
-        }
-
-        public static MemoryStream WriteWorkbookToMemoryStream(HSSFWorkbook workbook)
-        {
-            var memoryStream = new MemoryStream();
-            workbook.Write(memoryStream);
-            memoryStream.Seek(0, SeekOrigin.Begin);
-            return memoryStream;
         }
     }
 }

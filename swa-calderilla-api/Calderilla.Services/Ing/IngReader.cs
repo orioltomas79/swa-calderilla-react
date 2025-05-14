@@ -6,10 +6,8 @@ namespace Calderilla.Services.Ing
 {
     public class IngReader
     {
-        public static ExtractDataResult ExtractData(Stream stream, int month, int year)
+        public static ExtractDataResult ExtractData(HSSFWorkbook workbook, int month, int year)
         {
-            using var workbook = new HSSFWorkbook(stream);
-
             return GetAllIngOperations(workbook.GetSheetAt(0), month, year);
         }
 

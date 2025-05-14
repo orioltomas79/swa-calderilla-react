@@ -25,10 +25,8 @@ namespace Calderilla.Services.Tests.Ing
             Utils.CreateMockDataRow(sheet, 4, "01/12/2023", "Mock Description 1", "100.00", "1,000.00");
             Utils.CreateMockDataRow(sheet, 5, "15/12/2023", "Mock Description 2", "200.00", "1,200.00");
 
-            using var memoryStream = Utils.WriteWorkbookToMemoryStream(workbook);
-
             // Act
-            var result = _ingReaderService.GetBankExtractData(memoryStream, TestMonth, TestYear);
+            var result = _ingReaderService.GetBankExtractData(workbook, TestMonth, TestYear);
 
             // Assert
             Assert.NotNull(result.CsvData);
