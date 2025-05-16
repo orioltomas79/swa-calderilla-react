@@ -6,13 +6,9 @@ using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Calderilla.Api.ErrorHandling;
-using Calderilla.DataAccess;
 using Calderilla.Api.Functions.Dev;
-using Calderilla.Services.Operations;
 using Calderilla.Services.Ing;
 using NPOI.HSSF.UserModel;
-using NPOI.XSSF.UserModel;
-using System.IO;
 
 namespace Calderilla.Api.Functions.Ing
 {
