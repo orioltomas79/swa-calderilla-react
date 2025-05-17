@@ -2,7 +2,7 @@
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 
-namespace Calderilla.Services.Ing
+namespace Calderilla.Services.Banks.Ing
 {
     public class IngReader
     {

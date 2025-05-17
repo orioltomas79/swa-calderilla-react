@@ -1,7 +1,7 @@
 ﻿using NPOI.HSSF.UserModel;
-using Calderilla.Services.Ing;
+using Calderilla.Services.Banks.Ing;
 
-namespace Calderilla.Services.Tests.Ing
+namespace Calderilla.Services.Tests.Banks.Ing
 {
     public class IngReaderTests
     {

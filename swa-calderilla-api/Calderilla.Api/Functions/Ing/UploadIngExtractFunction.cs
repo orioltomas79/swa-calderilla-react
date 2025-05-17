@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Calderilla.Api.ErrorHandling;
 using Calderilla.Api.Functions.Dev;
-using Calderilla.Services.Ing;
+using Calderilla.Services.Banks.Ing;
 using NPOI.HSSF.UserModel;
 
 namespace Calderilla.Api.Functions.Ing

@@ -1,6 +1,6 @@
 ﻿using NPOI.SS.UserModel;
 
-namespace Calderilla.Services.Tests.Ing
+namespace Calderilla.Services.Tests.Banks.Ing
 {
     public class Utils
     {

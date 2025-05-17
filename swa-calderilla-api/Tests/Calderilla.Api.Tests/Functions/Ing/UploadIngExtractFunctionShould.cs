@@ -1,13 +1,12 @@
-﻿using System.Text;
-using Calderilla.Api.Functions.Ing;
-using Calderilla.Services.Ing;
+﻿using Calderilla.Api.Functions.Ing;
+using Calderilla.Services.Banks;
+using Calderilla.Services.Banks.Ing;
 using Calderilla.Test.Utils;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NPOI.HSSF.UserModel;
-using static Calderilla.Services.Ing.IngService;
 
 namespace Calderilla.Api.Tests.Functions.Ing
 {
@@ -44,7 +43,7 @@ namespace Calderilla.Api.Tests.Functions.Ing
             // Arrange
             var mockHttpRequest = CreateMockHttpRequestWithFile(CreateWorkbook(), "mockfile.xls");
 
-            var resultData = new GetBankExtractDataResult
+            var resultData = new GetBankExtractResult
             {
                 CsvData = "csv,data",
                 Operations = FakeOperationGenerator.GetFakeOperations(5)

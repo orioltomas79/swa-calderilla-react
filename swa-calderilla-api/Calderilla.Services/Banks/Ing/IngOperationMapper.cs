@@ -1,4 +1,4 @@
-namespace Calderilla.Services.Ing
+namespace Calderilla.Services.Banks.Ing
 {
     public static class IngOperationMapper
     {
