@@ -4,7 +4,6 @@ using Calderilla.Services.Banks;
 using Calderilla.Services.Banks.Sabadell;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure.Functions.Worker.Extensions.Abstractions;
 using Microsoft.Extensions.Logging;
 using Moq;
 using static Calderilla.Api.Functions.Banks.Sabadell.UploadSabadellExtractFunction;
