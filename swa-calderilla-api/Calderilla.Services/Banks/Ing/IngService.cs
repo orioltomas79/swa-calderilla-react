@@ -13,7 +13,7 @@ namespace Calderilla.Services.Banks.Ing
 
             return new GetBankExtractResult
             {
-                CsvData = extractedData.CsvData,
+                RawData = extractedData.CsvData,
                 Operations = operations
             };
         }

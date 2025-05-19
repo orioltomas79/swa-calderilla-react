@@ -1,4 +1,4 @@
-﻿using Calderilla.Api.Functions.Ing;
+﻿using Calderilla.Api.Functions.Banks.Ing;
 using Calderilla.Services.Banks;
 using Calderilla.Services.Banks.Ing;
 using Calderilla.Test.Utils;
@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using NPOI.HSSF.UserModel;
 
-namespace Calderilla.Api.Tests.Functions.Ing
+namespace Calderilla.Api.Tests.Functions.Banks.Ing
 {
     public class UploadIngExtractFunctionShould
     {
@@ -24,20 +24,6 @@ namespace Calderilla.Api.Tests.Functions.Ing
         }
 
         [Fact]
-        public async Task ReturnBadRequest_WhenFileIsMissing()
-        {
-            // Arrange
-            var httpRequestMock = CreateMockHttpRequestWithEmptyForm();
-
-            // Act
-            var result = await _function.UploadDocumentAsync(httpRequestMock.Object, Guid.NewGuid(), 2025, 5);
-
-            // Assert
-            var badRequestResult = Assert.IsType<ObjectResult>(result);
-            Assert.Equal(StatusCodes.Status400BadRequest, badRequestResult.StatusCode);
-        }
-
-        [Fact]
         public async Task ReturnCreated_WhenFileIsProcessedSuccessfully()
         {
             // Arrange
@@ -45,22 +31,40 @@ namespace Calderilla.Api.Tests.Functions.Ing
 
             var resultData = new GetBankExtractResult
             {
-                CsvData = "csv,data",
+                RawData = "csv,data",
                 Operations = FakeOperationGenerator.GetFakeOperations(5)
             };
 
             _ingServiceMock.Setup(s => s.GetBankExtractData(It.IsAny<HSSFWorkbook>(), 5, 2025)).Returns(resultData);
 
             // Act
-            var result = await _function.UploadDocumentAsync(mockHttpRequest.Object, Guid.NewGuid(), 2025, 5);
+            var result = await _function.UploadIngExtractAsync(mockHttpRequest.Object, Guid.NewGuid(), 2025, 5);
 
             // Assert
             var createdResult = Assert.IsType<ObjectResult>(result);
             Assert.Equal(StatusCodes.Status201Created, createdResult.StatusCode);
 
             var response = Assert.IsType<UploadIngExtractFunction.UploadIngExtractResponse>(createdResult.Value);
-            Assert.Equal(resultData.CsvData, response.IngExtractCsv);
+            Assert.Equal(resultData.RawData, response.IngExtractCsv);
             Assert.Equal(resultData.Operations, response.Operations);
+        }
+
+        [Fact]
+        public async Task ReturnBadRequest_WhenFileIsMissing()
+        {
+            // Arrange
+            var httpRequestMock = CreateMockHttpRequestWithEmptyForm();
+
+            // Act
+            var result = await _function.UploadIngExtractAsync(httpRequestMock.Object, Guid.NewGuid(), 2025, 5);
+
+            // Assert
+            var objectResult = Assert.IsType<ObjectResult>(result);
+            Assert.Equal(StatusCodes.Status400BadRequest, objectResult.StatusCode);
+            var details = Assert.IsType<ValidationProblemDetails>(objectResult.Value);
+            var firstError = details.Errors.FirstOrDefault();
+            Assert.Equal("file", firstError.Key);
+            Assert.Equal("No file named Document was provided.", firstError.Value.FirstOrDefault());
         }
 
         private Mock<HttpRequest> CreateMockHttpRequestWithEmptyForm()

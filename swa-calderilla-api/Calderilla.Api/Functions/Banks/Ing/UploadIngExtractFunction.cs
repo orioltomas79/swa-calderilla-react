@@ -10,21 +10,15 @@ using Calderilla.Api.Functions.Dev;
 using Calderilla.Services.Banks.Ing;
 using NPOI.HSSF.UserModel;
 
-namespace Calderilla.Api.Functions.Ing
+namespace Calderilla.Api.Functions.Banks.Ing
 {
-    public class UploadIngExtractFunction
+    public class UploadIngExtractFunction(ILogger<UploadIngExtractFunction> logger, IIngService ingService)
     {
-        private readonly ILogger<UploadIngExtractFunction> _logger;
-        private readonly IIngService _ingService;
+        private readonly ILogger<UploadIngExtractFunction> _logger = logger;
+        private readonly IIngService _ingService = ingService;
 
-        public UploadIngExtractFunction(ILogger<UploadIngExtractFunction> logger, IIngService ingService)
-        {
-            _logger = logger;
-            _ingService = ingService;
-        }
-
-        [Function(nameof(UploadDocumentAsync))]
-        [OpenApiOperation(operationId: nameof(UploadDocumentAsync), tags: [ApiEndpoints.IngEndpointsTag], Summary = "Uploads a document")]
+        [Function(nameof(UploadIngExtractAsync))]
+        [OpenApiOperation(operationId: nameof(UploadIngExtractAsync), tags: [ApiEndpoints.IngEndpointsTag], Summary = "Uploads a document")]
         [OpenApiParameter(name: "currentAccount", In = ParameterLocation.Path, Required = true, Type = typeof(Guid), Description = "The current account")]
         [OpenApiParameter(name: "year", In = ParameterLocation.Path, Required = true, Type = typeof(int), Description = "The year of the operations")]
         [OpenApiParameter(name: "month", In = ParameterLocation.Path, Required = true, Type = typeof(int), Description = "The month of the operations")]
@@ -32,12 +26,11 @@ namespace Calderilla.Api.Functions.Ing
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.Created, contentType: "application/json", bodyType: typeof(UploadIngExtractResponse), Description = "Returns the details of the uploaded document")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "application/json", bodyType: typeof(ProblemDetails), Description = "Returns a 400 error message")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.InternalServerError, contentType: "application/json", bodyType: typeof(ProblemDetails), Description = "Returns a 500 error message")]
-        public async Task<IActionResult> UploadDocumentAsync([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = ApiEndpoints.UploadIngBankExtract)] HttpRequest req, Guid currentAccount, int year, int month)
+        public async Task<IActionResult> UploadIngExtractAsync([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = ApiEndpoints.UploadIngBankExtract)] HttpRequest req, Guid currentAccount, int year, int month)
         {
-            // 1. Parse the multipart form
+            // Get the file from the request
+            _logger.LogDebug("Getting ING file from request");
             var form = await req.ReadFormAsync();
-
-            // 2. Grab the file and its original name
             var requestDocumentName = nameof(UploadIngExtractRequest.Document);
             var file = form.Files.GetFile(requestDocumentName);
             if (file == null)
@@ -48,18 +41,22 @@ namespace Calderilla.Api.Functions.Ing
                 return ValidationProblemDetailsHelper.ValidationProblemDetails(req, errors);
             }
 
-            // 3. Read the file into a memory stream
+            // Get the workbook from the file
+            _logger.LogDebug("Reading ING file");
             using var ms = new MemoryStream();
             await file.OpenReadStream().CopyToAsync(ms);
-            ms.Position = 0; 
+            ms.Position = 0;
             var workbook = new HSSFWorkbook(ms);
 
-            // 4. Call the service to get the data
+            // Extract the data from the workbook
+            _logger.LogDebug("Extracting data from ING file");
             var result = _ingService.GetBankExtractData(workbook, month, year);
 
+            // Return the result
+            _logger.LogDebug("Returning ING file result");
             var response = new UploadIngExtractResponse()
             {
-                IngExtractCsv = result.CsvData,
+                IngExtractCsv = result.RawData,
                 Operations = result.Operations
             };
 

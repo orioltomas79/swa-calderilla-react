@@ -21,10 +21,9 @@
         public const string IngEndpointsTag = "IngEndpoints";
         public const string UploadIngBankExtract = "ing/upload-bank-extract/{currentAccount:guid}/{year:int}/{month:int}";
 
-        // upload operations Sabadell
-        // patch an operation
-        // get monthly summary
-        // get annual summary
+        // Sabadell operations
+        public const string SabadellEndpointsTag = "SabadellEndpoints";
+        public const string UploadSabadellBankExtract = "sabadell/upload-bank-extract/{currentAccount:guid}/{year:int}/{month:int}";
 
         // Current accounts endpoints
         public const string CurrentAccountsEndpointsTag = "CurrentAccountsEndpoints";

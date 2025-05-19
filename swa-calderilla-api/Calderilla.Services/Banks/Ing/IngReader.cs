@@ -6,20 +6,10 @@ namespace Calderilla.Services.Banks.Ing
 {
     public class IngReader
     {
-        public static ExtractDataResult ExtractData(HSSFWorkbook workbook, int month, int year)
-        {
-            return GetAllIngOperations(workbook.GetSheetAt(0), month, year);
-        }
-
-        public class ExtractDataResult
-        {
-            public required string CsvData { get; set; }
-            public required List<IngOperation> Operations { get; set; }
-        }
-
-        private static ExtractDataResult GetAllIngOperations(ISheet sheet, int month, int year)
+        public static ExtractIngDataResult ExtractData(HSSFWorkbook workbook, int month, int year)
         {
             var operationsList = new List<IngOperation>();
+            var sheet = workbook.GetSheetAt(0);
             var headerRowNum = GetHeaderRowNum(sheet);
 
             var stringBuilder = new StringBuilder();
@@ -42,11 +32,17 @@ namespace Calderilla.Services.Banks.Ing
                 }
             }
 
-            return new ExtractDataResult
+            return new ExtractIngDataResult
             {
                 CsvData = stringBuilder.ToString(),
                 Operations = operationsList
             };
+        }
+
+        public class ExtractIngDataResult
+        {
+            public required string CsvData { get; set; }
+            public required List<IngOperation> Operations { get; set; }
         }
 
         private static int GetHeaderRowNum(ISheet sheet)

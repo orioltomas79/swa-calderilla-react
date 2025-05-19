@@ -29,8 +29,8 @@ namespace Calderilla.Services.Tests.Banks.Ing
             var result = _ingReaderService.GetBankExtractData(workbook, TestMonth, TestYear);
 
             // Assert
-            Assert.NotNull(result.CsvData);
-            var csvLines = result.CsvData.Split(Environment.NewLine);
+            Assert.NotNull(result.RawData);
+            var csvLines = Utils.GetLines(result.RawData);
             Assert.Equal("F. VALOR,CATEGORÍA,SUBCATEGORÍA,DESCRIPCIÓN,COMENTARIO,IMAGEN,IMPORTE (€),SALDO (€)", csvLines[3]);
             Assert.Equal("01/12/2023,Categoría,Subcategoría,Mock Description 1,,No,100,00,1.000,00", csvLines[4]);
 

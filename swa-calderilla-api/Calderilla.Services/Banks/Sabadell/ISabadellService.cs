@@ -1,9 +1,7 @@
-using Calderilla.Services.Banks;
-
-namespace Calderilla.Services.Bank.Sabadell
+namespace Calderilla.Services.Banks.Sabadell
 {
     public interface ISabadellService
     {
-        GetBankExtractResult GetBankExtractData(string extractCsv, int month, int year);
+        GetBankExtractResult GetBankExtractData(string pipeSeparatedBankExtract, int month, int year);
     }
 }

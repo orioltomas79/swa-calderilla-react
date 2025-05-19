@@ -40,5 +40,7 @@ namespace Calderilla.Services.Tests.Banks.Ing
             row.CreateCell(6).SetCellValue(importe);
             row.CreateCell(7).SetCellValue(saldo);
         }
+
+        public static string[] GetLines(string text) => text.Split(["\r\n", "\n", "\r"], StringSplitOptions.None);
     }
 }
