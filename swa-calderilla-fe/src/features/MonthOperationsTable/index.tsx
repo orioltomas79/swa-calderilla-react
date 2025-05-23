@@ -3,6 +3,7 @@ import { useState } from "react";
 import apiClient from "../../api/apiClient";
 import { Operation } from "../../api/types";
 import {
+  Button,
   Paper,
   Table,
   TableBody,
@@ -11,12 +12,26 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
+import { styled } from "@mui/material/styles";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 
 interface MonthOperationsTableProps {
   currentAccount: string;
   year: number;
   month: number;
 }
+
+const VisuallyHiddenInput = styled("input")({
+  clip: "rect(0 0 0 0)",
+  clipPath: "inset(50%)",
+  height: 1,
+  overflow: "hidden",
+  position: "absolute",
+  bottom: 0,
+  left: 0,
+  whiteSpace: "nowrap",
+  width: 1,
+});
 
 const MonthOperationsTable = ({
   currentAccount,
@@ -32,7 +47,11 @@ const MonthOperationsTable = ({
     setError(null); // Clear previous errors
     try {
       const listOperations =
-        await apiClient.operationsEndpointsClient.getOperations(currentAccount, year, month);
+        await apiClient.operationsEndpointsClient.getOperations(
+          currentAccount,
+          year,
+          month
+        );
       setApiResponse(listOperations);
     } catch (err) {
       if (err instanceof Error) {
@@ -45,8 +64,50 @@ const MonthOperationsTable = ({
     }
   };
 
+  const handleFileUpload = async (file: File) => {
+    setLoading(true);
+    setError(null);
+    try {
+      await apiClient.ingEndpointsClient.uploadIngExtract(
+        currentAccount,
+        year,
+        month,
+        { data: file, fileName: file.name }
+      );
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(err.message || "File upload failed");
+      } else {
+        setError("File upload failed");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div>
+      <div>
+        <Button
+          component="label"
+          role={undefined}
+          variant="contained"
+          tabIndex={-1}
+          startIcon={<CloudUploadIcon />}
+        >
+          Upload Ing file
+          <VisuallyHiddenInput
+            type="file"
+            onChange={(event) => {
+              if (event.target.files && event.target.files.length > 0) {
+                const file = event.target.files[0];
+                void handleFileUpload(file);
+                console.log("Selected file:", file);
+              }
+            }}
+          />
+        </Button>
+      </div>
       <button onClick={fetchApiData} disabled={loading}>
         {loading ? "Loading..." : "Fetch API Data"}
       </button>

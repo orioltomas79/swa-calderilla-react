@@ -21,27 +21,7 @@ https://learn.microsoft.com/en-us/training/modules/blob-storage-image-upload-sta
 
 ## **How to Build and Test the App Locally**
 
-To build and test your app locally, follow these steps:
+The detailed steps for building and testing the app locally are provided in the README files of both the API and the frontend projects:
 
-1. **Run the Backend Project:**
-   - Open the project in Visual Studio and build it.
-   - Start the backend server `http://localhost:7054/api/`.
-
-2. **Start the Frontend Application:**
-   - Open the frontend in your development environment.
-   - Start the frontend `http://localhost:5173/`.
-
-3. **Set Up the API Proxy with SWA:**
-   - Use **SWA (Static Web Apps)** to connect the frontend to the backend.
-   - Run the following command to start SWA with the development server:
-     ```bash
-     swa start http://localhost:5173 --api-devserver-url http://localhost:7054/api
-     ```
-
-4. **Access the Application:**
-   - Once everything is set up, open your browser and navigate to `http://localhost:4280/` to view the app.
-
-   Alternatively, if you're using Windows 11, you can run the run.ps1 file, which opens a single Windows Terminal instance with three tabs (one for each command).
-
-
-
+- [API README](./swa-calderilla-api/README.md)
+- [Frontend README](./swa-calderilla-fe/README.md)

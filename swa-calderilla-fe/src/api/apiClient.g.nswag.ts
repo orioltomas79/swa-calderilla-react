@@ -335,6 +335,281 @@ export class CurrentAccountsEndpointsClient {
   }
 }
 
+export class SabadellEndpointsClient {
+  private http: {
+    fetch(url: RequestInfo, init?: RequestInit): Promise<Response>;
+  };
+  private baseUrl: string;
+  protected jsonParseReviver: ((key: string, value: any) => any) | undefined =
+    undefined;
+
+  constructor(
+    baseUrl?: string,
+    http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }
+  ) {
+    this.http = http ? http : (window as any);
+    this.baseUrl = baseUrl ?? "http://localhost:7072/api";
+  }
+
+  /**
+   * Uploads a document
+   * @param currentAccount The current account
+   * @param year The year of the operations
+   * @param month The month of the operations
+   * @param document (optional)
+   * @return Returns the details of the uploaded document
+   */
+  uploadSabadellExtract(
+    currentAccount: string,
+    year: number,
+    month: number,
+    document: FileParameter | null | undefined
+  ): Promise<UploadSabadellExtractResponse> {
+    let url_ =
+      this.baseUrl +
+      "/sabadell/upload-bank-extract/{currentAccount}/{year}/{month}";
+    if (currentAccount === undefined || currentAccount === null)
+      throw new Error("The parameter 'currentAccount' must be defined.");
+    url_ = url_.replace(
+      "{currentAccount}",
+      encodeURIComponent("" + currentAccount)
+    );
+    if (year === undefined || year === null)
+      throw new Error("The parameter 'year' must be defined.");
+    url_ = url_.replace("{year}", encodeURIComponent("" + year));
+    if (month === undefined || month === null)
+      throw new Error("The parameter 'month' must be defined.");
+    url_ = url_.replace("{month}", encodeURIComponent("" + month));
+    url_ = url_.replace(/[?&]$/, "");
+
+    const content_ = new FormData();
+    if (document !== null && document !== undefined)
+      content_.append(
+        "document",
+        document.data,
+        document.fileName ? document.fileName : "document"
+      );
+
+    let options_: RequestInit = {
+      body: content_,
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+      },
+    };
+
+    return this.http.fetch(url_, options_).then((_response: Response) => {
+      return this.processUploadSabadellExtract(_response);
+    });
+  }
+
+  protected processUploadSabadellExtract(
+    response: Response
+  ): Promise<UploadSabadellExtractResponse> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && response.headers.forEach) {
+      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+    }
+    if (status === 201) {
+      return response.text().then((_responseText) => {
+        let result201: any = null;
+        result201 =
+          _responseText === ""
+            ? null
+            : (JSON.parse(
+                _responseText,
+                this.jsonParseReviver
+              ) as UploadSabadellExtractResponse);
+        return result201;
+      });
+    } else if (status === 400) {
+      return response.text().then((_responseText) => {
+        let result400: any = null;
+        result400 =
+          _responseText === ""
+            ? null
+            : (JSON.parse(
+                _responseText,
+                this.jsonParseReviver
+              ) as ProblemDetails);
+        return throwException(
+          "Returns a 400 error message",
+          status,
+          _responseText,
+          _headers,
+          result400
+        );
+      });
+    } else if (status === 500) {
+      return response.text().then((_responseText) => {
+        let result500: any = null;
+        result500 =
+          _responseText === ""
+            ? null
+            : (JSON.parse(
+                _responseText,
+                this.jsonParseReviver
+              ) as ProblemDetails);
+        return throwException(
+          "Returns a 500 error message",
+          status,
+          _responseText,
+          _headers,
+          result500
+        );
+      });
+    } else if (status !== 200 && status !== 204) {
+      return response.text().then((_responseText) => {
+        return throwException(
+          "An unexpected server error occurred.",
+          status,
+          _responseText,
+          _headers
+        );
+      });
+    }
+    return Promise.resolve<UploadSabadellExtractResponse>(null as any);
+  }
+}
+
+export class IngEndpointsClient {
+  private http: {
+    fetch(url: RequestInfo, init?: RequestInit): Promise<Response>;
+  };
+  private baseUrl: string;
+  protected jsonParseReviver: ((key: string, value: any) => any) | undefined =
+    undefined;
+
+  constructor(
+    baseUrl?: string,
+    http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }
+  ) {
+    this.http = http ? http : (window as any);
+    this.baseUrl = baseUrl ?? "http://localhost:7072/api";
+  }
+
+  /**
+   * Uploads a document
+   * @param currentAccount The current account
+   * @param year The year of the operations
+   * @param month The month of the operations
+   * @param document (optional)
+   * @return Returns the details of the uploaded document
+   */
+  uploadIngExtract(
+    currentAccount: string,
+    year: number,
+    month: number,
+    document: FileParameter | null | undefined
+  ): Promise<UploadIngExtractResponse> {
+    let url_ =
+      this.baseUrl + "/ing/upload-bank-extract/{currentAccount}/{year}/{month}";
+    if (currentAccount === undefined || currentAccount === null)
+      throw new Error("The parameter 'currentAccount' must be defined.");
+    url_ = url_.replace(
+      "{currentAccount}",
+      encodeURIComponent("" + currentAccount)
+    );
+    if (year === undefined || year === null)
+      throw new Error("The parameter 'year' must be defined.");
+    url_ = url_.replace("{year}", encodeURIComponent("" + year));
+    if (month === undefined || month === null)
+      throw new Error("The parameter 'month' must be defined.");
+    url_ = url_.replace("{month}", encodeURIComponent("" + month));
+    url_ = url_.replace(/[?&]$/, "");
+
+    const content_ = new FormData();
+    if (document !== null && document !== undefined)
+      content_.append(
+        "document",
+        document.data,
+        document.fileName ? document.fileName : "document"
+      );
+
+    let options_: RequestInit = {
+      body: content_,
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+      },
+    };
+
+    return this.http.fetch(url_, options_).then((_response: Response) => {
+      return this.processUploadIngExtract(_response);
+    });
+  }
+
+  protected processUploadIngExtract(
+    response: Response
+  ): Promise<UploadIngExtractResponse> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && response.headers.forEach) {
+      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+    }
+    if (status === 201) {
+      return response.text().then((_responseText) => {
+        let result201: any = null;
+        result201 =
+          _responseText === ""
+            ? null
+            : (JSON.parse(
+                _responseText,
+                this.jsonParseReviver
+              ) as UploadIngExtractResponse);
+        return result201;
+      });
+    } else if (status === 400) {
+      return response.text().then((_responseText) => {
+        let result400: any = null;
+        result400 =
+          _responseText === ""
+            ? null
+            : (JSON.parse(
+                _responseText,
+                this.jsonParseReviver
+              ) as ProblemDetails);
+        return throwException(
+          "Returns a 400 error message",
+          status,
+          _responseText,
+          _headers,
+          result400
+        );
+      });
+    } else if (status === 500) {
+      return response.text().then((_responseText) => {
+        let result500: any = null;
+        result500 =
+          _responseText === ""
+            ? null
+            : (JSON.parse(
+                _responseText,
+                this.jsonParseReviver
+              ) as ProblemDetails);
+        return throwException(
+          "Returns a 500 error message",
+          status,
+          _responseText,
+          _headers,
+          result500
+        );
+      });
+    } else if (status !== 200 && status !== 204) {
+      return response.text().then((_responseText) => {
+        return throwException(
+          "An unexpected server error occurred.",
+          status,
+          _responseText,
+          _headers
+        );
+      });
+    }
+    return Promise.resolve<UploadIngExtractResponse>(null as any);
+  }
+}
+
 export class DevEndpointsClient {
   private http: {
     fetch(url: RequestInfo, init?: RequestInit): Promise<Response>;
@@ -646,6 +921,24 @@ export interface ProblemDetails {
   extensions?: { [key: string]: any } | null;
 }
 
+export interface UploadIngExtractRequest {
+  document?: string | null;
+}
+
+export interface UploadIngExtractResponse {
+  ingExtractCsv?: string | null;
+  operations?: Operation[] | null;
+}
+
+export interface UploadSabadellExtractRequest {
+  document?: string | null;
+}
+
+export interface UploadSabadellExtractResponse {
+  sabadellExtractPipe?: string | null;
+  operations?: Operation[] | null;
+}
+
 export interface UserClaims {
   name?: string | null;
   authType?: string | null;
@@ -659,6 +952,11 @@ export interface ValidationProblemDetails {
   detail?: string | null;
   instance?: string | null;
   extensions?: { [key: string]: any } | null;
+}
+
+export interface FileParameter {
+  data: any;
+  fileName: string;
 }
 
 export class ApiException extends Error {

@@ -17,7 +17,10 @@
     "isready": "pnpm run format && pnpm run lint && pnpm run build && pnpm run test:coverage",
     "playwright:test": "pnpm exec playwright test",
     "playwright:report": "pnpm exec playwright show-report",
-    "playwright:ui": "pnpm exec playwright test --ui"
+    "playwright:ui": "pnpm exec playwright test --ui",
+    "backend:azurite:blob": "azurite-blob --location ../swa-calderilla-api",
+    "backend:func:start": "func host start --script-root ../swa-calderilla-api/Calderilla.Api",
+    "azure:swa": "swa start"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",

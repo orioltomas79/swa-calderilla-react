@@ -100,6 +100,10 @@ For more information, you can refer to the project's README file: [Calderilla.Da
 
 3. **Run Locally**:
    - Navigate to the `Calderilla.API` project directory.
+   - Start azurite:
+     ```bash
+     azurite-blob
+     ```   
    - Start the Azure Functions app:
      ```bash
      func start
@@ -111,3 +115,16 @@ For more information, you can refer to the project's README file: [Calderilla.Da
      dotnet test
      ```
 
+**Package.json**:
+
+The package.json file in this project serves as a set of development tools and scripts for working with the API. It defines several npm scripts to:
+
+- Start Azurite Blob storage emulator (azurite:blob)
+- Start the Azure Functions host for the API (func:start)
+- Run .NET tests for the API (api:test)
+- Build the .NET API project (api:build)
+
+This file does not manage the main application code (which is .NET), but provides convenient commands for local development, testing, and running the API.
+
+> ℹ️ **Note:**  
+> The `package.json` is especially useful for developers using Visual Studio Code, as it provides convenient scripts for local development and testing. If you are using Visual Studio, some tools like Azurite may start automatically when you run or debug the project, so you might not need to use these npm scripts directly.
