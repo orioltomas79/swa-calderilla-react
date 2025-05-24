@@ -2,6 +2,7 @@ using System.Text;
 using Calderilla.Api.Functions.Banks.Sabadell;
 using Calderilla.Services.Banks;
 using Calderilla.Services.Banks.Sabadell;
+using Calderilla.Services.Operations;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -15,14 +16,23 @@ public class UploadSabadellExtractFunctionShould
     private const int Year = 2024;
     private const int Month = 6;
 
-    private readonly Mock<ILogger<UploadSabadellExtractFunction>> _loggerMock = new();
-    private readonly Mock<ISabadellService> _sabadellServiceMock = new();
+    private Mock<ILogger<UploadSabadellExtractFunction>> _loggerMock;
+    private Mock<ISabadellService> _sabadellServiceMock;
+    private Mock<IOperationsService> _operationsServiceMock;
+    private readonly UploadSabadellExtractFunction _function;
+
+    public UploadSabadellExtractFunctionShould()
+    {
+        _loggerMock = new Mock<ILogger<UploadSabadellExtractFunction>>();
+        _sabadellServiceMock = new Mock<ISabadellService>();
+        _operationsServiceMock = new Mock<IOperationsService>();
+        _function = new(_loggerMock.Object, _sabadellServiceMock.Object, _operationsServiceMock.Object);
+    }
 
     [Fact]
     public async Task ReturnCreatedAndResponse_WhenFileIsValid()
     {
         // Arrange
-        var function = CreateFunction();
         var fileContent = "file-content";
         var httpRequest = CreateHttpRequestWithFile(fileContent);
         var currentAccount = Guid.NewGuid();
@@ -37,7 +47,7 @@ public class UploadSabadellExtractFunctionShould
         _sabadellServiceMock.Setup(s => s.GetBankExtractData(fileContent, Month, Year)).Returns(serviceResult);
 
         // Act
-        var result = await function.UploadSabadellExtractAsync(httpRequest, currentAccount, Year, Month);
+        var result = await _function.UploadSabadellExtractAsync(httpRequest, currentAccount, Year, Month);
 
         // Assert
         var objectResult = Assert.IsType<ObjectResult>(result);
@@ -52,11 +62,10 @@ public class UploadSabadellExtractFunctionShould
     public async Task ReturnBadRequest_WhenFileIsMissing()
     {
         // Arrange
-        var function = CreateFunction();
         var httpRequest = CreateHttpRequestWithoutFile();
 
         // Act
-        var result = await function.UploadSabadellExtractAsync(httpRequest, Guid.NewGuid(), Year, Month);
+        var result = await _function.UploadSabadellExtractAsync(httpRequest, Guid.NewGuid(), Year, Month);
 
         // Assert
         var objectResult = Assert.IsType<ObjectResult>(result);
@@ -66,8 +75,6 @@ public class UploadSabadellExtractFunctionShould
         Assert.Equal("file", firstError.Key);
         Assert.Equal("No file named Document was provided.", firstError.Value.FirstOrDefault());
     }
-
-    private UploadSabadellExtractFunction CreateFunction() => new(_loggerMock.Object, _sabadellServiceMock.Object);
 
     private static IFormFile CreateFormFile(string content, string name)
     {
