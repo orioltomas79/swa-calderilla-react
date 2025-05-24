@@ -1,6 +1,8 @@
-﻿using Calderilla.Api.Functions.Banks.Ing;
+﻿using System.Text;
+using Calderilla.Api.Functions.Banks.Ing;
 using Calderilla.Services.Banks;
 using Calderilla.Services.Banks.Ing;
+using Calderilla.Services.Operations;
 using Calderilla.Test.Utils;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -14,38 +16,40 @@ namespace Calderilla.Api.Tests.Functions.Banks.Ing
     {
         private readonly Mock<ILogger<UploadIngExtractFunction>> _loggerMock;
         private readonly Mock<IIngService> _ingServiceMock;
+        private readonly Mock<IOperationsService> _operationsServiceMock;
         private readonly UploadIngExtractFunction _function;
 
         public UploadIngExtractFunctionShould()
         {
             _loggerMock = new Mock<ILogger<UploadIngExtractFunction>>();
             _ingServiceMock = new Mock<IIngService>();
-            _function = new UploadIngExtractFunction(_loggerMock.Object, _ingServiceMock.Object);
+            _operationsServiceMock = new Mock<IOperationsService>();
+            _function = new UploadIngExtractFunction(_loggerMock.Object, _ingServiceMock.Object, _operationsServiceMock.Object);
         }
 
         [Fact]
         public async Task ReturnCreated_WhenFileIsProcessedSuccessfully()
         {
             // Arrange
-            var mockHttpRequest = CreateMockHttpRequestWithFile(CreateWorkbook(), "mockfile.xls");
+            var httpRequest = CreateHttpRequestWithFile(CreateWorkbook());
 
             var resultData = new GetBankExtractResult
             {
-                RawData = "csv,data",
+                RawData = ["raw|data"],
                 Operations = FakeOperationGenerator.GetFakeOperations(5)
             };
 
             _ingServiceMock.Setup(s => s.GetBankExtractData(It.IsAny<HSSFWorkbook>(), 5, 2025)).Returns(resultData);
 
             // Act
-            var result = await _function.UploadIngExtractAsync(mockHttpRequest.Object, Guid.NewGuid(), 2025, 5);
+            var result = await _function.UploadIngExtractAsync(httpRequest, Guid.NewGuid(), 2025, 5);
 
             // Assert
             var createdResult = Assert.IsType<ObjectResult>(result);
             Assert.Equal(StatusCodes.Status201Created, createdResult.StatusCode);
 
             var response = Assert.IsType<UploadIngExtractFunction.UploadIngExtractResponse>(createdResult.Value);
-            Assert.Equal(resultData.RawData, response.IngExtractCsv);
+            Assert.Equal(resultData.RawData, response.IngExtractRaw);
             Assert.Equal(resultData.Operations, response.Operations);
         }
 
@@ -53,10 +57,10 @@ namespace Calderilla.Api.Tests.Functions.Banks.Ing
         public async Task ReturnBadRequest_WhenFileIsMissing()
         {
             // Arrange
-            var httpRequestMock = CreateMockHttpRequestWithEmptyForm();
+            var httpRequest = CreateHttpRequestWithoutFile();
 
             // Act
-            var result = await _function.UploadIngExtractAsync(httpRequestMock.Object, Guid.NewGuid(), 2025, 5);
+            var result = await _function.UploadIngExtractAsync(httpRequest, Guid.NewGuid(), 2025, 5);
 
             // Assert
             var objectResult = Assert.IsType<ObjectResult>(result);
@@ -67,41 +71,30 @@ namespace Calderilla.Api.Tests.Functions.Banks.Ing
             Assert.Equal("No file named Document was provided.", firstError.Value.FirstOrDefault());
         }
 
-        private Mock<HttpRequest> CreateMockHttpRequestWithEmptyForm()
+        private static HttpRequest CreateHttpRequestWithFile(byte[] fileContent, string fileFieldName = "Document")
         {
-            var httpRequestMock = new Mock<HttpRequest>();
-            httpRequestMock
-                .Setup(r => r.ReadFormAsync(It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new FormCollection(new Dictionary<string, Microsoft.Extensions.Primitives.StringValues>()));
-            return httpRequestMock;
+            var context = new DefaultHttpContext();
+            var formFile = new FormFile(new MemoryStream(fileContent), 0, fileContent.Length, fileFieldName, "test.xls");
+            var formCollection = new FormCollection([], new FormFileCollection { formFile });
+            context.Request.Form = formCollection;
+            return context.Request;
         }
 
-        private Mock<HttpRequest> CreateMockHttpRequestWithFile(byte[] fileContent, string fileName)
+        private static IFormFile CreateFormFile(string content, string name)
         {
-            var mockFile = new Mock<IFormFile>();
-            mockFile.Setup(f => f.OpenReadStream()).Returns(new MemoryStream(fileContent));
-            mockFile.Setup(f => f.FileName).Returns(fileName);
-            mockFile.Setup(f => f.Length).Returns(fileContent.Length);
-
-            var mockFormFileCollection = new Mock<IFormFileCollection>();
-            mockFormFileCollection
-                .Setup(f => f.GetFile(It.IsAny<string>()))
-                .Returns(mockFile.Object);
-
-            var mockFormCollection = new Mock<IFormCollection>();
-            mockFormCollection
-                .Setup(f => f.Files)
-                .Returns(mockFormFileCollection.Object);
-
-            var mockHttpRequest = new Mock<HttpRequest>();
-            mockHttpRequest
-                .Setup(r => r.ReadFormAsync(default))
-                .ReturnsAsync(mockFormCollection.Object);
-
-            return mockHttpRequest;
+            var stream = new MemoryStream(Encoding.UTF8.GetBytes(content));
+            return new FormFile(stream, 0, stream.Length, name, "test.txt");
         }
 
-        public byte[] CreateWorkbook()
+        private static HttpRequest CreateHttpRequestWithoutFile()
+        {
+            var context = new DefaultHttpContext();
+            var formCollection = new FormCollection([], new FormFileCollection());
+            context.Request.Form = formCollection;
+            return context.Request;
+        }
+
+        private static byte[] CreateWorkbook()
         {
             using var memoryStream = new MemoryStream();
             var workbook = new HSSFWorkbook();

@@ -9,13 +9,16 @@ using Calderilla.Api.ErrorHandling;
 using Calderilla.Api.Functions.Dev;
 using Calderilla.Services.Banks.Ing;
 using NPOI.HSSF.UserModel;
+using Calderilla.Services.Operations;
+using Calderilla.Api.Auth;
 
 namespace Calderilla.Api.Functions.Banks.Ing
 {
-    public class UploadIngExtractFunction(ILogger<UploadIngExtractFunction> logger, IIngService ingService)
+    public class UploadIngExtractFunction(ILogger<UploadIngExtractFunction> logger, IIngService ingService, IOperationsService operationsService)
     {
         private readonly ILogger<UploadIngExtractFunction> _logger = logger;
         private readonly IIngService _ingService = ingService;
+        private readonly IOperationsService _operationsService = operationsService;
 
         [Function(nameof(UploadIngExtractAsync))]
         [OpenApiOperation(operationId: nameof(UploadIngExtractAsync), tags: [ApiEndpoints.IngEndpointsTag], Summary = "Uploads a document")]
@@ -52,11 +55,18 @@ namespace Calderilla.Api.Functions.Banks.Ing
             _logger.LogDebug("Extracting data from ING file");
             var result = _ingService.GetBankExtractData(workbook, month, year);
 
+            // Enrich the data
+
+            // Save the data
+            _logger.LogDebug("Saving operations");
+            var claimsPrincipal = StaticWebAppsAuth.GetClaimsPrincipal(req);
+            await _operationsService.SaveOperationAsync(result.Operations, claimsPrincipal.GetName(), currentAccount, year, month).ConfigureAwait(false);
+
             // Return the result
             _logger.LogDebug("Returning ING file result");
             var response = new UploadIngExtractResponse()
             {
-                IngExtractCsv = result.RawData,
+                IngExtractRaw = result.RawData,
                 Operations = result.Operations
             };
 
@@ -73,7 +83,7 @@ namespace Calderilla.Api.Functions.Banks.Ing
 
         public class UploadIngExtractResponse
         {
-            public required string IngExtractCsv { get; set; }
+            public required List<string> IngExtractRaw { get; set; }
 
             public required IEnumerable<Domain.Operation> Operations { get; set; }
         }

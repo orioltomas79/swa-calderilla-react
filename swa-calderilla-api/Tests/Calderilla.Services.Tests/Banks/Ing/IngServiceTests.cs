@@ -16,7 +16,7 @@ namespace Calderilla.Services.Tests.Banks.Ing
         }
 
         [Fact]
-        public void GetBankExtractData_ShouldReturnCsvAndOperations()
+        public void GetBankExtractData_ShouldReturnRawAndOperations()
         {
             // Arrange
             using var workbook = new HSSFWorkbook();
@@ -30,9 +30,9 @@ namespace Calderilla.Services.Tests.Banks.Ing
 
             // Assert
             Assert.NotNull(result.RawData);
-            var csvLines = Utils.GetLines(result.RawData);
-            Assert.Equal("F. VALOR,CATEGORÍA,SUBCATEGORÍA,DESCRIPCIÓN,COMENTARIO,IMAGEN,IMPORTE (€),SALDO (€)", csvLines[3]);
-            Assert.Equal("01/12/2023,Categoría,Subcategoría,Mock Description 1,,No,100,00,1.000,00", csvLines[4]);
+            var rawLines = result.RawData;
+            Assert.Equal("F. VALOR|CATEGORÍA|SUBCATEGORÍA|DESCRIPCIÓN|COMENTARIO|IMAGEN|IMPORTE (€)|SALDO (€)", rawLines[3]);
+            Assert.Equal("01/12/2023|Categoría|Subcategoría|Mock Description 1||No|100,00|1.000,00", rawLines[4]);
 
             Assert.NotNull(result.Operations);
             Assert.Equal(2, result.Operations.Count);

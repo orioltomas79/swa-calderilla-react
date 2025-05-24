@@ -7,5 +7,8 @@
   "editor.defaultFormatter": "ms-dotnettools.csharp",
   "editor.formatOnSave": true,
   "editor.formatOnType": true,
-  "dotnet.automaticallySyncWithActiveItem": true
+  "dotnet.automaticallySyncWithActiveItem": true,
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
 }

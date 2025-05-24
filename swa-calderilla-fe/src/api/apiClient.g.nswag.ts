@@ -926,7 +926,7 @@ export interface UploadIngExtractRequest {
 }
 
 export interface UploadIngExtractResponse {
-  ingExtractCsv?: string | null;
+  ingExtractCsv?: string[] | null;
   operations?: Operation[] | null;
 }
 
@@ -935,7 +935,7 @@ export interface UploadSabadellExtractRequest {
 }
 
 export interface UploadSabadellExtractResponse {
-  sabadellExtractPipe?: string | null;
+  sabadellExtractPipe?: string[] | null;
   operations?: Operation[] | null;
 }
 

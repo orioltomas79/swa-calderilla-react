@@ -14,11 +14,23 @@ namespace Calderilla.Services.Operations
 
         public Task<IEnumerable<Operation>> GetOperationsAsync(string userId, Guid currentAccount, int year, int month)
         {
+            ValidateOperationsParameters(userId, year, month);
+            return _operationsRepository.GetOperationsAsync(userId, currentAccount, year, month);
+        }
+
+        public async Task SaveOperationAsync(IEnumerable<Operation> operations, string userId, Guid currentAccount, int year, int month)
+        {
+            ValidateOperationsParameters(userId, year, month);
+            ArgumentNullException.ThrowIfNull(operations);
+
+            await _operationsRepository.SaveOperationsAsync(operations, userId, currentAccount, year, month).ConfigureAwait(false);
+        }
+
+        private static void ValidateOperationsParameters(string userId, int year, int month)
+        {
             if (string.IsNullOrWhiteSpace(userId)) throw new ArgumentException("User ID cannot be null or whitespace.", nameof(userId));
             if (year < 1 || year > 9999) throw new ArgumentOutOfRangeException(nameof(year), "Year must be between 1 and 9999.");
             if (month < 1 || month > 12) throw new ArgumentOutOfRangeException(nameof(month), "Month must be between 1 and 12.");
-
-            return _operationsRepository.GetOperationsAsync(userId, currentAccount, year, month);
         }
     }
 }

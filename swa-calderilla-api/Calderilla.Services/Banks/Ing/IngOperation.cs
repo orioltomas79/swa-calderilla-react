@@ -5,15 +5,14 @@ namespace Calderilla.Services.Banks.Ing
 {
     public class IngOperation
     {
-        private static readonly CultureInfo CultureUS = new("en-US");
         private static readonly CultureInfo CultureES = new("es-ES");
 
         public IngOperation(IRow row)
         {
             Date = DateOnly.Parse(row.GetCell(0).ToString()!, CultureES);
             Description = row.GetCell(3).ToString()!;
-            Amount = decimal.Parse(row.GetCell(6).ToString()!, CultureES);
-            Total = decimal.Parse(row.GetCell(7).ToString()!, CultureES);
+            Amount = Utils.ParseDecimalAutoDetectCulture(row.GetCell(6).ToString()!);
+            Total = Utils.ParseDecimalAutoDetectCulture(row.GetCell(7).ToString()!);
         }
 
         public DateOnly Date { get; set; }

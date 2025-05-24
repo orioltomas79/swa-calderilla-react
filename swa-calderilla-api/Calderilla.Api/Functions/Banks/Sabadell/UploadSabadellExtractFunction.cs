@@ -73,7 +73,7 @@ namespace Calderilla.Api.Functions.Banks.Sabadell
 
         public class UploadSabadellExtractResponse
         {
-            public required string SabadellExtractPipe { get; set; }
+            public required List<string> SabadellExtractPipe { get; set; }
 
             public required IEnumerable<Domain.Operation> Operations { get; set; }
         }

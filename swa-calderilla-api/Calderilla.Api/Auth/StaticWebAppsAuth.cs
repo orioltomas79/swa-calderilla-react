@@ -40,7 +40,7 @@ namespace Calderilla.Api.Auth
             }
 
 #if DEBUG
-            // For local testing only.
+            // For local testing and unit testing only.
             // We can test the backend without the frontend by creating a ClientPrincipal manually
             // if the header x-ms-client-principal is not present.
             if (principal.UserRoles == null)

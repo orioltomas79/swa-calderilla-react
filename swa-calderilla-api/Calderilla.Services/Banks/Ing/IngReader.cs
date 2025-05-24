@@ -1,5 +1,4 @@
-﻿using System.Text;
-using NPOI.HSSF.UserModel;
+﻿using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 
 namespace Calderilla.Services.Banks.Ing
@@ -11,8 +10,7 @@ namespace Calderilla.Services.Banks.Ing
             var operationsList = new List<IngOperation>();
             var sheet = workbook.GetSheetAt(0);
             var headerRowNum = GetHeaderRowNum(sheet);
-
-            var stringBuilder = new StringBuilder();
+            var rawList = new List<string>();
 
             for (int i = 0; i <= sheet.LastRowNum; i++)
             {
@@ -20,9 +18,9 @@ namespace Calderilla.Services.Banks.Ing
                 if (row == null) continue;
 
                 var rowValues = ExtractRowValues(row);
-                stringBuilder.AppendLine(string.Join(",", rowValues));
+                rawList.Add(string.Join("|", rowValues));
 
-                if ( i > headerRowNum)
+                if (i > headerRowNum)
                 {
                     var ingOperation = new IngOperation(row);
                     if (ingOperation.Date.Month == month && ingOperation.Date.Year == year)
@@ -34,14 +32,14 @@ namespace Calderilla.Services.Banks.Ing
 
             return new ExtractIngDataResult
             {
-                CsvData = stringBuilder.ToString(),
+                RawData = rawList,
                 Operations = operationsList
             };
         }
 
         public class ExtractIngDataResult
         {
-            public required string CsvData { get; set; }
+            public required List<string> RawData { get; set; }
             public required List<IngOperation> Operations { get; set; }
         }
 

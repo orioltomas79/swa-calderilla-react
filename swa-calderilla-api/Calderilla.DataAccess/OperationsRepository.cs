@@ -16,6 +16,11 @@ namespace Calderilla.DataAccess
             return await _blobRepository.ReadListAsync<Operation>(GetBlobName(userId, currentAccount, year, month)).ConfigureAwait(false);
         }
 
+        public async Task SaveOperationsAsync(IEnumerable<Operation> operations, string userId, Guid currentAccount, int year, int month)
+        {
+            await _blobRepository.WriteListAsync(GetBlobName(userId, currentAccount, year, month), operations.ToList()).ConfigureAwait(false);
+        }
+
         private static string GetBlobName(string userId, Guid currentAccount, int year, int month)
         {
             return $"{userId}/{currentAccount}/{year}/{month}.json";

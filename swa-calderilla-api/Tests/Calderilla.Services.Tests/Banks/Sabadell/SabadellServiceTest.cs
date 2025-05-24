@@ -1,4 +1,5 @@
 using Calderilla.Services.Banks.Sabadell;
+using Calderilla.Test.Utils;
 
 namespace Calderilla.Services.Tests.Banks.Sabadell
 {
@@ -22,7 +23,7 @@ namespace Calderilla.Services.Tests.Banks.Sabadell
             sb.AppendLine(Utils.CreateFakePipeRow("25/05/2024", "COMPRA TARJ. A", "-100.00", "2000.00", "5402__0037"));
             sb.AppendLine(Utils.CreateFakePipeRow("03/06/2024", "COMPRA TARJ. B", "-200.00", "2200.00", "5402__0037"));
             sb.AppendLine(Utils.CreateFakePipeRow("23/06/2024", "COMPRA TARJ. C", "-300.00", "2500.00", "5402__0037"));
-            sb.AppendLine(Utils.CreateFakePipeRow("28/07/2024", "COMPRA TARJ. D", "-400.00", "2900.00", "5402__0037"));
+            sb.Append(Utils.CreateFakePipeRow("28/07/2024", "COMPRA TARJ. D", "-400.00", "2900.00", "5402__0037"));
             var extract = sb.ToString();
 
             // Act
@@ -30,7 +31,8 @@ namespace Calderilla.Services.Tests.Banks.Sabadell
 
             // Assert
             Assert.NotNull(result.RawData);
-            Assert.Equal(extract, result.RawData);
+            List<string> expectedRawData = extract.SplitLines().ToList();
+            Assert.Equal(expectedRawData, result.RawData);
 
             Assert.NotNull(result.Operations);
             Assert.Equal(2, result.Operations.Count);

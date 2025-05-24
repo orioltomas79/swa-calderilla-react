@@ -24,20 +24,20 @@ public class UploadSabadellExtractFunctionShould
         // Arrange
         var function = CreateFunction();
         var fileContent = "file-content";
-        var req = CreateHttpRequestWithFile(fileContent);
+        var httpRequest = CreateHttpRequestWithFile(fileContent);
         var currentAccount = Guid.NewGuid();
 
         var operations = Test.Utils.FakeOperationGenerator.GetFakeOperations(5);
 
         var serviceResult = new GetBankExtractResult
         {
-            RawData = "pipe-data",
+            RawData = ["pipe-data"],
             Operations = operations
         };
         _sabadellServiceMock.Setup(s => s.GetBankExtractData(fileContent, Month, Year)).Returns(serviceResult);
 
         // Act
-        var result = await function.UploadSabadellExtractAsync(req, currentAccount, Year, Month);
+        var result = await function.UploadSabadellExtractAsync(httpRequest, currentAccount, Year, Month);
 
         // Assert
         var objectResult = Assert.IsType<ObjectResult>(result);
@@ -53,13 +53,10 @@ public class UploadSabadellExtractFunctionShould
     {
         // Arrange
         var function = CreateFunction();
-        var context = new DefaultHttpContext();
-        var formCollection = new FormCollection([], new FormFileCollection());
-        context.Request.Form = formCollection;
-        var req = context.Request;
+        var httpRequest = CreateHttpRequestWithoutFile();
 
         // Act
-        var result = await function.UploadSabadellExtractAsync(req, Guid.NewGuid(), Year, Month);
+        var result = await function.UploadSabadellExtractAsync(httpRequest, Guid.NewGuid(), Year, Month);
 
         // Assert
         var objectResult = Assert.IsType<ObjectResult>(result);
@@ -83,6 +80,14 @@ public class UploadSabadellExtractFunctionShould
         var context = new DefaultHttpContext();
         var formFile = CreateFormFile(fileContent, fileFieldName);
         var formCollection = new FormCollection(new Dictionary<string, Microsoft.Extensions.Primitives.StringValues>(), new FormFileCollection { formFile });
+        context.Request.Form = formCollection;
+        return context.Request;
+    }
+
+    private static HttpRequest CreateHttpRequestWithoutFile()
+    {
+        var context = new DefaultHttpContext();
+        var formCollection = new FormCollection([], new FormFileCollection());
         context.Request.Form = formCollection;
         return context.Request;
     }

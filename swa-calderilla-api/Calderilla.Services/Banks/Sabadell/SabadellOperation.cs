@@ -4,7 +4,6 @@ namespace Calderilla.Services.Banks.Sabadell;
 
 public class SabadellOperation
 {
-    private static readonly CultureInfo CultureUS = new("en-US");
     private static readonly CultureInfo CultureES = new("es-ES");
 
     public SabadellOperation(string row)
@@ -13,8 +12,8 @@ public class SabadellOperation
 
         Date = DateOnly.Parse(columns[0], CultureES);
         Description = columns[1];
-        Amount = decimal.Parse(columns[3], CultureUS);
-        Total = decimal.Parse(columns[4], CultureUS);
+        Amount = Utils.ParseDecimalAutoDetectCulture(columns[3]);
+        Total = Utils.ParseDecimalAutoDetectCulture(columns[4]);
         Payer = columns[6];
     }
 

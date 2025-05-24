@@ -1,5 +1,3 @@
-using System.Text;
-
 namespace Calderilla.Services.Banks.Sabadell;
 
 public class SabadellReader
@@ -7,8 +5,7 @@ public class SabadellReader
     public static ExtractSabadellDataResult ExtractData(string pipeSeparatedBankExtract, int month, int year)
     {
         var operationsList = new List<SabadellOperation>();
-
-        var stringBuilder = new StringBuilder();
+        var textRawList = new List<string>();
 
         var rows = GetLines(pipeSeparatedBankExtract);
 
@@ -19,7 +16,7 @@ public class SabadellReader
                 continue;
             }
 
-            stringBuilder.AppendLine(row);
+            textRawList.Add(row);
 
             var sabadellOperation = new SabadellOperation(row);
             if (sabadellOperation.Date.Month == month && sabadellOperation.Date.Year == year)
@@ -30,14 +27,14 @@ public class SabadellReader
 
         return new ExtractSabadellDataResult()
         {
-            RawData = stringBuilder.ToString(),
+            RawData = textRawList,
             Operations = operationsList
         };
     }
 
     public class ExtractSabadellDataResult
     {
-        public required string RawData { get; set; }
+        public required List<string> RawData { get; set; }
         public required List<SabadellOperation> Operations { get; set; }
     }
 

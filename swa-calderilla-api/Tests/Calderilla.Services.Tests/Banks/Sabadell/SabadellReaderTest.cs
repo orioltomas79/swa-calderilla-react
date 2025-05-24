@@ -1,4 +1,5 @@
 using Calderilla.Services.Banks.Sabadell;
+using Calderilla.Test.Utils;
 
 namespace Calderilla.Services.Tests.Banks.Sabadell;
 
@@ -15,7 +16,7 @@ public class SabadellReaderTest
         sb.AppendLine(Utils.CreateFakePipeRow("25/05/2024", "COMPRA TARJ. A", "-100.00", "2000.00", "5402__0037"));
         sb.AppendLine(Utils.CreateFakePipeRow("03/06/2024", "COMPRA TARJ. B", "-200.00", "2200.00", "5402__0037"));
         sb.AppendLine(Utils.CreateFakePipeRow("23/06/2024", "COMPRA TARJ. C", "-300.00", "2500.00", "5402__0037"));
-        sb.AppendLine(Utils.CreateFakePipeRow("28/07/2024", "COMPRA TARJ. D", "-400.00", "2900.00", "5402__0037"));
+        sb.Append(Utils.CreateFakePipeRow("28/07/2024", "COMPRA TARJ. D", "-400.00", "2900.00", "5402__0037"));
         var extract = sb.ToString();
 
         // Act
@@ -23,7 +24,8 @@ public class SabadellReaderTest
 
         // Assert
         Assert.NotNull(result);
-        Assert.Equal(extract, result.RawData);
+        List<string> expectedRawData = extract.SplitLines().ToList();
+        Assert.Equal(expectedRawData, result.RawData);
 
         Assert.Equal(2, result.Operations.Count);
         Assert.All(result.Operations, operation =>
@@ -45,16 +47,6 @@ public class SabadellReaderTest
     {
         // Arrange  
         var extract = Utils.CreateFakePipeRow("31/31/2023", "COMPRA TARJ. A", "-100.00", "2000.00", "5402__0037");
-
-        // Act & Assert  
-        Assert.Throws<FormatException>(() => SabadellReader.ExtractData(extract, TestMonth, TestYear));
-    }
-
-    [Fact]
-    public void ExtractData_ForSpecificMonth_ShouldThrowExceptionForInvalidAmount()
-    {
-        // Arrange  
-        var extract = Utils.CreateFakePipeRow("01/01/2023", "COMPRA TARJ. A", "-100,00", "2.000,00", "5402__0037");
 
         // Act & Assert  
         Assert.Throws<FormatException>(() => SabadellReader.ExtractData(extract, TestMonth, TestYear));
