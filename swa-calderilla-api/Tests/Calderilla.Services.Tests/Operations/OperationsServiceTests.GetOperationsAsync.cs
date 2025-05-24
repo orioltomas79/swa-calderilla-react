@@ -1,6 +1,5 @@
 ﻿using Calderilla.DataAccess;
 using Calderilla.Services.Operations;
-using Calderilla.Test.Utils;
 using Moq;
 
 namespace Calderilla.Services.Tests.Operations

@@ -36,5 +36,110 @@ namespace Calderilla.DataAccess.Tests
             _mockBlobRepository.Verify(repo => repo.ReadListAsync<Operation>(blobName), Times.Once);
             Assert.Equal(operations, result);
         }
+
+
+        [Fact]
+        public async Task GetOperationsLast12MonthsAsync_ShouldReturnAggregatedOperations()
+        {
+            // Arrange
+            var currentAccount = Guid.NewGuid();
+            var now = new DateTime(2025, 5, 24);
+            var allFakeOperations = new List<Operation>();
+
+            for (int i = 1; i <= 12; i++)
+            {
+                var date = now.AddMonths(-i);
+                var year = date.Year;
+                var month = date.Month;
+                var blobName = $"{userId}/{currentAccount}/{year}/{month}.json";
+                var fakeOps = FakeOperationGenerator.GetFakeOperations(2);
+                allFakeOperations.AddRange(fakeOps);
+                _mockBlobRepository.Setup(repo => repo.ReadListAsync<Operation>(blobName)).ReturnsAsync(fakeOps);
+            }
+
+            // Act
+            var result = await _operationsRepository.GetOperationsLast12MonthsAsync(userId, currentAccount, now.Year, now.Month);
+
+            // Assert
+            foreach (int i in Enumerable.Range(1, 12))
+            {
+                var date = now.AddMonths(-i);
+                var year = date.Year;
+                var month = date.Month;
+                var blobName = $"{userId}/{currentAccount}/{year}/{month}.json";
+                _mockBlobRepository.Verify(repo => repo.ReadListAsync<Operation>(blobName), Times.Once);
+            }
+            Assert.Equal(24, result.Count()); // 2 ops per month * 12 months
+            Assert.All(allFakeOperations, op => Assert.Contains(op, result));
+        }
+
+        [Fact]
+        public async Task GetOperationsLast12MonthsAsync_ShouldReturnEmpty_WhenNoOperations()
+        {
+            // Arrange
+            var currentAccount = Guid.NewGuid();
+            var now = new DateTime(2025, 5, 24);
+            for (int i = 1; i <= 12; i++)
+            {
+                var date = now.AddMonths(-i);
+                var year = date.Year;
+                var month = date.Month;
+                var blobName = $"{userId}/{currentAccount}/{year}/{month}.json";
+                _mockBlobRepository.Setup(repo => repo.ReadListAsync<Operation>(blobName)).ReturnsAsync(new List<Operation>());
+            }
+
+            // Act
+            var result = await _operationsRepository.GetOperationsLast12MonthsAsync(userId, currentAccount, now.Year, now.Month);
+
+            // Assert
+            Assert.Empty(result);
+        }
+
+        [Fact]
+        public async Task GetOperationsAsync_Year_ShouldReturnAggregatedOperations()
+        {
+            // Arrange
+            var currentAccount = Guid.NewGuid();
+            var year = 2025;
+            var allFakeOperations = new List<Operation>();
+            for (int month = 1; month <= 12; month++)
+            {
+                var blobName = $"{userId}/{currentAccount}/{year}/{month}.json";
+                var fakeOps = FakeOperationGenerator.GetFakeOperations(2);
+                allFakeOperations.AddRange(fakeOps);
+                _mockBlobRepository.Setup(repo => repo.ReadListAsync<Operation>(blobName)).ReturnsAsync(fakeOps);
+            }
+
+            // Act
+            var result = await _operationsRepository.GetOperationsAsync(userId, currentAccount, year);
+
+            // Assert
+            for (int month = 1; month <= 12; month++)
+            {
+                var blobName = $"{userId}/{currentAccount}/{year}/{month}.json";
+                _mockBlobRepository.Verify(repo => repo.ReadListAsync<Operation>(blobName), Times.Once);
+            }
+            Assert.Equal(24, result.Count()); // 2 ops per month * 12 months
+            Assert.All(allFakeOperations, op => Assert.Contains(op, result));
+        }
+
+        [Fact]
+        public async Task GetOperationsAsync_Year_ShouldReturnEmpty_WhenNoOperations()
+        {
+            // Arrange
+            var currentAccount = Guid.NewGuid();
+            var year = 2025;
+            for (int month = 1; month <= 12; month++)
+            {
+                var blobName = $"{userId}/{currentAccount}/{year}/{month}.json";
+                _mockBlobRepository.Setup(repo => repo.ReadListAsync<Operation>(blobName)).ReturnsAsync(new List<Operation>());
+            }
+
+            // Act
+            var result = await _operationsRepository.GetOperationsAsync(userId, currentAccount, year);
+
+            // Assert
+            Assert.Empty(result);
+        }
     }
 }

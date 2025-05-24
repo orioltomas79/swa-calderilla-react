@@ -31,6 +31,8 @@ namespace Calderilla.Api.Functions.Banks.Ing
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.InternalServerError, contentType: "application/json", bodyType: typeof(ProblemDetails), Description = "Returns a 500 error message")]
         public async Task<IActionResult> UploadIngExtractAsync([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = ApiEndpoints.UploadIngBankExtract)] HttpRequest req, Guid currentAccount, int year, int month)
         {
+            var claimsPrincipal = StaticWebAppsAuth.GetClaimsPrincipal(req);
+
             // Get the file from the request
             _logger.LogDebug("Getting ING file from request");
             var form = await req.ReadFormAsync();
@@ -56,10 +58,11 @@ namespace Calderilla.Api.Functions.Banks.Ing
             var result = _ingService.GetBankExtractData(workbook, month, year);
 
             // Enrich the data
+            _logger.LogDebug("Enriching operation type");
+            await _operationsService.EnrichOperationTypeAsync(claimsPrincipal.GetName(), currentAccount, result.Operations, year, month).ConfigureAwait(false);
 
             // Save the data
             _logger.LogDebug("Saving operations");
-            var claimsPrincipal = StaticWebAppsAuth.GetClaimsPrincipal(req);
             await _operationsService.SaveOperationAsync(result.Operations, claimsPrincipal.GetName(), currentAccount, year, month).ConfigureAwait(false);
 
             // Return the result

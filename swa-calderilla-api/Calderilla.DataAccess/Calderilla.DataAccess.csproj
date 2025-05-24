@@ -14,10 +14,4 @@
 		<ProjectReference Include="..\Calderilla.Domain\Calderilla.Domain.csproj" />
 	</ItemGroup>
 
-	<ItemGroup>
-		<None Update="sample.json">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
-	</ItemGroup>
-
 </Project>

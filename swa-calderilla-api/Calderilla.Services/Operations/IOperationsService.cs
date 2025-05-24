@@ -6,6 +6,8 @@ namespace Calderilla.Services.Operations
     {
         Task<IEnumerable<Operation>> GetOperationsAsync(string userId, Guid currentAccount, int year, int month);
 
+        Task EnrichOperationTypeAsync(string userId, Guid currentAccount, IEnumerable<Operation> operations, int year, int month);
+
         Task SaveOperationAsync(IEnumerable<Operation> operations, string userId, Guid currentAccount, int year, int month);
     }
 }

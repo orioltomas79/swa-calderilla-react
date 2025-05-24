@@ -8,13 +8,19 @@ using Microsoft.OpenApi.Models;
 using Calderilla.Api.ErrorHandling;
 using Calderilla.Api.Functions.Dev;
 using Calderilla.Services.Banks.Sabadell;
+using Calderilla.Services.Operations;
+using Calderilla.Api.Auth;
 
 namespace Calderilla.Api.Functions.Banks.Sabadell
 {
-    public class UploadSabadellExtractFunction(ILogger<UploadSabadellExtractFunction> logger, ISabadellService sabadellService)
+    public class UploadSabadellExtractFunction(
+        ILogger<UploadSabadellExtractFunction> logger,
+        ISabadellService sabadellService,
+        IOperationsService operationsService)
     {
         private readonly ILogger<UploadSabadellExtractFunction> _logger = logger;
         private readonly ISabadellService _sabadellService = sabadellService;
+        private readonly IOperationsService _operationsService = operationsService;
 
         [Function(nameof(UploadSabadellExtractAsync))]
         [OpenApiOperation(operationId: nameof(UploadSabadellExtractAsync), tags: [ApiEndpoints.SabadellEndpointsTag], Summary = "Uploads a document")]
@@ -27,6 +33,8 @@ namespace Calderilla.Api.Functions.Banks.Sabadell
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.InternalServerError, contentType: "application/json", bodyType: typeof(ProblemDetails), Description = "Returns a 500 error message")]
         public async Task<IActionResult> UploadSabadellExtractAsync([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = ApiEndpoints.UploadSabadellBankExtract)] HttpRequest req, Guid currentAccount, int year, int month)
         {
+            var claimsPrincipal = StaticWebAppsAuth.GetClaimsPrincipal(req);
+
             // Get the file from the request
             _logger.LogDebug("Getting Sabadell file from request");
             var form = await req.ReadFormAsync();
@@ -51,6 +59,14 @@ namespace Calderilla.Api.Functions.Banks.Sabadell
             // Extract the data from the file
             _logger.LogDebug("Extracting data from Sabadell file");
             var result = _sabadellService.GetBankExtractData(fileContent, month, year);
+
+            // Enrich the data
+            _logger.LogDebug("Enriching operation type");
+            await _operationsService.EnrichOperationTypeAsync(claimsPrincipal.GetName(), currentAccount, result.Operations, year, month).ConfigureAwait(false);
+
+            // Save the data
+            _logger.LogDebug("Saving operations");
+            await _operationsService.SaveOperationAsync(result.Operations, claimsPrincipal.GetName(), currentAccount, year, month).ConfigureAwait(false);
 
             // Return the result
             _logger.LogDebug("Returning Sabadell file result");
