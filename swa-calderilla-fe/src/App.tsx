@@ -4,6 +4,7 @@ import "./App.css";
 import MonthOperationsTable from "./features/MonthOperationsTable";
 import { CurrentAccount } from "./api/types";
 import apiClient from "./api/apiClient";
+import UploadIngExtract from "./features/UploadIngExtract";
 
 function App() {
   const [year, setYear] = useState(2025);
@@ -24,6 +25,19 @@ function App() {
   useEffect(() => {
     fetchApiData().catch((err) => console.error(err));
   }, []);
+
+  const handleFileUpload = async (file: File) => {
+    try {
+      await apiClient.ingEndpointsClient.uploadIngExtract(
+        currentAccount,
+        year,
+        month,
+        { data: file, fileName: file.name }
+      );
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   return (
     <>
@@ -64,6 +78,11 @@ function App() {
         value={month}
         onChange={(e) => setMonth(Number(e.target.value) || 0)}
       />
+      <div>
+        <UploadIngExtract
+          onFileUpload={(file) => void handleFileUpload(file)}
+        />
+      </div>
       <div className="card">
         <MonthOperationsTable
           currentAccount={currentAccount}
