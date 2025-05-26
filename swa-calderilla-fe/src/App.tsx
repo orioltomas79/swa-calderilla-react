@@ -5,6 +5,7 @@ import MonthOperationsTable from "./features/MonthOperationsTable";
 import { CurrentAccount } from "./api/types";
 import apiClient from "./api/apiClient";
 import UploadIngExtract from "./features/UploadIngExtract";
+import UploadSabadellExtract from "./features/UploadSabadellExtract";
 
 function App() {
   const [year, setYear] = useState(2025);
@@ -26,9 +27,22 @@ function App() {
     fetchApiData().catch((err) => console.error(err));
   }, []);
 
-  const handleFileUpload = async (file: File) => {
+  const handleIngFileUpload = async (file: File) => {
     try {
       await apiClient.ingEndpointsClient.uploadIngExtract(
+        currentAccount,
+        year,
+        month,
+        { data: file, fileName: file.name }
+      );
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleSabadellFileUpload = async (file: File) => {
+    try {
+      await apiClient.sabadellEndpointsClient.uploadSabadellExtract(
         currentAccount,
         year,
         month,
@@ -80,7 +94,12 @@ function App() {
       />
       <div>
         <UploadIngExtract
-          onFileUpload={(file) => void handleFileUpload(file)}
+          onFileUpload={(file) => void handleIngFileUpload(file)}
+        />
+      </div>
+      <div>
+        <UploadSabadellExtract
+          onFileUpload={(file) => void handleSabadellFileUpload(file)}
         />
       </div>
       <div className="card">
