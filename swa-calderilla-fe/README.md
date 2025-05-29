@@ -7,6 +7,19 @@ Currently, two official plugins are available:
 - [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
 - [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
+## Material UI Integration
+
+This project uses [Material UI (MUI)](https://mui.com/) as its main React UI component library, providing a modern, accessible, and customizable set of components that follow Google’s Material Design guidelines.
+
+### Key Dependencies
+
+- **@mui/material**: The core Material UI component library for React, offering a wide range of ready-to-use UI components.
+- **@mui/icons-material**: Provides Material Design icons as React components for use throughout the app.
+- **@emotion/react** and **@emotion/styled**: Peer dependencies required by MUI for styling components using the Emotion CSS-in-JS library.
+- **@fontsource/roboto**: Supplies the Roboto font, which is the default font for Material UI components and recommended for a consistent Material Design look.
+
+These dependencies are already included in the project’s `package.json`. You can use Material UI components and icons directly in your React code. For more information and usage examples, see the [Material UI documentation](https://mui.com/).
+
 ## TypeScript Configuration Files
 
 This project uses multiple TypeScript configuration files to separate concerns for different parts of the codebase:

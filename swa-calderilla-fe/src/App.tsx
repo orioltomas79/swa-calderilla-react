@@ -2,6 +2,7 @@ import HelloWorld from "./features/HelloWorld/HelloWorld";
 import apiClient from "./api/apiClient";
 import { useEffect, useState } from "react";
 import type { CurrentAccount } from "./api/types";
+import Button from '@mui/material/Button';
 
 function App() {
   const [apiResponse, setApiResponse] = useState<CurrentAccount[] | null>(null);
@@ -31,6 +32,7 @@ function App() {
           ))}
         </ul>
       )}
+      <Button variant="contained">Hello world</Button>
     </>
   );
 }
