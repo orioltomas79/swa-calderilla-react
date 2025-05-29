@@ -205,24 +205,29 @@ Azure Static Web Apps provides built-in authentication endpoints under the `/.au
 The `staticwebapp.config.json` file configures how authentication and authorization are enforced:
 
 - **API Route Protection:**
+
   ```json
   {
     "route": "/api/*",
     "allowedRoles": ["authenticated"]
   }
   ```
+
   All API routes under `/api/*` require the user to be authenticated. Unauthenticated users are not allowed to access these endpoints.
 
 - **Login Provider Restriction:**
+
   ```json
   {
     "route": "/.auth/login/aad",
     "statusCode": 404
   }
   ```
+
   The Azure Active Directory (AAD) login endpoint is disabled by returning a 404 status, so only GitHub login is available.
 
 - **401 Response Override:**
+
   ```json
   "responseOverrides": {
     "401": {
@@ -231,12 +236,70 @@ The `staticwebapp.config.json` file configures how authentication and authorizat
     }
   }
   ```
+
   If an unauthenticated user tries to access a protected resource (such as an API route), they are automatically redirected to the GitHub login page.
 
 - **SPA Navigation Fallback:**
+
   ```json
   "navigationFallback": {
     "rewrite": "/index.html"
   }
   ```
+
   Ensures that all non-API routes are served by the React single-page application, supporting client-side routing.
+
+  ## Routing with React Router (Declarative Mode)
+
+This application uses [React Router](https://reactrouter.com/) in [declarative mode](https://reactrouter.com/start/declarative/installation) to manage client-side navigation.
+
+Declarative routing allows you to define your application's routes directly in your React component tree, making navigation predictable and easy to maintain.
+
+### Routing: `<Routes>` and `<Route>`
+
+- **`<BrowserRouter>`**: Wraps your app and enables client-side routing using the browser’s history API.
+- **`<Routes>`**: Contains all your route definitions. It matches the current URL to the best `<Route>` and renders its element.
+- **`<Route>`**: Defines a path and the React element to render for that path.
+  - Example from your code:
+    ```tsx
+    <Routes>
+      <Route path="/" element={<App />}>
+        <Route index element={<Home />} />
+        <Route path="about" element={<About />} />
+      </Route>
+    </Routes>
+    ```
+    - The root path `/` renders the `App` component.
+    - The index route (just `/`) renders `Home` inside `App`.
+    - The `/about` path renders `About` inside `App`.
+
+### Navigating: `<Link>`, `<NavLink>`, and `useNavigate`
+
+- **`<Link to="..." />`**: Renders an anchor tag that, when clicked, navigates to the specified route without reloading the page.
+  - Example: `<Link to="/about">About</Link>`
+- **`<NavLink to="..." />`**: Like `<Link>`, but adds styling (e.g., an `active` class) when the link matches the current URL. Useful for navigation menus.
+- **`useNavigate()`**: A React hook that returns a function for programmatic navigation.
+  - Example:
+    ```tsx
+    const navigate = useNavigate();
+    // Navigate to /about on some event
+    navigate("/about");
+    ```
+
+### URL Values: Route Params
+
+- **Dynamic Segments**: You can define routes with dynamic segments using `:paramName`.
+  - Example: `<Route path="user/:userId" element={<User />} />`
+- **Route Params**: When a user visits `/user/42`, the `userId` param will be `"42"`.
+- **Accessing Params**: Use the `useParams()` hook inside your component to get the parsed values.
+  - Example:
+    ```tsx
+    import { useParams } from "react-router-dom";
+    const { userId } = useParams(); // userId will be "42" for /user/42
+    ```
+
+**Summary:**
+
+- `<Routes>` and `<Route>` define which components render for which URLs.
+- `<Link>`, `<NavLink>`, and `useNavigate` let you navigate between routes declaratively or programmatically.
+- Route params let you extract dynamic values from the URL for use in your components.
