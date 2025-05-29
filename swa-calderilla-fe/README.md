@@ -69,14 +69,71 @@ You can run Prettier manually or configure your editor to format files automatic
 
 ### Scripts explained
 
-| Script  | Command              | Description                                                                                                                       |
-| ------- | -------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
-| dev     | vite                 | Starts the Vite development server for local development                                                                          |
-| build   | tsc -b && vite build | Builds TypeScript files and then creates a production build with Vite                                                             |
-| lint    | eslint .             | Runs ESLint to check for code quality and style issues                                                                            |
-| preview | vite preview         | vite runs the development server with hot module replacement, while vite preview serves the production build locally for testing. |
-| format  | prettier --write src/**/*.{ts,tsx,scss,css,json} | Formats all source files (TypeScript, SCSS, CSS, JSON) in the src directory using Prettier according to the project's style rules. |
+| Script  | Command                                           | Description                                                                                                                        |
+| ------- | ------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| dev     | vite                                              | Starts the Vite development server for local development                                                                           |
+| build   | tsc -b && vite build                              | Builds TypeScript files and then creates a production build with Vite                                                              |
+| lint    | eslint .                                          | Runs ESLint to check for code quality and style issues                                                                             |
+| preview | vite preview                                      | vite runs the development server with hot module replacement, while vite preview serves the production build locally for testing.  |
+| format  | prettier --write src/\*_/_.{ts,tsx,scss,css,json} | Formats all source files (TypeScript, SCSS, CSS, JSON) in the src directory using Prettier according to the project's style rules. |
+| test | vitest | Runs all unit and component tests using Vitest. |
+| test:coverage | vitest run --coverage | Runs all tests and generates a code coverage report in the coverage/ folder. |
 
-- **pnpm-lock.yaml**
 
+## Testing with Vitest
 
+This project uses [Vitest](https://vitest.dev/) for unit and component testing, providing a fast and modern testing experience that integrates seamlessly with Vite and React.
+
+### How to Implement Tests
+
+- **Test Files:**  
+  Place your test files alongside your source files or in a dedicated `tests` folder. Use the `.test.ts`, `.test.tsx`, or similar naming convention.
+
+- **Test Environment:**  
+  The test environment is set to `jsdom`, which simulates a browser-like environment for React component testing.
+
+### Configuration Details
+
+#### `vite.config.ts`
+
+- Adds the `@vitejs/plugin-react` plugin for React support.
+- Configures Vitest with:
+  - `globals: true` to allow using global test functions (like `test`, `expect`) without importing them.
+  - `environment: 'jsdom'` for browser-like testing.
+
+#### `vite-env.d.ts`
+
+- References Vitest’s global types with:
+  ```
+  /// <reference types="vitest/globals" />
+  ```
+  This enables TypeScript to recognize Vitest’s global test functions and types in your test files.
+
+---
+
+#### Purpose of Key Testing Libraries
+
+- **@testing-library/jest-dom**:  
+  Provides custom DOM element matchers for Jest and Vitest, such as `toBeInTheDocument()` and `toHaveTextContent()`. These improve the readability and power of your assertions when testing React components.
+
+- **@testing-library/react**:  
+  Supplies utilities to render React components in a test environment and interact with them as a user would. It encourages best practices by focusing on testing components from the user's perspective.
+
+- **@testing-library/user-event**:  
+  Simulates user interactions (like clicks, typing, and more complex events) in your tests, making it possible to test how your app responds to real user behavior.
+
+- **vitest**:  
+  The main testing framework used in this project. It provides a fast, modern, and Vite-native test runner with a Jest-like API, supporting TypeScript and React out of the box.
+
+- **@vitest/coverage-v8**:  
+  Adds code coverage reporting to Vitest using the V8 engine. It helps you track which parts of your codebase are tested and identify untested code.
+
+## Recommended VS Code Extensions
+
+To improve your development workflow, it is recommended to install the following Visual Studio Code extensions:
+
+- **Prettier - Code formatter**: Automatically formats your code according to the project's style rules every time you save a file. This helps maintain consistent code style across the team and reduces formatting issues in pull requests.
+
+  - After installing, enable "Format on Save" in your VS Code settings to ensure your code is always formatted automatically.
+
+- **Vitest**: Adds UI integration for running and debugging your Vitest tests directly from the Visual Studio Code interface. This extension makes it easy to view test results, re-run tests, and debug failures without leaving your editor.
