@@ -11,6 +11,7 @@
     "format": "prettier --write src/**/*.{ts,tsx,scss,css,json}",
     "test": "vitest",
     "test:coverage": "vitest run --coverage",
+    "isready": "pnpm run format && pnpm run lint && pnpm run build && pnpm run test:coverage",
     "api:generate": "pnpm run api:generate:nswag && npm run api:postgenerate",
     "api:generate:nswag": "nswag openapi2tsclient /typeScriptVersion:4.9 /input:http://localhost:7072/api/swagger.json /output:src/api/apiClient.g.nswag.ts /template:fetch /operationGenerationMode:MultipleClientsFromFirstTagAndOperationName /typeStyle:Interface /nullValue:null /dateTimeType:string",
     "api:postgenerate": "prettier --write src/api/apiClient.g.nswag.ts",

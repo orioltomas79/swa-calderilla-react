@@ -188,3 +188,55 @@ To improve your development workflow, it is recommended to install the following
   - After installing, enable "Format on Save" in your VS Code settings to ensure your code is always formatted automatically.
 
 - **Vitest**: Adds UI integration for running and debugging your Vitest tests directly from the Visual Studio Code interface. This extension makes it easy to view test results, re-run tests, and debug failures without leaving your editor.
+
+## Authentication and Authorization in Azure Static Web Apps
+
+This project uses [Azure Static Web Apps](https://learn.microsoft.com/en-us/azure/static-web-apps/) built-in authentication and authorization system to secure API routes and manage user login/logout flows.
+
+### How Authentication Works
+
+Azure Static Web Apps provides built-in authentication endpoints under the `/.auth` path. When a user visits the app, they can authenticate using supported identity providers (such as GitHub, Microsoft, Google, etc.).
+
+- **Login:** The React app includes a link: `<a href="/.auth/login/github">Login</a>`. Clicking this link redirects the user to GitHub's OAuth login flow. Upon successful authentication, the user is redirected back to the app with a valid session.
+- **Logout:** The `<a href="/.auth/logout">Log out</a>` link ends the user's session and logs them out of the app.
+
+### Authorization and Route Protection
+
+The `staticwebapp.config.json` file configures how authentication and authorization are enforced:
+
+- **API Route Protection:**
+  ```json
+  {
+    "route": "/api/*",
+    "allowedRoles": ["authenticated"]
+  }
+  ```
+  All API routes under `/api/*` require the user to be authenticated. Unauthenticated users are not allowed to access these endpoints.
+
+- **Login Provider Restriction:**
+  ```json
+  {
+    "route": "/.auth/login/aad",
+    "statusCode": 404
+  }
+  ```
+  The Azure Active Directory (AAD) login endpoint is disabled by returning a 404 status, so only GitHub login is available.
+
+- **401 Response Override:**
+  ```json
+  "responseOverrides": {
+    "401": {
+      "statusCode": 302,
+      "redirect": "/.auth/login/github"
+    }
+  }
+  ```
+  If an unauthenticated user tries to access a protected resource (such as an API route), they are automatically redirected to the GitHub login page.
+
+- **SPA Navigation Fallback:**
+  ```json
+  "navigationFallback": {
+    "rewrite": "/index.html"
+  }
+  ```
+  Ensures that all non-API routes are served by the React single-page application, supporting client-side routing.

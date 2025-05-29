@@ -2,7 +2,7 @@ import HelloWorld from "./features/HelloWorld/HelloWorld";
 import apiClient from "./api/apiClient";
 import { useEffect, useState } from "react";
 import type { CurrentAccount } from "./api/types";
-import Button from '@mui/material/Button';
+import Button from "@mui/material/Button";
 
 function App() {
   const [apiResponse, setApiResponse] = useState<CurrentAccount[] | null>(null);
@@ -23,6 +23,12 @@ function App() {
 
   return (
     <>
+      <div>
+        <a href="/.auth/login/github">Login</a>
+      </div>
+      <div>
+        <a href="/.auth/logout">Log out</a>
+      </div>
       <h1>Vite + React</h1>
       <HelloWorld />
       {apiResponse && (
