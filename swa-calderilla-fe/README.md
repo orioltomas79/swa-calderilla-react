@@ -69,16 +69,18 @@ You can run Prettier manually or configure your editor to format files automatic
 
 ### Scripts explained
 
-| Script  | Command                                           | Description                                                                                                                        |
-| ------- | ------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
-| dev     | vite                                              | Starts the Vite development server for local development                                                                           |
-| build   | tsc -b && vite build                              | Builds TypeScript files and then creates a production build with Vite                                                              |
-| lint    | eslint .                                          | Runs ESLint to check for code quality and style issues                                                                             |
-| preview | vite preview                                      | vite runs the development server with hot module replacement, while vite preview serves the production build locally for testing.  |
-| format  | prettier --write src/\*_/_.{ts,tsx,scss,css,json} | Formats all source files (TypeScript, SCSS, CSS, JSON) in the src directory using Prettier according to the project's style rules. |
-| test | vitest | Runs all unit and component tests using Vitest. |
-| test:coverage | vitest run --coverage | Runs all tests and generates a code coverage report in the coverage/ folder. |
-
+| Script             | Command                                                                                                                                                                                                                                                                         | Description                                                                                                                                                                 |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| dev                | vite                                                                                                                                                                                                                                                                            | Starts the Vite development server for local development                                                                                                                    |
+| build              | tsc -b && vite build                                                                                                                                                                                                                                                            | Builds TypeScript files and then creates a production build with Vite                                                                                                       |
+| lint               | eslint .                                                                                                                                                                                                                                                                        | Runs ESLint to check for code quality and style issues                                                                                                                      |
+| preview            | vite preview                                                                                                                                                                                                                                                                    | vite runs the development server with hot module replacement, while vite preview serves the production build locally for testing.                                           |
+| format             | prettier --write src/\*_/_.{ts,tsx,scss,css,json}                                                                                                                                                                                                                               | Formats all source files (TypeScript, SCSS, CSS, JSON) in the src directory using Prettier according to the project's style rules.                                          |
+| test               | vitest                                                                                                                                                                                                                                                                          | Runs all unit and component tests using Vitest.                                                                                                                             |
+| test:coverage      | vitest run --coverage                                                                                                                                                                                                                                                           | Runs all tests and generates a code coverage report in the coverage/ folder.                                                                                                |
+| api:generate       | pnpm run api:generate:nswag && npm run api:postgenerate                                                                                                                                                                                                                         | Runs the full API client generation workflow: first generates the TypeScript client from the backend OpenAPI (Swagger) spec, then formats the generated file with Prettier. |
+| api:generate:nswag | nswag openapi2tsclient /typeScriptVersion:4.9 /input:http://localhost:7072/api/swagger.json /output:src/api/apiClient.g.nswag.ts /template:fetch /operationGenerationMode:MultipleClientsFromFirstTagAndOperationName /typeStyle:Interface /nullValue:null /dateTimeType:string | Uses NSwag to generate the TypeScript API client from the backend's OpenAPI (Swagger) specification. The output is written to `src/api/apiClient.g.nswag.ts`.               |
+| api:postgenerate   | prettier --write src/api/apiClient.g.nswag.ts                                                                                                                                                                                                                                   | Formats the autogenerated API client file with Prettier to ensure consistent code style.                                                                                    |
 
 ## Testing with Vitest
 
@@ -127,6 +129,42 @@ This project uses [Vitest](https://vitest.dev/) for unit and component testing, 
 
 - **@vitest/coverage-v8**:  
   Adds code coverage reporting to Vitest using the V8 engine. It helps you track which parts of your codebase are tested and identify untested code.
+
+## Backend API Client Generation
+
+To interact with the backend, this project uses an autogenerated TypeScript client based on the OpenAPI (Swagger) specification provided by the backend. The client is generated using [NSwag](https://github.com/RicoSuter/NSwag).
+
+### How the Client is Generated
+
+The client is generated with the following command, which is included in the `package.json` scripts:
+
+```
+nswag openapi2tsclient /typeScriptVersion:4.9 /input:http://localhost:7072/api/swagger.json /output:src/api/apiClient.g.nswag.ts /template:fetch /operationGenerationMode:MultipleClientsFromFirstTagAndOperationName /typeStyle:Interface /nullValue:null /dateTimeType:string
+```
+
+This command fetches the OpenAPI specification from the backend and generates a TypeScript client in `src/api/apiClient.g.nswag.ts`. The generated client uses the Fetch API and is tailored for our backend's endpoints and data types.
+
+### File Structure and Usage
+
+- **`src/api/apiClient.g.nswag.ts`**  
+  This is the autogenerated file containing all the TypeScript classes and interfaces for calling the backend API.  
+  **Do not edit this file manually.** It will be overwritten each time the client is regenerated.
+
+- **`src/api/apiClient.ts`**  
+  This file wraps the autogenerated client, providing a single `apiClient` instance with all the endpoint clients preconfigured.  
+  The rest of the codebase should use this file to access backend endpoints, ensuring a consistent and centralized API usage.
+
+- **`src/api/types.ts`**  
+  This file re-exports the main types (`Operation`, `CurrentAccount`, etc.) from the autogenerated client.  
+  Use these types throughout the codebase for type safety and consistency.
+
+### Best Practices
+
+- **Do not import or use `apiClient.g.nswag.ts` directly in your application code.**  
+  Always use `apiClient.ts` for API calls and `types.ts` for type imports.  
+  This abstraction allows us to update or regenerate the API client without affecting the rest of the codebase.
+
+---
 
 ## Recommended VS Code Extensions
 

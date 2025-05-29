@@ -57,6 +57,9 @@ importers:
       globals:
         specifier: ^16.0.0
         version: 16.2.0
+      nswag:
+        specifier: ^14.4.0
+        version: 14.4.0
       prettier:
         specifier: ^3.5.3
         version: 3.5.3
@@ -1305,6 +1308,11 @@ packages:
 
   node-releases@2.0.19:
     resolution: {integrity: sha512-xxOWJsBKtzAq7DY0J+DTzuz58K8e7sJbdgwkbMWQe8UYB6ekmsQ45q0M/tJDsGaZmbC+l7n57UV8Hl5tHxO9uw==}
+
+  nswag@14.4.0:
+    resolution: {integrity: sha512-uul0DRrY4PtsOATvI5FqdR/q2DzbQEJh15s/PC2s3Thl0BQ5UCjVASvjTDGlSEfnZ9f7E9fF82TcoK+hhkVT6w==}
+    engines: {npm: '>=3.10.8'}
+    hasBin: true
 
   nwsapi@2.2.20:
     resolution: {integrity: sha512-/ieB+mDe4MrrKMT8z+mQL8klXydZWGR5Dowt4RAGKbJ3kIGEx3X4ljUo+6V73IXtUPWgfOlU5B9MlGxFO5T+cA==}
@@ -3039,6 +3047,8 @@ snapshots:
   natural-compare@1.4.0: {}
 
   node-releases@2.0.19: {}
+
+  nswag@14.4.0: {}
 
   nwsapi@2.2.20:
     optional: true

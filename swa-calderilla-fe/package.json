@@ -10,7 +10,13 @@
     "preview": "vite preview",
     "format": "prettier --write src/**/*.{ts,tsx,scss,css,json}",
     "test": "vitest",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "api:generate": "pnpm run api:generate:nswag && npm run api:postgenerate",
+    "api:generate:nswag": "nswag openapi2tsclient /typeScriptVersion:4.9 /input:http://localhost:7072/api/swagger.json /output:src/api/apiClient.g.nswag.ts /template:fetch /operationGenerationMode:MultipleClientsFromFirstTagAndOperationName /typeStyle:Interface /nullValue:null /dateTimeType:string",
+    "api:postgenerate": "prettier --write src/api/apiClient.g.nswag.ts",
+    "backend:azurite:blob": "azurite-blob --location ../swa-calderilla-api",
+    "backend:func:start": "func host start --port 7072 --script-root ../swa-calderilla-api/Calderilla.Api",
+    "azure:swa": "swa start"
   },
   "dependencies": {
     "react": "^19.1.0",
@@ -31,6 +37,7 @@
     "eslint-plugin-react-refresh": "^0.4.19",
     "eslint-plugin-react-x": "^1.50.0",
     "globals": "^16.0.0",
+    "nswag": "^14.4.0",
     "prettier": "^3.5.3",
     "typescript": "~5.8.3",
     "typescript-eslint": "^8.30.1",

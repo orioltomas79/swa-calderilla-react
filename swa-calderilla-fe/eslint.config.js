@@ -24,8 +24,8 @@ import tseslint from "typescript-eslint";
 export default tseslint.config(
   // First argument: global config options
   {
-    // Ignore the 'dist' directory from linting
-    ignores: ["dist"],
+    // Ignore the 'dist' and 'coverage' directories from linting
+    ignores: ["dist", "coverage"],
   },
 
   // Second argument: configuration for TypeScript and React files
