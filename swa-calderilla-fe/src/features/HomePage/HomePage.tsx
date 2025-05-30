@@ -1,10 +1,10 @@
-import apiClient from "./api/apiClient";
 import { useEffect, useState } from "react";
-import type { CurrentAccount } from "./api/types";
-import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
+import type { CurrentAccount } from "../../api/types";
+import apiClient from "../../api/apiClient";
+import { Button } from "@mui/material";
 
-function App() {
+const HomePage = () => {
   const navigate = useNavigate();
 
   const [apiResponse, setApiResponse] = useState<CurrentAccount[] | null>(null);
@@ -24,18 +24,12 @@ function App() {
   }, []);
 
   const handleClick = () => {
-    navigate("/hello");
+    navigate("/import");
   };
 
   return (
     <>
-      <div>
-        <a href="/.auth/login/github">Login</a>
-      </div>
-      <div>
-        <a href="/.auth/logout">Log out</a>
-      </div>
-      <h1>Vite + React</h1>
+      <h1>Current accounts</h1>
       {apiResponse && (
         <ul>
           {apiResponse.map((account) => (
@@ -43,9 +37,8 @@ function App() {
           ))}
         </ul>
       )}
-      <Button variant="contained" onClick={handleClick}>Hello world</Button>
+      <Button variant="contained" onClick={handleClick}>Import</Button>
     </>
   );
 }
-
-export default App;
+export default HomePage;
