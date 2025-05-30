@@ -24,7 +24,7 @@ const HomePage = () => {
   }, []);
 
   const handleClick = () => {
-    navigate("/import");
+    void navigate("/import");
   };
 
   return (
@@ -37,8 +37,10 @@ const HomePage = () => {
           ))}
         </ul>
       )}
-      <Button variant="contained" onClick={handleClick}>Import</Button>
+      <Button variant="contained" onClick={handleClick}>
+        Import
+      </Button>
     </>
   );
-}
+};
 export default HomePage;
