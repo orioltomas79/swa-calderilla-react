@@ -47,8 +47,8 @@ const Login = () => {
             fullWidth
             variant="outlined"
             onClick={() => {
-              window.location.href =
-                "/.auth/login/github?post_login_redirect_uri=/home";
+              const year = new Date().getFullYear();
+              window.location.href = `/.auth/login/github?post_login_redirect_uri=/home/${year}`;
             }}
           >
             Log in with Github

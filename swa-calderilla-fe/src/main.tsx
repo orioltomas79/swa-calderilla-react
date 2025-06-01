@@ -10,6 +10,7 @@ import LoginPage from "./features/LoginPage/LoginPage.tsx";
 import { CssBaseline } from "@mui/material";
 import HomePage from "./features/HomePage/HomePage.tsx";
 import ImportPage from "./features/ImportPage/ImportPage.tsx";
+import AccountMonthPage from "./features/AccountMonthPage/AccountMonthPage.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -17,8 +18,15 @@ createRoot(document.getElementById("root")!).render(
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<LoginPage />} />
-          <Route path="home" element={<HomePage />} />
-          <Route path="import" element={<ImportPage />} />
+          <Route path="home/:year" element={<HomePage />} />
+          <Route
+            path="accounts/:accountId/import/:year/:month"
+            element={<ImportPage />}
+          />
+          <Route
+            path="accounts/:accountId/month-details/:year/:month"
+            element={<AccountMonthPage />}
+          />
         </Routes>
       </BrowserRouter>
     </CssBaseline>
