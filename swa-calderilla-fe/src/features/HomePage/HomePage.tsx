@@ -10,6 +10,7 @@ import {
   MenuItem,
   FormControl,
   InputLabel,
+  type SelectChangeEvent,
 } from "@mui/material";
 import CurrentAccountAnualSummary from "./CurrentAccountAnualSummay/CurrentAccountAnualSummary";
 import TopMenu from "../TopMenu/TopMenu";
@@ -45,9 +46,9 @@ const HomePage = () => {
   }
 
   // Handle dropdown change
-  const handleYearChange = (event: any) => {
+  const handleYearChange = (event: SelectChangeEvent) => {
     const selectedYear = event.target.value;
-    navigate(`/home/${selectedYear}`);
+    void navigate(`/home/${selectedYear}`); // explicitly ignore the promise
   };
 
   return (
@@ -64,12 +65,12 @@ const HomePage = () => {
             <Select
               labelId="year-select-label"
               id="year-select"
-              value={year ? Number(year) : currentYear}
+              value={year ? year : String(currentYear)}
               label="Year"
               onChange={handleYearChange}
             >
               {years.map((y) => (
-                <MenuItem key={y} value={y}>
+                <MenuItem key={y} value={String(y)}>
                   {y}
                 </MenuItem>
               ))}
@@ -82,7 +83,7 @@ const HomePage = () => {
               <Grid key={account.id} size={{ xs: 12, sm: 12, md: 6 }}>
                 <CurrentAccountAnualSummary
                   account={account}
-                  year={Number(year)}
+                  year={Number(year ?? currentYear)}
                 />
               </Grid>
             ))}

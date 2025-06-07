@@ -24,25 +24,24 @@ const CurrentAccountAnualSummary = ({
     useState<GetCurrentAccountYearlySummaryResponse | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const fetchApiData = async () => {
-    setLoading(true);
-    try {
-      const response =
-        await apiClient.currentAccountEndpointsClient.getCurrentAccountYearlySummary(
-          account.id,
-          year
-        );
-      setApiResponse(response);
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
-    fetchApiData().catch((err) => console.error(err));
-  }, [year, account.id]);
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const response =
+          await apiClient.currentAccountEndpointsClient.getCurrentAccountYearlySummary(
+            account.id,
+            year
+          );
+        setApiResponse(response);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData().catch((err) => console.error(err));
+  }, [account.id, year]);
 
   return (
     <>
