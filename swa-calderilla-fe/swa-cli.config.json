@@ -1,9 +1,8 @@
 {
-    "configurations": {
-      "default": {
-        "appDevserverUrl": "http://localhost:5173",
-        "apiDevserverUrl": "http://localhost:7072/api"
-      }
+  "configurations": {
+    "default": {
+      "appDevserverUrl": "http://localhost:5173",
+      "apiDevserverUrl": "http://localhost:7072/api"
     }
   }
-  
+}

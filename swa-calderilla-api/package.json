@@ -4,7 +4,7 @@
   "private": true,
 "scripts": {
     "azurite:blob": "azurite-blob",
-    "func:start": "func host start --script-root ../swa-calderilla-api/Calderilla.Api",
+    "func:start": "func host start --port 7072 --script-root ../swa-calderilla-api/Calderilla.Api",
     "api:test": "dotnet test",
     "api:build": "dotnet build"
   },

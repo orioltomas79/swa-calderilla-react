@@ -22,14 +22,14 @@ namespace Calderilla.Api.Functions.Banks.Ing
 
         [Function(nameof(UploadIngExtractAsync))]
         [OpenApiOperation(operationId: nameof(UploadIngExtractAsync), tags: [ApiEndpoints.IngEndpointsTag], Summary = "Uploads a document")]
-        [OpenApiParameter(name: "currentAccount", In = ParameterLocation.Path, Required = true, Type = typeof(Guid), Description = "The current account")]
+        [OpenApiParameter(name: "accountId", In = ParameterLocation.Path, Required = true, Type = typeof(Guid), Description = "The current account")]
         [OpenApiParameter(name: "year", In = ParameterLocation.Path, Required = true, Type = typeof(int), Description = "The year of the operations")]
         [OpenApiParameter(name: "month", In = ParameterLocation.Path, Required = true, Type = typeof(int), Description = "The month of the operations")]
         [OpenApiRequestBody(contentType: "multipart/form-data", bodyType: typeof(UploadIngExtractRequest), Required = true, Description = "The document file to upload.")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.Created, contentType: "application/json", bodyType: typeof(UploadIngExtractResponse), Description = "Returns the details of the uploaded document")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "application/json", bodyType: typeof(ProblemDetails), Description = "Returns a 400 error message")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.InternalServerError, contentType: "application/json", bodyType: typeof(ProblemDetails), Description = "Returns a 500 error message")]
-        public async Task<IActionResult> UploadIngExtractAsync([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = ApiEndpoints.UploadIngBankExtract)] HttpRequest req, Guid currentAccount, int year, int month)
+        public async Task<IActionResult> UploadIngExtractAsync([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = ApiEndpoints.UploadIngBankExtract)] HttpRequest req, Guid accountId, int year, int month)
         {
             var claimsPrincipal = StaticWebAppsAuth.GetClaimsPrincipal(req);
 
@@ -59,11 +59,11 @@ namespace Calderilla.Api.Functions.Banks.Ing
 
             // Enrich the data
             _logger.LogDebug("Enriching operation type");
-            await _operationsService.EnrichOperationTypeAsync(claimsPrincipal.GetName(), currentAccount, result.Operations, year, month).ConfigureAwait(false);
+            await _operationsService.EnrichOperationTypeAsync(claimsPrincipal.GetName(), accountId, result.Operations, year, month).ConfigureAwait(false);
 
             // Save the data
             _logger.LogDebug("Saving operations");
-            await _operationsService.SaveOperationAsync(result.Operations, claimsPrincipal.GetName(), currentAccount, year, month).ConfigureAwait(false);
+            await _operationsService.SaveOperationAsync(result.Operations, claimsPrincipal.GetName(), accountId, year, month).ConfigureAwait(false);
 
             // Return the result
             _logger.LogDebug("Returning ING file result");

@@ -57,3 +57,20 @@ This API uses a **custom middleware** called: `ExceptionHandlingMiddleware`. Its
 
 The **functions folder contains the Azure Functions** that are part of the API. 
 **Each function** is defined in its **own class**, and the folder structure reflects the organization of the API endpoints.
+
+## Local Development Settings
+
+To run this project locally, you need a `local.settings.json` file in the `Calderilla.Api` directory with the following configuration:
+
+```json
+{
+  "IsEncrypted": false,
+  "Values": {
+    "StorageAccountConnectionString": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated"
+  },
+  "ConnectionStrings": {}
+}
+```
+
+This file is required for local development and should not be committed to source control. It configures the Azure Functions runtime and the connection string for local storage emulation.
