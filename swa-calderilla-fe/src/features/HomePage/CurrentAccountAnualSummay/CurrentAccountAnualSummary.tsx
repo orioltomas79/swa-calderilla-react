@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import apiClient from "../../../api/apiClient";
 import type { GetCurrentAccountYearlySummaryResponse } from "../../../api/apiClient.g.nswag";
 import { Box, CircularProgress } from "@mui/material";
+import { Link } from "react-router-dom";
 
 type CurrentAccountAnualSummaryProps = {
   account: CurrentAccount;
@@ -71,7 +72,24 @@ const CurrentAccountAnualSummary = ({
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
                   <TableCell component="th" scope="row">
-                    {month?.month ?? "-"}
+                    {typeof month?.month === "number" ? (
+                      <Link
+                        to={`/accounts/${account.id}/month-details/${year}/${month.month}`}
+                        style={{
+                          textDecoration: "underline",
+                          color: "#1976d2",
+                          fontWeight: 500,
+                          cursor: "pointer",
+                        }}
+                      >
+                        {new Date(0, month.month - 1).toLocaleString(
+                          "default",
+                          { month: "long" }
+                        )}
+                      </Link>
+                    ) : (
+                      "-"
+                    )}
                   </TableCell>
                   <TableCell align="right">
                     {typeof month?.incomes === "number"
