@@ -15,18 +15,20 @@
 
         // Operations endpoints
         public const string OperationsEndpointsTag = "OperationsEndpoints";
-        public const string GetOperations = "operations/{currentAccount:guid}/{year:int}/{month:int}";
+        public const string GetOperations = "operations/{accountId:guid}/{year:int}/{month:int}";
 
         // Ing operations
         public const string IngEndpointsTag = "IngEndpoints";
-        public const string UploadIngBankExtract = "ing/upload-bank-extract/{currentAccount:guid}/{year:int}/{month:int}";
+        public const string UploadIngBankExtract = "ing/upload-bank-extract/{accountId:guid}/{year:int}/{month:int}";
 
         // Sabadell operations
         public const string SabadellEndpointsTag = "SabadellEndpoints";
-        public const string UploadSabadellBankExtract = "sabadell/upload-bank-extract/{currentAccount:guid}/{year:int}/{month:int}";
+        public const string UploadSabadellBankExtract = "sabadell/upload-bank-extract/{accountId:guid}/{year:int}/{month:int}";
 
         // Current accounts endpoints
         public const string CurrentAccountsEndpointsTag = "CurrentAccountsEndpoints";
-        public const string GetCurrentAccounts = "current-accounts";
+        public const string GetCurrentAccounts = "accounts";
+
+        public const string GetCurrentAccountYearlySummary = "accounts/{accountId:guid}/summary/{year:int}";
     }
 }

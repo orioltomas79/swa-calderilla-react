@@ -13,9 +13,9 @@ namespace Calderilla.Api.Tests.Functions.Operations
         public void GetCurrentAccountsFunctionShouldReturnCurrentAccounts()
         {
             // Arrange
-            var loggerMock = new Mock<ILogger<GetCurrentAccountFunction>>();
+            var loggerMock = new Mock<ILogger<GetCurrentAccountsFunction>>();
 
-            var function = new GetCurrentAccountFunction(loggerMock.Object);
+            var function = new GetCurrentAccountsFunction(loggerMock.Object);
 
             var httpContext = new DefaultHttpContext();
             var request = httpContext.Request;

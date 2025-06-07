@@ -9,11 +9,11 @@ using Microsoft.OpenApi.Models;
 
 namespace Calderilla.Api.Functions.CurrentAccount
 {
-    public class GetCurrentAccountFunction
+    public class GetCurrentAccountsFunction
     {
-        private readonly ILogger<GetCurrentAccountFunction> _logger;
+        private readonly ILogger<GetCurrentAccountsFunction> _logger;
 
-        public GetCurrentAccountFunction(ILogger<GetCurrentAccountFunction> logger)
+        public GetCurrentAccountsFunction(ILogger<GetCurrentAccountsFunction> logger)
         {
             _logger = logger;
         }

@@ -69,11 +69,12 @@
     },
     {
       "type": "func",
+      "label": "start functions host on 7072",
       "dependsOn": "build (functions)",
       "options": {
         "cwd": "${workspaceFolder}/Calderilla.Api/bin/Debug/net8.0"
       },
-      "command": "host start",
+      "command": "host start --port 7072",
       "isBackground": true,
       "problemMatcher": "$func-dotnet-watch"
     }

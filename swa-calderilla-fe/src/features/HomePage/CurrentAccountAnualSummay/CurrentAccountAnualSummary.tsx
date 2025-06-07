@@ -6,31 +6,10 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import type { CurrentAccount } from "../../../api/types";
-
-function createData(
-  name: string,
-  calories: number,
-  fat: number,
-  carbs: number,
-  protein: number
-) {
-  return { name, calories, fat, carbs, protein };
-}
-
-const rows = [
-  createData("1", 2500.0, 1000.0, 15000.0, 40000.0),
-  createData("2", 2500.0, 1000.0, 15000.0, 40000.0),
-  createData("3", 2500.0, 1000.0, 15000.0, 40000.0),
-  createData("4", 2500.0, 1000.0, 15000.0, 40000.0),
-  createData("5", 2500.0, 1000.0, 15000.0, 40000.0),
-  createData("6", 2500.0, 1000.0, 15000.0, 40000.0),
-  createData("7", 2500.0, 1000.0, 15000.0, 40000.0),
-  createData("8", 2500.0, 1000.0, 15000.0, 40000.0),
-  createData("9", 2500.0, 1000.0, 15000.0, 40000.0),
-  createData("10", 2500.0, 1000.0, 15000.0, 40000.0),
-  createData("11", 2500.0, 1000.0, 15000.0, 40000.0),
-  createData("12", 2500.0, 1000.0, 15000.0, 40000.0),
-];
+import { useEffect, useState } from "react";
+import apiClient from "../../../api/apiClient";
+import type { GetCurrentAccountYearlySummaryResponse } from "../../../api/apiClient.g.nswag";
+import { Box, CircularProgress } from "@mui/material";
 
 type CurrentAccountAnualSummaryProps = {
   account: CurrentAccount;
@@ -41,42 +20,86 @@ const CurrentAccountAnualSummary = ({
   account,
   year,
 }: CurrentAccountAnualSummaryProps) => {
+  const [yearlySummary, setApiResponse] =
+    useState<GetCurrentAccountYearlySummaryResponse | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  const fetchApiData = async () => {
+    setLoading(true);
+    try {
+      const response =
+        await apiClient.currentAccountEndpointsClient.getCurrentAccountYearlySummary(
+          account.id,
+          year
+        );
+      setApiResponse(response);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchApiData().catch((err) => console.error(err));
+  }, [year, account.id]);
+
   return (
     <>
       <div>
-        <h2>Summary for Account</h2>
-        <p>Account name: {account.name}</p>
-        <p>Year: {year}</p>
+        <p>{account.name}</p>
       </div>
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
-          <TableHead>
-            <TableRow>
-              <TableCell>Month</TableCell>
-              <TableCell align="right">Incomes</TableCell>
-              <TableCell align="right">Expenses</TableCell>
-              <TableCell align="right">Result</TableCell>
-              <TableCell align="right">Month end balance</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows.map((row) => (
-              <TableRow
-                key={row.name}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell component="th" scope="row">
-                  {row.name}
-                </TableCell>
-                <TableCell align="right">{row.calories}</TableCell>
-                <TableCell align="right">{row.fat}</TableCell>
-                <TableCell align="right">{row.carbs}</TableCell>
-                <TableCell align="right">{row.protein}</TableCell>
+      {loading ? (
+        <Box sx={{ display: "flex" }}>
+          <CircularProgress />
+        </Box>
+      ) : (
+        <TableContainer component={Paper}>
+          <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
+            <TableHead>
+              <TableRow>
+                <TableCell>Month</TableCell>
+                <TableCell align="right">Incomes</TableCell>
+                <TableCell align="right">Expenses</TableCell>
+                <TableCell align="right">Result</TableCell>
+                <TableCell align="right">Month end balance</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+            </TableHead>
+            <TableBody>
+              {yearlySummary?.months?.map((month, idx) => (
+                <TableRow
+                  key={month?.month ?? idx}
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                  <TableCell component="th" scope="row">
+                    {month?.month ?? "-"}
+                  </TableCell>
+                  <TableCell align="right">
+                    {typeof month?.incomes === "number"
+                      ? month.incomes.toFixed(2)
+                      : "-"}
+                  </TableCell>
+                  <TableCell align="right">
+                    {typeof month?.expenses === "number"
+                      ? month.expenses.toFixed(2)
+                      : "-"}
+                  </TableCell>
+                  <TableCell align="right">
+                    {typeof month?.result === "number"
+                      ? month.result.toFixed(2)
+                      : "-"}
+                  </TableCell>
+                  <TableCell align="right">
+                    {typeof month?.monthEndBalance === "number"
+                      ? month.monthEndBalance.toFixed(2)
+                      : "-"}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      )}
     </>
   );
 };

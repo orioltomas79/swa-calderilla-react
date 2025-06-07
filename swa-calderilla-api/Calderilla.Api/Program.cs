@@ -7,6 +7,7 @@ using Calderilla.Api.Auth;
 using Calderilla.Services.Operations;
 using Calderilla.Services.Banks.Ing;
 using Calderilla.Services.Banks.Sabadell;
+using Calderilla.Services.Accounts;
 
 namespace Calderilla.Api
 {
@@ -49,6 +50,7 @@ namespace Calderilla.Api
             builder.Services.AddSingleton<IOperationsRepository, OperationsRepository>();
             builder.Services.AddSingleton<IIngService, IngService>();
             builder.Services.AddSingleton<ISabadellService, SabadellService>();
+            builder.Services.AddSingleton<IAccountsService, AccountsService>();
         }
     }
 }
