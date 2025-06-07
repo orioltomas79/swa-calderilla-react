@@ -52,7 +52,7 @@ const AccountMonthPage = () => {
   }, [accountId, year, month]);
 
   const handleClick = () => {
-    void navigate("/import");
+    void navigate(`/accounts/${accountId}/import/${year}/${month}`);
   };
 
   return (
