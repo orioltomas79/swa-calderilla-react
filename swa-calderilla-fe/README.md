@@ -303,3 +303,30 @@ Declarative routing allows you to define your application's routes directly in y
 - `<Routes>` and `<Route>` define which components render for which URLs.
 - `<Link>`, `<NavLink>`, and `useNavigate` let you navigate between routes declaratively or programmatically.
 - Route params let you extract dynamic values from the URL for use in your components.
+
+## Global Current Accounts Context
+
+This project uses a React Context to efficiently manage and provide access to the list of current accounts throughout the application. This ensures that the list of accounts is fetched from the backend only once per app session, improving performance and reducing unnecessary API calls.
+
+### How It Works
+
+- The context is implemented in `src/contexts/CurrentAccountsContext.tsx`.
+- The `CurrentAccountsProvider` component wraps the application at the top level (see `main.tsx`).
+- The provider fetches the list of current accounts from the backend using the `getCurrentAccounts` endpoint when the app first loads.
+- The result is stored in context and made available to all components via the `useCurrentAccounts` hook.
+- Any component can access the list, loading, and error state by calling `useCurrentAccounts()`.
+- The data is only fetched once per app session, regardless of how many times you navigate between pages.
+
+### Usage Example
+
+Access the accounts in any component:
+
+```tsx
+import { useCurrentAccounts } from "../contexts/CurrentAccountsContext";
+
+const { listCurrentAccounts, loading, error } = useCurrentAccounts();
+```
+
+This pattern ensures that the list of accounts is always available, up-to-date, and only fetched once per session.
+
+---

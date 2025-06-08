@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import type { CurrentAccount } from "../../api/types";
-import apiClient from "../../api/apiClient";
+import { useCurrentAccounts } from "../../contexts/CurrentAccountsContext";
+// import type { CurrentAccount } from "../../api/types";
 import {
   Box,
   Grid,
@@ -20,23 +19,7 @@ const HomePage = () => {
 
   const { year } = useParams<{ year: string }>();
 
-  const [listCurrentAccounts, setListCurrentAccounts] = useState<
-    CurrentAccount[] | null
-  >(null);
-
-  const fetchApiData = async () => {
-    try {
-      const listCurrentAccounts =
-        await apiClient.currentAccountEndpointsClient.getCurrentAccounts();
-      setListCurrentAccounts(listCurrentAccounts);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  useEffect(() => {
-    fetchApiData().catch((err) => console.error(err));
-  }, []);
+  const { listCurrentAccounts, loading, error } = useCurrentAccounts();
 
   // Generate years from 2020 to current year
   const currentYear = new Date().getFullYear();
@@ -77,6 +60,8 @@ const HomePage = () => {
             </Select>
           </FormControl>
         </Box>
+        {loading && <div>Loading accounts...</div>}
+        {Boolean(error) && <div>Error loading accounts: {String(error)}</div>}
         {listCurrentAccounts && (
           <Grid container spacing={2}>
             {listCurrentAccounts.map((account) => (

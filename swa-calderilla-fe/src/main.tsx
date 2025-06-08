@@ -9,26 +9,29 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import LoginPage from "./features/LoginPage/LoginPage.tsx";
 import { CssBaseline } from "@mui/material";
 import HomePage from "./features/HomePage/HomePage.tsx";
+import { CurrentAccountsProvider } from "./contexts/CurrentAccountsContext.tsx";
 import ImportPage from "./features/ImportPage/ImportPage.tsx";
 import AccountMonthPage from "./features/AccountMonthPage/AccountMonthPage.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <CssBaseline>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<LoginPage />} />
-          <Route path="home/:year" element={<HomePage />} />
-          <Route
-            path="accounts/:accountId/import/:year/:month"
-            element={<ImportPage />}
-          />
-          <Route
-            path="accounts/:accountId/month-details/:year/:month"
-            element={<AccountMonthPage />}
-          />
-        </Routes>
-      </BrowserRouter>
+      <CurrentAccountsProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<LoginPage />} />
+            <Route path="home/:year" element={<HomePage />} />
+            <Route
+              path="accounts/:accountId/import/:year/:month"
+              element={<ImportPage />}
+            />
+            <Route
+              path="accounts/:accountId/month-details/:year/:month"
+              element={<AccountMonthPage />}
+            />
+          </Routes>
+        </BrowserRouter>
+      </CurrentAccountsProvider>
     </CssBaseline>
   </StrictMode>
 );
