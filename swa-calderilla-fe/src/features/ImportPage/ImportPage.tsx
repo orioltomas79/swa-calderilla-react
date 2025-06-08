@@ -1,21 +1,14 @@
-import { Box, Button, styled, Toolbar } from "@mui/material";
+import { Box, Toolbar } from "@mui/material";
 import { useParams } from "react-router-dom";
 import TopMenu from "../TopMenu/TopMenu";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import ImportIngButton from "./ImportIngButton";
 import apiClient from "../../api/apiClient";
 import { useState } from "react";
-
-const VisuallyHiddenInput = styled("input")({
-  clip: "rect(0 0 0 0)",
-  clipPath: "inset(50%)",
-  height: 1,
-  overflow: "hidden",
-  position: "absolute",
-  bottom: 0,
-  left: 0,
-  whiteSpace: "nowrap",
-  width: 1,
-});
+import ImportResponseRawData from "./ImportResponseRawData";
+import { useCurrentAccounts } from "../../contexts/useCurrentAccounts";
+import ImportSabadellButton from "./ImportSabadellButton";
+import ImportResponseOperationsData from "./ImportResponseOperationsData";
+import type { UploadIngExtractResponse, UploadSabadellExtractResponse } from "../../api/types";
 
 const ImportPage = () => {
   const { accountId, year, month } = useParams<{
@@ -24,18 +17,24 @@ const ImportPage = () => {
     month: string;
   }>();
 
-  const [loading, setLoading] = useState(false);
+  const { listCurrentAccounts, loadingAccounts, error } = useCurrentAccounts();
 
-  const handleFileUpload = async (file: File) => {
+  const [loading, setLoading] = useState(false);
+  const [ingResponse, setIngResponse] = useState<UploadIngExtractResponse | null>(null);
+  const [sabadellResponse, setSabadellResponse] = useState<UploadSabadellExtractResponse | null>(null);
+
+  const handleIngFileUpload = async (file: File) => {
     try {
       setLoading(true);
+      setIngResponse(null);
       if (!accountId || !year || !month) {
         return;
       }
-      await apiClient.ingEndpointsClient.uploadIngExtract(accountId, Number(year), Number(month), {
+      const response = await apiClient.ingEndpointsClient.uploadIngExtract(accountId, Number(year), Number(month), {
         data: file,
         fileName: file.name,
       });
+      setIngResponse(response);
     } catch (err) {
       console.error(err);
     } finally {
@@ -43,12 +42,43 @@ const ImportPage = () => {
     }
   };
 
+  const handleSabadellFileUpload = async (file: File) => {
+    try {
+      setLoading(true);
+      setSabadellResponse(null);
+      if (!accountId || !year || !month) {
+        return;
+      }
+      const response = await apiClient.sabadellEndpointsClient.uploadSabadellExtract(
+        accountId,
+        Number(year),
+        Number(month),
+        {
+          data: file,
+          fileName: file.name,
+        }
+      );
+      setSabadellResponse(response);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  let account;
+  if (loadingAccounts || error) {
+    account = undefined;
+  } else {
+    account = listCurrentAccounts?.find((acc) => acc.id === accountId);
+  }
+
   return (
     <>
       <TopMenu />
       <Toolbar />
       <Box sx={{ width: "95%", mx: "auto" }}>
-        <h1>Import</h1>
+        <h1>Import bank extract for account: {account ? account.name : ""}</h1>
         <div>
           {year && month ? (
             <Box sx={{ fontWeight: "bold", fontSize: 20, my: 2 }}>
@@ -57,27 +87,39 @@ const ImportPage = () => {
           ) : null}
         </div>
         <div>
-          <Button
-            component="label"
-            role={undefined}
-            variant="contained"
-            tabIndex={-1}
-            startIcon={<CloudUploadIcon />}
-            disabled={loading}
-          >
-            Upload Ing file
-            <VisuallyHiddenInput
-              type="file"
-              onChange={(event) => {
-                if (event.target.files && event.target.files.length > 0) {
-                  const file = event.target.files[0];
-                  handleFileUpload(file);
-                  console.log("Selected file:", file);
-                }
+          {account?.type === "Ing" && (
+            <ImportIngButton
+              loading={loading}
+              handleFileUpload={(file) => {
+                void handleIngFileUpload(file);
               }}
             />
-          </Button>
+          )}
+          {account?.type === "Sabadell" && (
+            <ImportSabadellButton
+              loading={loading}
+              handleFileUpload={(file) => {
+                void handleSabadellFileUpload(file);
+              }}
+            />
+          )}
         </div>
+        {account?.type === "Ing" && ingResponse && (
+          <Box sx={{ mt: 3 }}>
+            <h2>ING Extract Upload Result</h2>
+            {ingResponse.ingExtractRaw && <ImportResponseRawData data={ingResponse.ingExtractRaw} />}
+            {ingResponse.operations && <ImportResponseOperationsData operations={ingResponse.operations} />}
+          </Box>
+        )}
+        {account?.type === "Sabadell" && sabadellResponse && (
+          <Box sx={{ mt: 3 }}>
+            <h2>ING Extract Upload Result</h2>
+            {sabadellResponse.sabadellExtractPipe && (
+              <ImportResponseRawData data={sabadellResponse.sabadellExtractPipe} />
+            )}
+            {sabadellResponse.operations && <ImportResponseOperationsData operations={sabadellResponse.operations} />}
+          </Box>
+        )}
       </Box>
     </>
   );

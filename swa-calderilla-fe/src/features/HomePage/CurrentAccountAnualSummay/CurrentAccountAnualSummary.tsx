@@ -5,10 +5,9 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import type { CurrentAccount } from "../../../api/types";
+import type { CurrentAccount, GetCurrentAccountYearlySummaryResponse } from "../../../api/types";
 import { useEffect, useState } from "react";
 import apiClient from "../../../api/apiClient";
-import type { GetCurrentAccountYearlySummaryResponse } from "../../../api/apiClient.g.nswag";
 import { Box, CircularProgress } from "@mui/material";
 import { Link } from "react-router-dom";
 

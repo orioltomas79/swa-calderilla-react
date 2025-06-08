@@ -1,1 +1,7 @@
-export type { Operation, CurrentAccount } from "./apiClient.g.nswag";
+export type {
+  Operation,
+  CurrentAccount,
+  UploadIngExtractResponse,
+  UploadSabadellExtractResponse,
+  GetCurrentAccountYearlySummaryResponse,
+} from "./apiClient.g.nswag";

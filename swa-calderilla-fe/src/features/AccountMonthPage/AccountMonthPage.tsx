@@ -96,7 +96,9 @@ const AccountMonthPage = () => {
                       <TableCell>{new Date(op.operationDate).getDate()}</TableCell>
                       <TableCell>{op.description}</TableCell>
                       <TableCell>{op.payer}</TableCell>
-                      <TableCell align="right">{op.amount}</TableCell>
+                      <TableCell align="right" sx={{ color: op.amount >= 0 ? "green" : "red" }}>
+                        {op.amount.toFixed(2)}
+                      </TableCell>
                       <TableCell align="right">{op.balance}</TableCell>
                       <TableCell>{op.ignore}</TableCell>
                       <TableCell>{op.type}</TableCell>

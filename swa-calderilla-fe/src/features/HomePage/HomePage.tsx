@@ -1,6 +1,5 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useCurrentAccounts } from "../../contexts/CurrentAccountsContext";
-// import type { CurrentAccount } from "../../api/types";
+import { useCurrentAccounts } from "../../contexts/useCurrentAccounts";
 import { Box, Grid, Toolbar, Select, MenuItem, FormControl, InputLabel, type SelectChangeEvent } from "@mui/material";
 import CurrentAccountAnualSummary from "./CurrentAccountAnualSummay/CurrentAccountAnualSummary";
 import TopMenu from "../TopMenu/TopMenu";
@@ -10,7 +9,7 @@ const HomePage = () => {
 
   const { year } = useParams<{ year: string }>();
 
-  const { listCurrentAccounts, loading, error } = useCurrentAccounts();
+  const { listCurrentAccounts, loadingAccounts, error } = useCurrentAccounts();
 
   // Generate years from 2020 to current year
   const currentYear = new Date().getFullYear();
@@ -49,7 +48,7 @@ const HomePage = () => {
             </Select>
           </FormControl>
         </Box>
-        {loading && <div>Loading accounts...</div>}
+        {loadingAccounts && <div>Loading accounts...</div>}
         {Boolean(error) && <div>Error loading accounts: {String(error)}</div>}
         {listCurrentAccounts && (
           <Grid container spacing={2}>
