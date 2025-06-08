@@ -10,16 +10,20 @@ import {
   TableRow,
   Paper,
   CircularProgress,
+  Checkbox,
+  Select,
+  MenuItem,
 } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 import TopMenu from "../TopMenu/TopMenu";
 import { useEffect, useState } from "react";
 import apiClient from "../../api/apiClient";
-import type { Operation } from "../../api/types";
+import type { Operation, OperationType } from "../../api/types";
 
 const AccountMonthPage = () => {
   const navigate = useNavigate();
-  const [operations, setApiResponse] = useState<Operation[] | null>(null);
+  const [operations, setOperations] = useState<Operation[] | null>(null);
+  const [operationTypes, setOperationTypes] = useState<OperationType[]>([]);
   const [loading, setLoading] = useState(false);
 
   const { accountId, year, month } = useParams<{
@@ -35,12 +39,12 @@ const AccountMonthPage = () => {
       }
       setLoading(true);
       try {
-        const response = await apiClient.operationsEndpointsClient.getOperations(
-          accountId,
-          Number(year),
-          Number(month)
-        );
-        setApiResponse(response);
+        const [operationsResponse, operationTypesResponse] = await Promise.all([
+          apiClient.operationsEndpointsClient.getOperations(accountId, Number(year), Number(month)),
+          apiClient.operationsEndpointsClient.getOperationTypes(),
+        ]);
+        setOperations(operationsResponse);
+        setOperationTypes(operationTypesResponse ?? []);
       } catch (err) {
         console.error(err);
       } finally {
@@ -52,6 +56,26 @@ const AccountMonthPage = () => {
 
   const handleClick = () => {
     void navigate(`/accounts/${accountId}/import/${year}/${month}`);
+  };
+
+  // Toggles the 'ignore' property for the specified operation
+  const handleIgnoreChange = (operationId: string) => {
+    setOperations((operations) => {
+      if (!operations) return operations;
+      return operations.map((operation) =>
+        operation.id === operationId ? { ...operation, ignore: !operation.ignore } : operation
+      );
+    });
+  };
+
+  // Handler for changing the type
+  const handleTypeChange = (operationId: string, newType: string | null) => {
+    setOperations((operations) => {
+      if (!operations) return operations;
+      return operations.map((operation) =>
+        operation.id === operationId ? { ...operation, type: newType } : operation
+      );
+    });
   };
 
   return (
@@ -100,8 +124,30 @@ const AccountMonthPage = () => {
                         {op.amount.toFixed(2)}
                       </TableCell>
                       <TableCell align="right">{op.balance}</TableCell>
-                      <TableCell>{op.ignore}</TableCell>
-                      <TableCell>{op.type}</TableCell>
+                      <TableCell>
+                        <Checkbox checked={op.ignore} onChange={() => handleIgnoreChange(op.id)} />
+                      </TableCell>
+                      <TableCell>
+                        <Select
+                          value={op.type ?? ""}
+                          displayEmpty
+                          onChange={(e) => {
+                            const value = e.target.value === "" ? null : e.target.value;
+                            handleTypeChange(op.id, value);
+                          }}
+                          size="small"
+                          sx={{ minWidth: 120 }}
+                        >
+                          <MenuItem value="">
+                            <em>None</em>
+                          </MenuItem>
+                          {operationTypes.map((type) => (
+                            <MenuItem key={type.id} value={type.name}>
+                              {type.name}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </TableCell>
                     </TableRow>
                   ))
                 ) : (

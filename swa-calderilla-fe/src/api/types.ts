@@ -1,5 +1,6 @@
 export type {
   Operation,
+  OperationType,
   CurrentAccount,
   UploadIngExtractResponse,
   UploadSabadellExtractResponse,

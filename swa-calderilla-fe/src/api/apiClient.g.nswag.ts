@@ -9,9 +9,7 @@
 // ReSharper disable InconsistentNaming
 
 export class UserEndpointsClient {
-  private http: {
-    fetch(url: RequestInfo, init?: RequestInit): Promise<Response>;
-  };
+  private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
   private baseUrl: string;
   protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
 
@@ -74,9 +72,7 @@ export class UserEndpointsClient {
 }
 
 export class OperationsEndpointsClient {
-  private http: {
-    fetch(url: RequestInfo, init?: RequestInit): Promise<Response>;
-  };
+  private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
   private baseUrl: string;
   protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
 
@@ -145,12 +141,62 @@ export class OperationsEndpointsClient {
     }
     return Promise.resolve<Operation[]>(null as any);
   }
+
+  /**
+   * Returns a list of operation types
+   * @return Returns a list of operations
+   */
+  getOperationTypes(): Promise<OperationType[]> {
+    let url_ = this.baseUrl + "/operation-types";
+    url_ = url_.replace(/[?&]$/, "");
+
+    let options_: RequestInit = {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+      },
+    };
+
+    return this.http.fetch(url_, options_).then((_response: Response) => {
+      return this.processGetOperationTypes(_response);
+    });
+  }
+
+  protected processGetOperationTypes(response: Response): Promise<OperationType[]> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && response.headers.forEach) {
+      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+    }
+    if (status === 200) {
+      return response.text().then((_responseText) => {
+        let result200: any = null;
+        result200 = _responseText === "" ? null : (JSON.parse(_responseText, this.jsonParseReviver) as OperationType[]);
+        return result200;
+      });
+    } else if (status === 401) {
+      return response.text().then((_responseText) => {
+        let result401: any = null;
+        result401 = _responseText === "" ? null : (JSON.parse(_responseText, this.jsonParseReviver) as ProblemDetails);
+        return throwException("Returns a 401 error message", status, _responseText, _headers, result401);
+      });
+    } else if (status === 500) {
+      return response.text().then((_responseText) => {
+        let result500: any = null;
+        result500 = _responseText === "" ? null : (JSON.parse(_responseText, this.jsonParseReviver) as ProblemDetails);
+        return throwException("Returns a 500 error message", status, _responseText, _headers, result500);
+      });
+    } else if (status !== 200 && status !== 204) {
+      return response.text().then((_responseText) => {
+        return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+      });
+    }
+    return Promise.resolve<OperationType[]>(null as any);
+  }
 }
 
 export class CurrentAccountsEndpointsClient {
-  private http: {
-    fetch(url: RequestInfo, init?: RequestInit): Promise<Response>;
-  };
+  private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
   private baseUrl: string;
   protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
 
@@ -275,9 +321,7 @@ export class CurrentAccountsEndpointsClient {
 }
 
 export class SabadellEndpointsClient {
-  private http: {
-    fetch(url: RequestInfo, init?: RequestInit): Promise<Response>;
-  };
+  private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
   private baseUrl: string;
   protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
 
@@ -363,9 +407,7 @@ export class SabadellEndpointsClient {
 }
 
 export class IngEndpointsClient {
-  private http: {
-    fetch(url: RequestInfo, init?: RequestInit): Promise<Response>;
-  };
+  private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
   private baseUrl: string;
   protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
 
@@ -449,9 +491,7 @@ export class IngEndpointsClient {
 }
 
 export class DevEndpointsClient {
-  private http: {
-    fetch(url: RequestInfo, init?: RequestInit): Promise<Response>;
-  };
+  private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
   private baseUrl: string;
   protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
 
@@ -643,6 +683,11 @@ export interface Operation {
   type?: string | null;
   notes?: string | null;
   reviewed: boolean;
+}
+
+export interface OperationType {
+  id: number;
+  name: string;
 }
 
 export interface ProblemDetails {
