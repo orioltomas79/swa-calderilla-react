@@ -13,13 +13,9 @@ export class UserEndpointsClient {
     fetch(url: RequestInfo, init?: RequestInit): Promise<Response>;
   };
   private baseUrl: string;
-  protected jsonParseReviver: ((key: string, value: any) => any) | undefined =
-    undefined;
+  protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
 
-  constructor(
-    baseUrl?: string,
-    http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }
-  ) {
+  constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
     this.http = http ? http : (window as any);
     this.baseUrl = baseUrl ?? "http://localhost:7072/api";
   }
@@ -53,56 +49,24 @@ export class UserEndpointsClient {
     if (status === 200) {
       return response.text().then((_responseText) => {
         let result200: any = null;
-        result200 =
-          _responseText === ""
-            ? null
-            : (JSON.parse(_responseText, this.jsonParseReviver) as UserClaims);
+        result200 = _responseText === "" ? null : (JSON.parse(_responseText, this.jsonParseReviver) as UserClaims);
         return result200;
       });
     } else if (status === 401) {
       return response.text().then((_responseText) => {
         let result401: any = null;
-        result401 =
-          _responseText === ""
-            ? null
-            : (JSON.parse(
-                _responseText,
-                this.jsonParseReviver
-              ) as ProblemDetails);
-        return throwException(
-          "Returns a 401 error message",
-          status,
-          _responseText,
-          _headers,
-          result401
-        );
+        result401 = _responseText === "" ? null : (JSON.parse(_responseText, this.jsonParseReviver) as ProblemDetails);
+        return throwException("Returns a 401 error message", status, _responseText, _headers, result401);
       });
     } else if (status === 500) {
       return response.text().then((_responseText) => {
         let result500: any = null;
-        result500 =
-          _responseText === ""
-            ? null
-            : (JSON.parse(
-                _responseText,
-                this.jsonParseReviver
-              ) as ProblemDetails);
-        return throwException(
-          "Returns a 500 error message",
-          status,
-          _responseText,
-          _headers,
-          result500
-        );
+        result500 = _responseText === "" ? null : (JSON.parse(_responseText, this.jsonParseReviver) as ProblemDetails);
+        return throwException("Returns a 500 error message", status, _responseText, _headers, result500);
       });
     } else if (status !== 200 && status !== 204) {
       return response.text().then((_responseText) => {
-        return throwException(
-          "An unexpected server error occurred.",
-          status,
-          _responseText,
-          _headers
-        );
+        return throwException("An unexpected server error occurred.", status, _responseText, _headers);
       });
     }
     return Promise.resolve<UserClaims>(null as any);
@@ -114,13 +78,9 @@ export class OperationsEndpointsClient {
     fetch(url: RequestInfo, init?: RequestInit): Promise<Response>;
   };
   private baseUrl: string;
-  protected jsonParseReviver: ((key: string, value: any) => any) | undefined =
-    undefined;
+  protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
 
-  constructor(
-    baseUrl?: string,
-    http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }
-  ) {
+  constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
     this.http = http ? http : (window as any);
     this.baseUrl = baseUrl ?? "http://localhost:7072/api";
   }
@@ -132,20 +92,13 @@ export class OperationsEndpointsClient {
    * @param month The month of the operations
    * @return Returns a list of operations
    */
-  getOperations(
-    accountId: string,
-    year: number,
-    month: number
-  ): Promise<Operation[]> {
+  getOperations(accountId: string, year: number, month: number): Promise<Operation[]> {
     let url_ = this.baseUrl + "/operations/{accountId}/{year}/{month}";
-    if (accountId === undefined || accountId === null)
-      throw new Error("The parameter 'accountId' must be defined.");
+    if (accountId === undefined || accountId === null) throw new Error("The parameter 'accountId' must be defined.");
     url_ = url_.replace("{accountId}", encodeURIComponent("" + accountId));
-    if (year === undefined || year === null)
-      throw new Error("The parameter 'year' must be defined.");
+    if (year === undefined || year === null) throw new Error("The parameter 'year' must be defined.");
     url_ = url_.replace("{year}", encodeURIComponent("" + year));
-    if (month === undefined || month === null)
-      throw new Error("The parameter 'month' must be defined.");
+    if (month === undefined || month === null) throw new Error("The parameter 'month' must be defined.");
     url_ = url_.replace("{month}", encodeURIComponent("" + month));
     url_ = url_.replace(/[?&]$/, "");
 
@@ -170,56 +123,24 @@ export class OperationsEndpointsClient {
     if (status === 200) {
       return response.text().then((_responseText) => {
         let result200: any = null;
-        result200 =
-          _responseText === ""
-            ? null
-            : (JSON.parse(_responseText, this.jsonParseReviver) as Operation[]);
+        result200 = _responseText === "" ? null : (JSON.parse(_responseText, this.jsonParseReviver) as Operation[]);
         return result200;
       });
     } else if (status === 401) {
       return response.text().then((_responseText) => {
         let result401: any = null;
-        result401 =
-          _responseText === ""
-            ? null
-            : (JSON.parse(
-                _responseText,
-                this.jsonParseReviver
-              ) as ProblemDetails);
-        return throwException(
-          "Returns a 401 error message",
-          status,
-          _responseText,
-          _headers,
-          result401
-        );
+        result401 = _responseText === "" ? null : (JSON.parse(_responseText, this.jsonParseReviver) as ProblemDetails);
+        return throwException("Returns a 401 error message", status, _responseText, _headers, result401);
       });
     } else if (status === 500) {
       return response.text().then((_responseText) => {
         let result500: any = null;
-        result500 =
-          _responseText === ""
-            ? null
-            : (JSON.parse(
-                _responseText,
-                this.jsonParseReviver
-              ) as ProblemDetails);
-        return throwException(
-          "Returns a 500 error message",
-          status,
-          _responseText,
-          _headers,
-          result500
-        );
+        result500 = _responseText === "" ? null : (JSON.parse(_responseText, this.jsonParseReviver) as ProblemDetails);
+        return throwException("Returns a 500 error message", status, _responseText, _headers, result500);
       });
     } else if (status !== 200 && status !== 204) {
       return response.text().then((_responseText) => {
-        return throwException(
-          "An unexpected server error occurred.",
-          status,
-          _responseText,
-          _headers
-        );
+        return throwException("An unexpected server error occurred.", status, _responseText, _headers);
       });
     }
     return Promise.resolve<Operation[]>(null as any);
@@ -231,13 +152,9 @@ export class CurrentAccountsEndpointsClient {
     fetch(url: RequestInfo, init?: RequestInit): Promise<Response>;
   };
   private baseUrl: string;
-  protected jsonParseReviver: ((key: string, value: any) => any) | undefined =
-    undefined;
+  protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
 
-  constructor(
-    baseUrl?: string,
-    http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }
-  ) {
+  constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
     this.http = http ? http : (window as any);
     this.baseUrl = baseUrl ?? "http://localhost:7072/api";
   }
@@ -262,9 +179,7 @@ export class CurrentAccountsEndpointsClient {
     });
   }
 
-  protected processGetCurrentAccounts(
-    response: Response
-  ): Promise<CurrentAccount[]> {
+  protected processGetCurrentAccounts(response: Response): Promise<CurrentAccount[]> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -274,58 +189,24 @@ export class CurrentAccountsEndpointsClient {
       return response.text().then((_responseText) => {
         let result200: any = null;
         result200 =
-          _responseText === ""
-            ? null
-            : (JSON.parse(
-                _responseText,
-                this.jsonParseReviver
-              ) as CurrentAccount[]);
+          _responseText === "" ? null : (JSON.parse(_responseText, this.jsonParseReviver) as CurrentAccount[]);
         return result200;
       });
     } else if (status === 401) {
       return response.text().then((_responseText) => {
         let result401: any = null;
-        result401 =
-          _responseText === ""
-            ? null
-            : (JSON.parse(
-                _responseText,
-                this.jsonParseReviver
-              ) as ProblemDetails);
-        return throwException(
-          "Returns a 401 error message",
-          status,
-          _responseText,
-          _headers,
-          result401
-        );
+        result401 = _responseText === "" ? null : (JSON.parse(_responseText, this.jsonParseReviver) as ProblemDetails);
+        return throwException("Returns a 401 error message", status, _responseText, _headers, result401);
       });
     } else if (status === 500) {
       return response.text().then((_responseText) => {
         let result500: any = null;
-        result500 =
-          _responseText === ""
-            ? null
-            : (JSON.parse(
-                _responseText,
-                this.jsonParseReviver
-              ) as ProblemDetails);
-        return throwException(
-          "Returns a 500 error message",
-          status,
-          _responseText,
-          _headers,
-          result500
-        );
+        result500 = _responseText === "" ? null : (JSON.parse(_responseText, this.jsonParseReviver) as ProblemDetails);
+        return throwException("Returns a 500 error message", status, _responseText, _headers, result500);
       });
     } else if (status !== 200 && status !== 204) {
       return response.text().then((_responseText) => {
-        return throwException(
-          "An unexpected server error occurred.",
-          status,
-          _responseText,
-          _headers
-        );
+        return throwException("An unexpected server error occurred.", status, _responseText, _headers);
       });
     }
     return Promise.resolve<CurrentAccount[]>(null as any);
@@ -337,16 +218,11 @@ export class CurrentAccountsEndpointsClient {
    * @param year The year of the operations
    * @return Returns a yearly summary for the current account
    */
-  getCurrentAccountYearlySummary(
-    accountId: string,
-    year: number
-  ): Promise<GetCurrentAccountYearlySummaryResponse> {
+  getCurrentAccountYearlySummary(accountId: string, year: number): Promise<GetCurrentAccountYearlySummaryResponse> {
     let url_ = this.baseUrl + "/accounts/{accountId}/summary/{year}";
-    if (accountId === undefined || accountId === null)
-      throw new Error("The parameter 'accountId' must be defined.");
+    if (accountId === undefined || accountId === null) throw new Error("The parameter 'accountId' must be defined.");
     url_ = url_.replace("{accountId}", encodeURIComponent("" + accountId));
-    if (year === undefined || year === null)
-      throw new Error("The parameter 'year' must be defined.");
+    if (year === undefined || year === null) throw new Error("The parameter 'year' must be defined.");
     url_ = url_.replace("{year}", encodeURIComponent("" + year));
     url_ = url_.replace(/[?&]$/, "");
 
@@ -362,9 +238,7 @@ export class CurrentAccountsEndpointsClient {
     });
   }
 
-  protected processGetCurrentAccountYearlySummary(
-    response: Response
-  ): Promise<GetCurrentAccountYearlySummaryResponse> {
+  protected processGetCurrentAccountYearlySummary(response: Response): Promise<GetCurrentAccountYearlySummaryResponse> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -376,56 +250,24 @@ export class CurrentAccountsEndpointsClient {
         result200 =
           _responseText === ""
             ? null
-            : (JSON.parse(
-                _responseText,
-                this.jsonParseReviver
-              ) as GetCurrentAccountYearlySummaryResponse);
+            : (JSON.parse(_responseText, this.jsonParseReviver) as GetCurrentAccountYearlySummaryResponse);
         return result200;
       });
     } else if (status === 401) {
       return response.text().then((_responseText) => {
         let result401: any = null;
-        result401 =
-          _responseText === ""
-            ? null
-            : (JSON.parse(
-                _responseText,
-                this.jsonParseReviver
-              ) as ProblemDetails);
-        return throwException(
-          "Returns a 401 error message",
-          status,
-          _responseText,
-          _headers,
-          result401
-        );
+        result401 = _responseText === "" ? null : (JSON.parse(_responseText, this.jsonParseReviver) as ProblemDetails);
+        return throwException("Returns a 401 error message", status, _responseText, _headers, result401);
       });
     } else if (status === 500) {
       return response.text().then((_responseText) => {
         let result500: any = null;
-        result500 =
-          _responseText === ""
-            ? null
-            : (JSON.parse(
-                _responseText,
-                this.jsonParseReviver
-              ) as ProblemDetails);
-        return throwException(
-          "Returns a 500 error message",
-          status,
-          _responseText,
-          _headers,
-          result500
-        );
+        result500 = _responseText === "" ? null : (JSON.parse(_responseText, this.jsonParseReviver) as ProblemDetails);
+        return throwException("Returns a 500 error message", status, _responseText, _headers, result500);
       });
     } else if (status !== 200 && status !== 204) {
       return response.text().then((_responseText) => {
-        return throwException(
-          "An unexpected server error occurred.",
-          status,
-          _responseText,
-          _headers
-        );
+        return throwException("An unexpected server error occurred.", status, _responseText, _headers);
       });
     }
     return Promise.resolve<GetCurrentAccountYearlySummaryResponse>(null as any);
@@ -437,13 +279,9 @@ export class SabadellEndpointsClient {
     fetch(url: RequestInfo, init?: RequestInit): Promise<Response>;
   };
   private baseUrl: string;
-  protected jsonParseReviver: ((key: string, value: any) => any) | undefined =
-    undefined;
+  protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
 
-  constructor(
-    baseUrl?: string,
-    http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }
-  ) {
+  constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
     this.http = http ? http : (window as any);
     this.baseUrl = baseUrl ?? "http://localhost:7072/api";
   }
@@ -462,26 +300,18 @@ export class SabadellEndpointsClient {
     month: number,
     document: FileParameter | null | undefined
   ): Promise<UploadSabadellExtractResponse> {
-    let url_ =
-      this.baseUrl + "/sabadell/upload-bank-extract/{accountId}/{year}/{month}";
-    if (accountId === undefined || accountId === null)
-      throw new Error("The parameter 'accountId' must be defined.");
+    let url_ = this.baseUrl + "/sabadell/upload-bank-extract/{accountId}/{year}/{month}";
+    if (accountId === undefined || accountId === null) throw new Error("The parameter 'accountId' must be defined.");
     url_ = url_.replace("{accountId}", encodeURIComponent("" + accountId));
-    if (year === undefined || year === null)
-      throw new Error("The parameter 'year' must be defined.");
+    if (year === undefined || year === null) throw new Error("The parameter 'year' must be defined.");
     url_ = url_.replace("{year}", encodeURIComponent("" + year));
-    if (month === undefined || month === null)
-      throw new Error("The parameter 'month' must be defined.");
+    if (month === undefined || month === null) throw new Error("The parameter 'month' must be defined.");
     url_ = url_.replace("{month}", encodeURIComponent("" + month));
     url_ = url_.replace(/[?&]$/, "");
 
     const content_ = new FormData();
     if (document !== null && document !== undefined)
-      content_.append(
-        "document",
-        document.data,
-        document.fileName ? document.fileName : "document"
-      );
+      content_.append("document", document.data, document.fileName ? document.fileName : "document");
 
     let options_: RequestInit = {
       body: content_,
@@ -496,9 +326,7 @@ export class SabadellEndpointsClient {
     });
   }
 
-  protected processUploadSabadellExtract(
-    response: Response
-  ): Promise<UploadSabadellExtractResponse> {
+  protected processUploadSabadellExtract(response: Response): Promise<UploadSabadellExtractResponse> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -510,56 +338,24 @@ export class SabadellEndpointsClient {
         result201 =
           _responseText === ""
             ? null
-            : (JSON.parse(
-                _responseText,
-                this.jsonParseReviver
-              ) as UploadSabadellExtractResponse);
+            : (JSON.parse(_responseText, this.jsonParseReviver) as UploadSabadellExtractResponse);
         return result201;
       });
     } else if (status === 400) {
       return response.text().then((_responseText) => {
         let result400: any = null;
-        result400 =
-          _responseText === ""
-            ? null
-            : (JSON.parse(
-                _responseText,
-                this.jsonParseReviver
-              ) as ProblemDetails);
-        return throwException(
-          "Returns a 400 error message",
-          status,
-          _responseText,
-          _headers,
-          result400
-        );
+        result400 = _responseText === "" ? null : (JSON.parse(_responseText, this.jsonParseReviver) as ProblemDetails);
+        return throwException("Returns a 400 error message", status, _responseText, _headers, result400);
       });
     } else if (status === 500) {
       return response.text().then((_responseText) => {
         let result500: any = null;
-        result500 =
-          _responseText === ""
-            ? null
-            : (JSON.parse(
-                _responseText,
-                this.jsonParseReviver
-              ) as ProblemDetails);
-        return throwException(
-          "Returns a 500 error message",
-          status,
-          _responseText,
-          _headers,
-          result500
-        );
+        result500 = _responseText === "" ? null : (JSON.parse(_responseText, this.jsonParseReviver) as ProblemDetails);
+        return throwException("Returns a 500 error message", status, _responseText, _headers, result500);
       });
     } else if (status !== 200 && status !== 204) {
       return response.text().then((_responseText) => {
-        return throwException(
-          "An unexpected server error occurred.",
-          status,
-          _responseText,
-          _headers
-        );
+        return throwException("An unexpected server error occurred.", status, _responseText, _headers);
       });
     }
     return Promise.resolve<UploadSabadellExtractResponse>(null as any);
@@ -571,13 +367,9 @@ export class IngEndpointsClient {
     fetch(url: RequestInfo, init?: RequestInit): Promise<Response>;
   };
   private baseUrl: string;
-  protected jsonParseReviver: ((key: string, value: any) => any) | undefined =
-    undefined;
+  protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
 
-  constructor(
-    baseUrl?: string,
-    http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }
-  ) {
+  constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
     this.http = http ? http : (window as any);
     this.baseUrl = baseUrl ?? "http://localhost:7072/api";
   }
@@ -596,26 +388,18 @@ export class IngEndpointsClient {
     month: number,
     document: FileParameter | null | undefined
   ): Promise<UploadIngExtractResponse> {
-    let url_ =
-      this.baseUrl + "/ing/upload-bank-extract/{accountId}/{year}/{month}";
-    if (accountId === undefined || accountId === null)
-      throw new Error("The parameter 'accountId' must be defined.");
+    let url_ = this.baseUrl + "/ing/upload-bank-extract/{accountId}/{year}/{month}";
+    if (accountId === undefined || accountId === null) throw new Error("The parameter 'accountId' must be defined.");
     url_ = url_.replace("{accountId}", encodeURIComponent("" + accountId));
-    if (year === undefined || year === null)
-      throw new Error("The parameter 'year' must be defined.");
+    if (year === undefined || year === null) throw new Error("The parameter 'year' must be defined.");
     url_ = url_.replace("{year}", encodeURIComponent("" + year));
-    if (month === undefined || month === null)
-      throw new Error("The parameter 'month' must be defined.");
+    if (month === undefined || month === null) throw new Error("The parameter 'month' must be defined.");
     url_ = url_.replace("{month}", encodeURIComponent("" + month));
     url_ = url_.replace(/[?&]$/, "");
 
     const content_ = new FormData();
     if (document !== null && document !== undefined)
-      content_.append(
-        "document",
-        document.data,
-        document.fileName ? document.fileName : "document"
-      );
+      content_.append("document", document.data, document.fileName ? document.fileName : "document");
 
     let options_: RequestInit = {
       body: content_,
@@ -630,9 +414,7 @@ export class IngEndpointsClient {
     });
   }
 
-  protected processUploadIngExtract(
-    response: Response
-  ): Promise<UploadIngExtractResponse> {
+  protected processUploadIngExtract(response: Response): Promise<UploadIngExtractResponse> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -642,58 +424,24 @@ export class IngEndpointsClient {
       return response.text().then((_responseText) => {
         let result201: any = null;
         result201 =
-          _responseText === ""
-            ? null
-            : (JSON.parse(
-                _responseText,
-                this.jsonParseReviver
-              ) as UploadIngExtractResponse);
+          _responseText === "" ? null : (JSON.parse(_responseText, this.jsonParseReviver) as UploadIngExtractResponse);
         return result201;
       });
     } else if (status === 400) {
       return response.text().then((_responseText) => {
         let result400: any = null;
-        result400 =
-          _responseText === ""
-            ? null
-            : (JSON.parse(
-                _responseText,
-                this.jsonParseReviver
-              ) as ProblemDetails);
-        return throwException(
-          "Returns a 400 error message",
-          status,
-          _responseText,
-          _headers,
-          result400
-        );
+        result400 = _responseText === "" ? null : (JSON.parse(_responseText, this.jsonParseReviver) as ProblemDetails);
+        return throwException("Returns a 400 error message", status, _responseText, _headers, result400);
       });
     } else if (status === 500) {
       return response.text().then((_responseText) => {
         let result500: any = null;
-        result500 =
-          _responseText === ""
-            ? null
-            : (JSON.parse(
-                _responseText,
-                this.jsonParseReviver
-              ) as ProblemDetails);
-        return throwException(
-          "Returns a 500 error message",
-          status,
-          _responseText,
-          _headers,
-          result500
-        );
+        result500 = _responseText === "" ? null : (JSON.parse(_responseText, this.jsonParseReviver) as ProblemDetails);
+        return throwException("Returns a 500 error message", status, _responseText, _headers, result500);
       });
     } else if (status !== 200 && status !== 204) {
       return response.text().then((_responseText) => {
-        return throwException(
-          "An unexpected server error occurred.",
-          status,
-          _responseText,
-          _headers
-        );
+        return throwException("An unexpected server error occurred.", status, _responseText, _headers);
       });
     }
     return Promise.resolve<UploadIngExtractResponse>(null as any);
@@ -705,13 +453,9 @@ export class DevEndpointsClient {
     fetch(url: RequestInfo, init?: RequestInit): Promise<Response>;
   };
   private baseUrl: string;
-  protected jsonParseReviver: ((key: string, value: any) => any) | undefined =
-    undefined;
+  protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
 
-  constructor(
-    baseUrl?: string,
-    http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }
-  ) {
+  constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
     this.http = http ? http : (window as any);
     this.baseUrl = baseUrl ?? "http://localhost:7072/api";
   }
@@ -745,56 +489,24 @@ export class DevEndpointsClient {
     if (status === 200) {
       return response.text().then((_responseText) => {
         let result200: any = null;
-        result200 =
-          _responseText === ""
-            ? null
-            : (JSON.parse(_responseText, this.jsonParseReviver) as string);
+        result200 = _responseText === "" ? null : (JSON.parse(_responseText, this.jsonParseReviver) as string);
         return result200;
       });
     } else if (status === 401) {
       return response.text().then((_responseText) => {
         let result401: any = null;
-        result401 =
-          _responseText === ""
-            ? null
-            : (JSON.parse(
-                _responseText,
-                this.jsonParseReviver
-              ) as ProblemDetails);
-        return throwException(
-          "Returns a 401 error message",
-          status,
-          _responseText,
-          _headers,
-          result401
-        );
+        result401 = _responseText === "" ? null : (JSON.parse(_responseText, this.jsonParseReviver) as ProblemDetails);
+        return throwException("Returns a 401 error message", status, _responseText, _headers, result401);
       });
     } else if (status === 500) {
       return response.text().then((_responseText) => {
         let result500: any = null;
-        result500 =
-          _responseText === ""
-            ? null
-            : (JSON.parse(
-                _responseText,
-                this.jsonParseReviver
-              ) as ProblemDetails);
-        return throwException(
-          "Returns a 500 error message",
-          status,
-          _responseText,
-          _headers,
-          result500
-        );
+        result500 = _responseText === "" ? null : (JSON.parse(_responseText, this.jsonParseReviver) as ProblemDetails);
+        return throwException("Returns a 500 error message", status, _responseText, _headers, result500);
       });
     } else if (status !== 200 && status !== 204) {
       return response.text().then((_responseText) => {
-        return throwException(
-          "An unexpected server error occurred.",
-          status,
-          _responseText,
-          _headers
-        );
+        return throwException("An unexpected server error occurred.", status, _responseText, _headers);
       });
     }
     return Promise.resolve<string>(null as any);
@@ -826,65 +538,24 @@ export class DevEndpointsClient {
     if (status === 404) {
       return response.text().then((_responseText) => {
         let result404: any = null;
-        result404 =
-          _responseText === ""
-            ? null
-            : (JSON.parse(
-                _responseText,
-                this.jsonParseReviver
-              ) as ProblemDetails);
-        return throwException(
-          "Returns a 404 error message",
-          status,
-          _responseText,
-          _headers,
-          result404
-        );
+        result404 = _responseText === "" ? null : (JSON.parse(_responseText, this.jsonParseReviver) as ProblemDetails);
+        return throwException("Returns a 404 error message", status, _responseText, _headers, result404);
       });
     } else if (status === 401) {
       return response.text().then((_responseText) => {
         let result401: any = null;
-        result401 =
-          _responseText === ""
-            ? null
-            : (JSON.parse(
-                _responseText,
-                this.jsonParseReviver
-              ) as ProblemDetails);
-        return throwException(
-          "Returns a 401 error message",
-          status,
-          _responseText,
-          _headers,
-          result401
-        );
+        result401 = _responseText === "" ? null : (JSON.parse(_responseText, this.jsonParseReviver) as ProblemDetails);
+        return throwException("Returns a 401 error message", status, _responseText, _headers, result401);
       });
     } else if (status === 500) {
       return response.text().then((_responseText) => {
         let result500: any = null;
-        result500 =
-          _responseText === ""
-            ? null
-            : (JSON.parse(
-                _responseText,
-                this.jsonParseReviver
-              ) as ProblemDetails);
-        return throwException(
-          "Returns a 500 error message",
-          status,
-          _responseText,
-          _headers,
-          result500
-        );
+        result500 = _responseText === "" ? null : (JSON.parse(_responseText, this.jsonParseReviver) as ProblemDetails);
+        return throwException("Returns a 500 error message", status, _responseText, _headers, result500);
       });
     } else if (status !== 200 && status !== 204) {
       return response.text().then((_responseText) => {
-        return throwException(
-          "An unexpected server error occurred.",
-          status,
-          _responseText,
-          _headers
-        );
+        return throwException("An unexpected server error occurred.", status, _responseText, _headers);
       });
     }
     return Promise.resolve<void>(null as any);
@@ -917,64 +588,24 @@ export class DevEndpointsClient {
       return response.text().then((_responseText) => {
         let result400: any = null;
         result400 =
-          _responseText === ""
-            ? null
-            : (JSON.parse(
-                _responseText,
-                this.jsonParseReviver
-              ) as ValidationProblemDetails);
-        return throwException(
-          "Returns a 400 error message",
-          status,
-          _responseText,
-          _headers,
-          result400
-        );
+          _responseText === "" ? null : (JSON.parse(_responseText, this.jsonParseReviver) as ValidationProblemDetails);
+        return throwException("Returns a 400 error message", status, _responseText, _headers, result400);
       });
     } else if (status === 401) {
       return response.text().then((_responseText) => {
         let result401: any = null;
-        result401 =
-          _responseText === ""
-            ? null
-            : (JSON.parse(
-                _responseText,
-                this.jsonParseReviver
-              ) as ProblemDetails);
-        return throwException(
-          "Returns a 401 error message",
-          status,
-          _responseText,
-          _headers,
-          result401
-        );
+        result401 = _responseText === "" ? null : (JSON.parse(_responseText, this.jsonParseReviver) as ProblemDetails);
+        return throwException("Returns a 401 error message", status, _responseText, _headers, result401);
       });
     } else if (status === 500) {
       return response.text().then((_responseText) => {
         let result500: any = null;
-        result500 =
-          _responseText === ""
-            ? null
-            : (JSON.parse(
-                _responseText,
-                this.jsonParseReviver
-              ) as ProblemDetails);
-        return throwException(
-          "Returns a 500 error message",
-          status,
-          _responseText,
-          _headers,
-          result500
-        );
+        result500 = _responseText === "" ? null : (JSON.parse(_responseText, this.jsonParseReviver) as ProblemDetails);
+        return throwException("Returns a 500 error message", status, _responseText, _headers, result500);
       });
     } else if (status !== 200 && status !== 204) {
       return response.text().then((_responseText) => {
-        return throwException(
-          "An unexpected server error occurred.",
-          status,
-          _responseText,
-          _headers
-        );
+        return throwException("An unexpected server error occurred.", status, _responseText, _headers);
       });
     }
     return Promise.resolve<void>(null as any);
@@ -1068,13 +699,7 @@ export class ApiException extends Error {
   headers: { [key: string]: any };
   result: any;
 
-  constructor(
-    message: string,
-    status: number,
-    response: string,
-    headers: { [key: string]: any },
-    result: any
-  ) {
+  constructor(message: string, status: number, response: string, headers: { [key: string]: any }, result: any) {
     super();
 
     this.message = message;

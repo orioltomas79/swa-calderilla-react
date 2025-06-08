@@ -1,16 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useCurrentAccounts } from "../../contexts/CurrentAccountsContext";
 // import type { CurrentAccount } from "../../api/types";
-import {
-  Box,
-  Grid,
-  Toolbar,
-  Select,
-  MenuItem,
-  FormControl,
-  InputLabel,
-  type SelectChangeEvent,
-} from "@mui/material";
+import { Box, Grid, Toolbar, Select, MenuItem, FormControl, InputLabel, type SelectChangeEvent } from "@mui/material";
 import CurrentAccountAnualSummary from "./CurrentAccountAnualSummay/CurrentAccountAnualSummary";
 import TopMenu from "../TopMenu/TopMenu";
 
@@ -40,9 +31,7 @@ const HomePage = () => {
       <Toolbar />
       <Box sx={{ width: "95%", mx: "auto" }}>
         <h1 style={{ margin: 0 }}>Current accounts</h1>
-        <Box
-          sx={{ display: "flex", alignItems: "center", gap: 2, mb: 2, mt: 1 }}
-        >
+        <Box sx={{ display: "flex", alignItems: "center", gap: 2, mb: 2, mt: 1 }}>
           <FormControl size="small" sx={{ minWidth: 120 }}>
             <InputLabel id="year-select-label">Year</InputLabel>
             <Select
@@ -66,10 +55,7 @@ const HomePage = () => {
           <Grid container spacing={2}>
             {listCurrentAccounts.map((account) => (
               <Grid key={account.id} size={{ xs: 12, sm: 12, md: 6 }}>
-                <CurrentAccountAnualSummary
-                  account={account}
-                  year={Number(year ?? currentYear)}
-                />
+                <CurrentAccountAnualSummary account={account} year={Number(year ?? currentYear)} />
               </Grid>
             ))}
           </Grid>

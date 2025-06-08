@@ -17,23 +17,15 @@ type CurrentAccountAnualSummaryProps = {
   year: number;
 };
 
-const CurrentAccountAnualSummary = ({
-  account,
-  year,
-}: CurrentAccountAnualSummaryProps) => {
-  const [yearlySummary, setApiResponse] =
-    useState<GetCurrentAccountYearlySummaryResponse | null>(null);
+const CurrentAccountAnualSummary = ({ account, year }: CurrentAccountAnualSummaryProps) => {
+  const [yearlySummary, setApiResponse] = useState<GetCurrentAccountYearlySummaryResponse | null>(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const response =
-          await apiClient.currentAccountEndpointsClient.getCurrentAccountYearlySummary(
-            account.id,
-            year
-          );
+        const response = await apiClient.currentAccountEndpointsClient.getCurrentAccountYearlySummary(account.id, year);
         setApiResponse(response);
       } catch (err) {
         console.error(err);
@@ -67,10 +59,7 @@ const CurrentAccountAnualSummary = ({
             </TableHead>
             <TableBody>
               {yearlySummary?.months?.map((month, idx) => (
-                <TableRow
-                  key={month?.month ?? idx}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                >
+                <TableRow key={month?.month ?? idx} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
                   <TableCell component="th" scope="row">
                     {typeof month?.month === "number" ? (
                       <Link
@@ -82,34 +71,23 @@ const CurrentAccountAnualSummary = ({
                           cursor: "pointer",
                         }}
                       >
-                        {new Date(0, month.month - 1).toLocaleString(
-                          "default",
-                          { month: "long" }
-                        )}
+                        {new Date(0, month.month - 1).toLocaleString("default", { month: "long" })}
                       </Link>
                     ) : (
                       "-"
                     )}
                   </TableCell>
                   <TableCell align="right">
-                    {typeof month?.incomes === "number"
-                      ? month.incomes.toFixed(2)
-                      : "-"}
+                    {typeof month?.incomes === "number" ? month.incomes.toFixed(2) : "-"}
                   </TableCell>
                   <TableCell align="right">
-                    {typeof month?.expenses === "number"
-                      ? month.expenses.toFixed(2)
-                      : "-"}
+                    {typeof month?.expenses === "number" ? month.expenses.toFixed(2) : "-"}
                   </TableCell>
                   <TableCell align="right">
-                    {typeof month?.result === "number"
-                      ? month.result.toFixed(2)
-                      : "-"}
+                    {typeof month?.result === "number" ? month.result.toFixed(2) : "-"}
                   </TableCell>
                   <TableCell align="right">
-                    {typeof month?.monthEndBalance === "number"
-                      ? month.monthEndBalance.toFixed(2)
-                      : "-"}
+                    {typeof month?.monthEndBalance === "number" ? month.monthEndBalance.toFixed(2) : "-"}
                   </TableCell>
                 </TableRow>
               ))}

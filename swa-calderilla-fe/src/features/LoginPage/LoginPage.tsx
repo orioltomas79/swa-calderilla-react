@@ -40,8 +40,7 @@ const Login = () => {
           <Typography variant="h4">Login</Typography>
           <Typography variant="h5">Welcome to Calderilla.</Typography>
           <Typography variant="body1">
-            To access the application, please click the "Log in with Github"
-            button. A GitHub account is required.
+            To access the application, please click the "Log in with Github" button. A GitHub account is required.
           </Typography>
           <Button
             fullWidth

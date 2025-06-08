@@ -21,14 +21,8 @@ createRoot(document.getElementById("root")!).render(
           <Routes>
             <Route path="/" element={<LoginPage />} />
             <Route path="home/:year" element={<HomePage />} />
-            <Route
-              path="accounts/:accountId/import/:year/:month"
-              element={<ImportPage />}
-            />
-            <Route
-              path="accounts/:accountId/month-details/:year/:month"
-              element={<AccountMonthPage />}
-            />
+            <Route path="accounts/:accountId/import/:year/:month" element={<ImportPage />} />
+            <Route path="accounts/:accountId/month-details/:year/:month" element={<AccountMonthPage />} />
           </Routes>
         </BrowserRouter>
       </CurrentAccountsProvider>

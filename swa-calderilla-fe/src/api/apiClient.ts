@@ -16,9 +16,7 @@ class ApiClient {
   constructor() {
     this.devEndpointsClient = new DevEndpointsClient("/api");
     this.operationsEndpointsClient = new OperationsEndpointsClient("/api");
-    this.currentAccountEndpointsClient = new CurrentAccountsEndpointsClient(
-      "/api"
-    );
+    this.currentAccountEndpointsClient = new CurrentAccountsEndpointsClient("/api");
     this.ingEndpointsClient = new IngEndpointsClient("/api");
     this.sabadellEndpointsClient = new SabadellEndpointsClient("/api");
   }

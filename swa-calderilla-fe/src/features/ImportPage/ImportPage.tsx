@@ -32,12 +32,10 @@ const ImportPage = () => {
       if (!accountId || !year || !month) {
         return;
       }
-      await apiClient.ingEndpointsClient.uploadIngExtract(
-        accountId,
-        Number(year),
-        Number(month),
-        { data: file, fileName: file.name }
-      );
+      await apiClient.ingEndpointsClient.uploadIngExtract(accountId, Number(year), Number(month), {
+        data: file,
+        fileName: file.name,
+      });
     } catch (err) {
       console.error(err);
     } finally {
@@ -54,10 +52,7 @@ const ImportPage = () => {
         <div>
           {year && month ? (
             <Box sx={{ fontWeight: "bold", fontSize: 20, my: 2 }}>
-              {new Date(Number(year), Number(month) - 1).toLocaleString(
-                undefined,
-                { month: "long", year: "numeric" }
-              )}
+              {new Date(Number(year), Number(month) - 1).toLocaleString(undefined, { month: "long", year: "numeric" })}
             </Box>
           ) : null}
         </div>

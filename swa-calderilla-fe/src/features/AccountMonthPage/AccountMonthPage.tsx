@@ -35,12 +35,11 @@ const AccountMonthPage = () => {
       }
       setLoading(true);
       try {
-        const response =
-          await apiClient.operationsEndpointsClient.getOperations(
-            accountId,
-            Number(year),
-            Number(month)
-          );
+        const response = await apiClient.operationsEndpointsClient.getOperations(
+          accountId,
+          Number(year),
+          Number(month)
+        );
         setApiResponse(response);
       } catch (err) {
         console.error(err);
@@ -63,10 +62,7 @@ const AccountMonthPage = () => {
         <div>
           {year && month ? (
             <Box sx={{ fontWeight: "bold", fontSize: 20, my: 2 }}>
-              {new Date(Number(year), Number(month) - 1).toLocaleString(
-                undefined,
-                { month: "long", year: "numeric" }
-              )}
+              {new Date(Number(year), Number(month) - 1).toLocaleString(undefined, { month: "long", year: "numeric" })}
             </Box>
           ) : null}
         </div>
@@ -97,9 +93,7 @@ const AccountMonthPage = () => {
                 {operations && operations.length > 0 ? (
                   operations.map((op) => (
                     <TableRow key={op.id}>
-                      <TableCell>
-                        {new Date(op.operationDate).getDate()}
-                      </TableCell>
+                      <TableCell>{new Date(op.operationDate).getDate()}</TableCell>
                       <TableCell>{op.description}</TableCell>
                       <TableCell>{op.payer}</TableCell>
                       <TableCell align="right">{op.amount}</TableCell>
