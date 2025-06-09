@@ -62,9 +62,23 @@ const AccountMonthPage = () => {
   const handleIgnoreChange = (operationId: string) => {
     setOperations((operations) => {
       if (!operations) return operations;
-      return operations.map((operation) =>
+      const updated = operations.map((operation) =>
         operation.id === operationId ? { ...operation, ignore: !operation.ignore } : operation
       );
+
+      // Find the toggled operation
+      const toggled = operations.find((op) => op.id === operationId);
+      if (toggled && accountId && year && month) {
+        console.log(toggled);
+        // Call API to patch the ignore field
+        apiClient.operationsEndpointsClient
+          .patchOperation(accountId, Number(year), Number(month), operationId, { ignore: !toggled.ignore })
+          .catch((err) => {
+            // Optionally handle error (e.g., revert UI change)
+            console.error("Failed to patch ignore field", err);
+          });
+      }
+      return updated;
     });
   };
 
@@ -72,9 +86,21 @@ const AccountMonthPage = () => {
   const handleTypeChange = (operationId: string, newType: string | null) => {
     setOperations((operations) => {
       if (!operations) return operations;
-      return operations.map((operation) =>
+      const updated = operations.map((operation) =>
         operation.id === operationId ? { ...operation, type: newType } : operation
       );
+
+      // Find the changed operation
+      const changed = operations.find((op) => op.id === operationId);
+      if (changed && accountId && year && month) {
+        apiClient.operationsEndpointsClient
+          .patchOperation(accountId, Number(year), Number(month), operationId, { type: newType })
+          .catch((err) => {
+            // Optionally handle error (e.g., revert UI change)
+            console.error("Failed to patch type field", err);
+          });
+      }
+      return updated;
     });
   };
 
@@ -105,12 +131,12 @@ const AccountMonthPage = () => {
               <TableHead>
                 <TableRow>
                   <TableCell>Day</TableCell>
-                  <TableCell>Description</TableCell>
-                  <TableCell>Payer</TableCell>
-                  <TableCell>Amount</TableCell>
-                  <TableCell>Balance</TableCell>
                   <TableCell>Ignore</TableCell>
                   <TableCell>Type</TableCell>
+                  <TableCell>Description</TableCell>
+                  <TableCell>Amount</TableCell>
+                  <TableCell>Payer</TableCell>
+                  <TableCell>Balance</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -118,12 +144,6 @@ const AccountMonthPage = () => {
                   operations.map((op) => (
                     <TableRow key={op.id}>
                       <TableCell>{new Date(op.operationDate).getDate()}</TableCell>
-                      <TableCell>{op.description}</TableCell>
-                      <TableCell>{op.payer}</TableCell>
-                      <TableCell align="right" sx={{ color: op.amount >= 0 ? "green" : "red" }}>
-                        {op.amount.toFixed(2)}
-                      </TableCell>
-                      <TableCell align="right">{op.balance}</TableCell>
                       <TableCell>
                         <Checkbox checked={op.ignore} onChange={() => handleIgnoreChange(op.id)} />
                       </TableCell>
@@ -139,7 +159,7 @@ const AccountMonthPage = () => {
                           sx={{ minWidth: 120 }}
                         >
                           <MenuItem value="">
-                            <em>None</em>
+                            <em style={{ color: "red" }}>None</em>
                           </MenuItem>
                           {operationTypes.map((type) => (
                             <MenuItem key={type.id} value={type.name}>
@@ -148,6 +168,12 @@ const AccountMonthPage = () => {
                           ))}
                         </Select>
                       </TableCell>
+                      <TableCell>{op.description}</TableCell>
+                      <TableCell align="right" sx={{ color: op.amount >= 0 ? "green" : "red" }}>
+                        {op.amount.toFixed(2)}
+                      </TableCell>
+                      <TableCell>{op.payer}</TableCell>
+                      <TableCell align="right">{op.balance}</TableCell>
                     </TableRow>
                   ))
                 ) : (

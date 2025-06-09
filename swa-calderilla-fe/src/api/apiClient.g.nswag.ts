@@ -193,6 +193,88 @@ export class OperationsEndpointsClient {
     }
     return Promise.resolve<OperationType[]>(null as any);
   }
+
+  /**
+   * Patch an operation
+   * @param accountId The current account
+   * @param year The year of the operation
+   * @param month The month of the operation
+   * @param operationId The operation ID
+   * @param body The new values
+   * @return Returns the updated operation
+   */
+  patchOperation(
+    accountId: string,
+    year: number,
+    month: number,
+    operationId: string,
+    body: PatchOperationRequest
+  ): Promise<Operation> {
+    let url_ = this.baseUrl + "/operations/{accountId}/{year}/{month}/{operationId}";
+    if (accountId === undefined || accountId === null) throw new Error("The parameter 'accountId' must be defined.");
+    url_ = url_.replace("{accountId}", encodeURIComponent("" + accountId));
+    if (year === undefined || year === null) throw new Error("The parameter 'year' must be defined.");
+    url_ = url_.replace("{year}", encodeURIComponent("" + year));
+    if (month === undefined || month === null) throw new Error("The parameter 'month' must be defined.");
+    url_ = url_.replace("{month}", encodeURIComponent("" + month));
+    if (operationId === undefined || operationId === null)
+      throw new Error("The parameter 'operationId' must be defined.");
+    url_ = url_.replace("{operationId}", encodeURIComponent("" + operationId));
+    url_ = url_.replace(/[?&]$/, "");
+
+    const content_ = JSON.stringify(body);
+
+    let options_: RequestInit = {
+      body: content_,
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    };
+
+    return this.http.fetch(url_, options_).then((_response: Response) => {
+      return this.processPatchOperation(_response);
+    });
+  }
+
+  protected processPatchOperation(response: Response): Promise<Operation> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && response.headers.forEach) {
+      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+    }
+    if (status === 200) {
+      return response.text().then((_responseText) => {
+        let result200: any = null;
+        result200 = _responseText === "" ? null : (JSON.parse(_responseText, this.jsonParseReviver) as Operation);
+        return result200;
+      });
+    } else if (status === 400) {
+      return response.text().then((_responseText) => {
+        let result400: any = null;
+        result400 = _responseText === "" ? null : (JSON.parse(_responseText, this.jsonParseReviver) as ProblemDetails);
+        return throwException("Validation error", status, _responseText, _headers, result400);
+      });
+    } else if (status === 404) {
+      return response.text().then((_responseText) => {
+        let result404: any = null;
+        result404 = _responseText === "" ? null : (JSON.parse(_responseText, this.jsonParseReviver) as ProblemDetails);
+        return throwException("Operation not found", status, _responseText, _headers, result404);
+      });
+    } else if (status === 500) {
+      return response.text().then((_responseText) => {
+        let result500: any = null;
+        result500 = _responseText === "" ? null : (JSON.parse(_responseText, this.jsonParseReviver) as ProblemDetails);
+        return throwException("Server error", status, _responseText, _headers, result500);
+      });
+    } else if (status !== 200 && status !== 204) {
+      return response.text().then((_responseText) => {
+        return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+      });
+    }
+    return Promise.resolve<Operation>(null as any);
+  }
 }
 
 export class CurrentAccountsEndpointsClient {
@@ -688,6 +770,11 @@ export interface Operation {
 export interface OperationType {
   id: number;
   name: string;
+}
+
+export interface PatchOperationRequest {
+  ignore?: boolean | null;
+  type?: string | null;
 }
 
 export interface ProblemDetails {

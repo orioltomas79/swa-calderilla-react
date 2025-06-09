@@ -17,6 +17,7 @@
         public const string OperationsEndpointsTag = "OperationsEndpoints";
         public const string GetOperations = "operations/{accountId:guid}/{year:int}/{month:int}";
         public const string GetOperationTypes = "operation-types";
+        public const string PatchOperation = "operations/{accountId:guid}/{year:int}/{month:int}/{operationId:guid}";
 
         // Ing operations
         public const string IngEndpointsTag = "IngEndpoints";
