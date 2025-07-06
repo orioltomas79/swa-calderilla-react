@@ -9,7 +9,7 @@ namespace Calderilla.DataAccess
 
         public BlobRepository()
         {
-            
+
         }
 
         public async Task<List<T>> ReadListAsync<T>(string blobName)
@@ -48,6 +48,18 @@ namespace Calderilla.DataAccess
             await blobContainerClient.CreateIfNotExistsAsync().ConfigureAwait(false);
 
             return blobContainerClient.GetBlobClient(blobName);
+        }
+
+        public async Task<bool> ExistsAsync(string blobName)
+        {
+            var blobClient = await GetBlobClientAsync(blobName).ConfigureAwait(false);
+            return await blobClient.ExistsAsync().ConfigureAwait(false);
+        }
+
+        public async Task DeleteAsync(string blobName)
+        {
+            var blobClient = await GetBlobClientAsync(blobName).ConfigureAwait(false);
+            await blobClient.DeleteIfExistsAsync().ConfigureAwait(false);
         }
     }
 }

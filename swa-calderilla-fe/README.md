@@ -330,3 +330,25 @@ const { listCurrentAccounts, loading, error } = useCurrentAccounts();
 This pattern ensures that the list of accounts is always available, up-to-date, and only fetched once per session.
 
 ---
+
+## Website Navigation Diagram
+
+Below is a diagram illustrating the main navigation flow of the application:
+
+```mermaid
+graph TD
+  HomePage["🏠 HomePage"]
+  AccountPage["💼 AccountPage"]
+  AccountMonthPage["📅 AccountMonthPage"]
+  ImportPage["⬆️ ImportPage"]
+
+  HomePage -- "Click on a month" --> AccountMonthPage
+  HomePage -- "Click on account name" --> AccountPage
+  AccountMonthPage -- "Click Import button" --> ImportPage
+```
+
+- **HomePage**: The landing page of the app.
+  - Clicking on a month navigates to **AccountMonthPage** for that month.
+  - Clicking the **Import** button navigates to **ImportPage**.
+
+This flow ensures intuitive navigation between the main features of the application.

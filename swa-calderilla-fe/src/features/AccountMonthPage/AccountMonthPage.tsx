@@ -54,8 +54,12 @@ const AccountMonthPage = () => {
     fetchData().catch((err) => console.error(err));
   }, [accountId, year, month]);
 
-  const handleClick = () => {
+  const handleImportClick = () => {
     void navigate(`/accounts/${accountId}/import/${year}/${month}`);
+  };
+
+  const handleGroupClick = () => {
+    void navigate(`/accounts/${accountId}/month-group/${year}/${month}`);
   };
 
   // Toggles the 'ignore' property for the specified operation
@@ -117,8 +121,11 @@ const AccountMonthPage = () => {
           ) : null}
         </div>
         <div>
-          <Button variant="contained" onClick={handleClick}>
+          <Button variant="contained" onClick={handleImportClick}>
             Import
+          </Button>
+          <Button variant="contained" onClick={handleGroupClick}>
+            Group
           </Button>
         </div>
         {loading ? (

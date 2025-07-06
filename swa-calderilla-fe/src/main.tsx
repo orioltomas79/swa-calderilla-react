@@ -12,6 +12,8 @@ import HomePage from "./features/HomePage/HomePage.tsx";
 import { CurrentAccountsProvider } from "./contexts/CurrentAccountsContext.tsx";
 import ImportPage from "./features/ImportPage/ImportPage.tsx";
 import AccountMonthPage from "./features/AccountMonthPage/AccountMonthPage.tsx";
+import AccountPage from "./features/AccountPage/AccountPage.tsx";
+import AccountMonthGroupPage from "./features/AccountMonthGroupPage/AccountMonthGroupPage.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -21,8 +23,10 @@ createRoot(document.getElementById("root")!).render(
           <Routes>
             <Route path="/" element={<LoginPage />} />
             <Route path="home/:year" element={<HomePage />} />
+            <Route path="accounts/:accountId/:year" element={<AccountPage />} />
             <Route path="accounts/:accountId/import/:year/:month" element={<ImportPage />} />
             <Route path="accounts/:accountId/month-details/:year/:month" element={<AccountMonthPage />} />
+            <Route path="accounts/:accountId/month-group/:year/:month" element={<AccountMonthGroupPage />} />
           </Routes>
         </BrowserRouter>
       </CurrentAccountsProvider>

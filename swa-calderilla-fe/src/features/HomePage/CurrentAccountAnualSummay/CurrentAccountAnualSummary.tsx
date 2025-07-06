@@ -38,7 +38,17 @@ const CurrentAccountAnualSummary = ({ account, year }: CurrentAccountAnualSummar
   return (
     <>
       <div>
-        <p>{account.name}</p>
+        <Link
+          to={`/accounts/${account.id}/${year}`}
+          style={{
+            textDecoration: "underline",
+            color: "#1976d2",
+            fontWeight: 500,
+            cursor: "pointer",
+          }}
+        >
+          {account.name}
+        </Link>
       </div>
       {loading ? (
         <Box sx={{ display: "flex" }}>

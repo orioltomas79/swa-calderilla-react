@@ -341,6 +341,67 @@ export class CurrentAccountsEndpointsClient {
   }
 
   /**
+   * Returns the yearly details for the current account.
+   * @param accountId The current account
+   * @param year The year of the operations
+   * @return Returns the yearly details for the current account.
+   */
+  getCurrentAccountYearlyDetails(accountId: string, year: number): Promise<GetCurrentAccountYearlyDetailsResponse> {
+    let url_ = this.baseUrl + "/accounts/{accountId}/details/{year}";
+    if (accountId === undefined || accountId === null) throw new Error("The parameter 'accountId' must be defined.");
+    url_ = url_.replace("{accountId}", encodeURIComponent("" + accountId));
+    if (year === undefined || year === null) throw new Error("The parameter 'year' must be defined.");
+    url_ = url_.replace("{year}", encodeURIComponent("" + year));
+    url_ = url_.replace(/[?&]$/, "");
+
+    let options_: RequestInit = {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+      },
+    };
+
+    return this.http.fetch(url_, options_).then((_response: Response) => {
+      return this.processGetCurrentAccountYearlyDetails(_response);
+    });
+  }
+
+  protected processGetCurrentAccountYearlyDetails(response: Response): Promise<GetCurrentAccountYearlyDetailsResponse> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && response.headers.forEach) {
+      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+    }
+    if (status === 200) {
+      return response.text().then((_responseText) => {
+        let result200: any = null;
+        result200 =
+          _responseText === ""
+            ? null
+            : (JSON.parse(_responseText, this.jsonParseReviver) as GetCurrentAccountYearlyDetailsResponse);
+        return result200;
+      });
+    } else if (status === 401) {
+      return response.text().then((_responseText) => {
+        let result401: any = null;
+        result401 = _responseText === "" ? null : (JSON.parse(_responseText, this.jsonParseReviver) as ProblemDetails);
+        return throwException("Returns a 401 error message", status, _responseText, _headers, result401);
+      });
+    } else if (status === 500) {
+      return response.text().then((_responseText) => {
+        let result500: any = null;
+        result500 = _responseText === "" ? null : (JSON.parse(_responseText, this.jsonParseReviver) as ProblemDetails);
+        return throwException("Returns a 500 error message", status, _responseText, _headers, result500);
+      });
+    } else if (status !== 200 && status !== 204) {
+      return response.text().then((_responseText) => {
+        return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+      });
+    }
+    return Promise.resolve<GetCurrentAccountYearlyDetailsResponse>(null as any);
+  }
+
+  /**
    * Returns a yearly summary for the current account
    * @param accountId The current account
    * @param year The year of the operations
@@ -740,6 +801,10 @@ export interface CurrentAccount {
   type: string;
 }
 
+export interface GetCurrentAccountYearlyDetailsResponse {
+  types?: OperationTypeSummary[] | null;
+}
+
 export interface GetCurrentAccountYearlySummaryResponse {
   months?: MonthSummary[] | null;
 }
@@ -770,6 +835,23 @@ export interface Operation {
 export interface OperationType {
   id: number;
   name: string;
+}
+
+export interface OperationTypeSummary {
+  type?: string | null;
+  jan?: number | null;
+  feb?: number | null;
+  mar?: number | null;
+  apr?: number | null;
+  may?: number | null;
+  jun?: number | null;
+  jul?: number | null;
+  aug?: number | null;
+  sep?: number | null;
+  oct?: number | null;
+  nov?: number | null;
+  dec?: number | null;
+  total?: number | null;
 }
 
 export interface PatchOperationRequest {

@@ -1,5 +1,3 @@
-using System;
-
 namespace Calderilla.Services.Accounts;
 
 public class MonthSummary

@@ -30,7 +30,7 @@
         // Current accounts endpoints
         public const string CurrentAccountsEndpointsTag = "CurrentAccountsEndpoints";
         public const string GetCurrentAccounts = "accounts";
-
+        public const string GetCurrentAccountYearlyDetails = "accounts/{accountId:guid}/details/{year:int}";
         public const string GetCurrentAccountYearlySummary = "accounts/{accountId:guid}/summary/{year:int}";
     }
 }
