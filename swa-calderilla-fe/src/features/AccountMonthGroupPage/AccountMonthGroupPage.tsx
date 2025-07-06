@@ -84,14 +84,16 @@ const AccountMonthGroupPage = () => {
               </TableHead>
               <TableBody>
                 {groupedOperations && Object.keys(groupedOperations).length > 0 ? (
-                  Object.entries(groupedOperations).map(([type, amount]) => (
-                    <TableRow key={type}>
-                      <TableCell>{type}</TableCell>
-                      <TableCell align="right" sx={{ color: amount >= 0 ? "green" : "red" }}>
-                        {amount.toFixed(2)}
-                      </TableCell>
-                    </TableRow>
-                  ))
+                  Object.entries(groupedOperations)
+                    .sort((a, b) => b[1] - a[1]) // Sort by amount descending
+                    .map(([type, amount]) => (
+                      <TableRow key={type}>
+                        <TableCell>{type}</TableCell>
+                        <TableCell align="right" sx={{ color: amount >= 0 ? "green" : "red" }}>
+                          {amount.toFixed(2)}
+                        </TableCell>
+                      </TableRow>
+                    ))
                 ) : (
                   <TableRow>
                     <TableCell colSpan={2} align="center">
