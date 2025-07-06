@@ -85,7 +85,7 @@ const AccountMonthGroupPage = () => {
               <TableBody>
                 {groupedOperations && Object.keys(groupedOperations).length > 0 ? (
                   Object.entries(groupedOperations)
-                    .sort((a, b) => b[1] - a[1]) // Sort by amount descending
+                    .sort((a, b) => a[1] - b[1]) // Sort by amount ascending
                     .map(([type, amount]) => (
                       <TableRow key={type}>
                         <TableCell>{type}</TableCell>
