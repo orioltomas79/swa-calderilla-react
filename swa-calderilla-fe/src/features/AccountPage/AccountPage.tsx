@@ -34,7 +34,7 @@ const AccountMonthPage = () => {
     apiClient.currentAccountEndpointsClient
       .getCurrentAccountYearlyDetails(accountId, Number(year))
       .then((res) => setData(res?.types ?? null))
-      .catch((err) => setError("Failed to load data"))
+      .catch(() => setError("Failed to load data"))
       .finally(() => setLoading(false));
   }, [accountId, year]);
 
