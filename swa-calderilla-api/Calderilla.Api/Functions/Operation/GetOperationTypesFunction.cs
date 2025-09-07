@@ -30,6 +30,7 @@ namespace Calderilla.Api.Functions.Operation
         {
             var listOperationTypes = new List<Domain.OperationType>
             {
+                new() { Id = 0, Name = "Inversió" },
                 new() { Id = 1, Name = "Amazon" },
                 new() { Id = 2, Name = "Cardedeu - Aigua" },
                 new() { Id = 3, Name = "Cardedeu - Comunitat" },

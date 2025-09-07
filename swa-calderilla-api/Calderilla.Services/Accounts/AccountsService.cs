@@ -5,6 +5,8 @@ namespace Calderilla.Services.Accounts;
 
 public class AccountsService(IOperationsRepository operationsRepository) : IAccountsService
 {
+
+
     private readonly IOperationsRepository _operationsRepository = operationsRepository ?? throw new ArgumentNullException(nameof(operationsRepository));
 
     public async Task<List<MonthSummary>> GetYearlySummaryAsync(string userId, Guid currentAccount, int year)
@@ -20,7 +22,8 @@ public class AccountsService(IOperationsRepository operationsRepository) : IAcco
                 .ToList();
 
             decimal incomes = monthOps.Where(op => op.Amount > 0).Sum(op => op.Amount);
-            decimal expenses = monthOps.Where(op => op.Amount < 0).Sum(op => Math.Abs(op.Amount));
+            decimal expenses = monthOps.Where(op => op.Amount < 0 && op.Type != GlobalConstants.InvestmentType).Sum(op => Math.Abs(op.Amount));
+            decimal investments = monthOps.Where(op => op.Type == GlobalConstants.InvestmentType).Sum(op => Math.Abs(op.Amount));
             decimal result = incomes - expenses;
             decimal monthEndBalance = monthOps.OrderBy(op => op.MonthOperationNumber).FirstOrDefault()?.Balance ?? 0m;
 
@@ -29,6 +32,7 @@ public class AccountsService(IOperationsRepository operationsRepository) : IAcco
                 Month = month,
                 Incomes = incomes,
                 Expenses = expenses,
+                Investments = investments,
                 Result = result,
                 MonthEndBalance = monthEndBalance
             });

@@ -62,6 +62,7 @@ const CurrentAccountAnualSummary = ({ account, year }: CurrentAccountAnualSummar
                 <TableCell>Month</TableCell>
                 <TableCell align="right">Incomes</TableCell>
                 <TableCell align="right">Expenses</TableCell>
+                <TableCell align="right">Investments</TableCell>
                 <TableCell align="right">Result</TableCell>
                 <TableCell align="right">Month end balance</TableCell>
               </TableRow>
@@ -91,6 +92,9 @@ const CurrentAccountAnualSummary = ({ account, year }: CurrentAccountAnualSummar
                   </TableCell>
                   <TableCell align="right">
                     {typeof month?.expenses === "number" ? month.expenses.toFixed(2) : "-"}
+                  </TableCell>
+                  <TableCell align="right">
+                    {typeof month?.investments === "number" ? month.investments.toFixed(2) : "-"}
                   </TableCell>
                   <TableCell align="right">
                     {typeof month?.result === "number" ? month.result.toFixed(2) : "-"}

@@ -813,6 +813,7 @@ export interface MonthSummary {
   month?: number | null;
   incomes?: number | null;
   expenses?: number | null;
+  investments?: number | null;
   result?: number | null;
   monthEndBalance?: number | null;
 }
