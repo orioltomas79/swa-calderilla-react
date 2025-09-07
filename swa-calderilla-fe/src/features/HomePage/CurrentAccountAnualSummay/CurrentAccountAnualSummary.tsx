@@ -146,7 +146,7 @@ const CurrentAccountAnualSummary = ({ account, year }: CurrentAccountAnualSummar
                 <div style={{ display: "flex", justifyContent: "space-between" }}>
                   <span>Result:</span>
                   <span style={{ minWidth: 80, textAlign: "right", fontVariantNumeric: "tabular-nums" }}>
-                    {((totals?.incomes ?? 0) - (totals?.expenses ?? 0) - (totals?.investments ?? 0)).toFixed(2)}
+                    {((totals?.incomes ?? 0) - (totals?.expenses ?? 0)).toFixed(2)}
                   </span>
                 </div>
               </Paper>
