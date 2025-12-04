@@ -59,7 +59,7 @@ namespace Calderilla.Services.Banks.Ing
 
         private static bool IsTheHeaderRow(IRow row)
         {
-            for (int j = 0; j < 7; j++)
+            for (int j = 0; j < 5; j++)
             {
                 var cell = row.GetCell(j);
                 if (cell == null || string.IsNullOrWhiteSpace(cell.ToString()))
