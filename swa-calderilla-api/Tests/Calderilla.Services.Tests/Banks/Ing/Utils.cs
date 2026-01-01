@@ -36,9 +36,8 @@ namespace Calderilla.Services.Tests.Banks.Ing
             row.CreateCell(2).SetCellValue("Subcategoría");
             row.CreateCell(3).SetCellValue(descripcion);
             row.CreateCell(4).SetCellValue(string.Empty);
-            row.CreateCell(5).SetCellValue("No");
-            row.CreateCell(6).SetCellValue(importe);
-            row.CreateCell(7).SetCellValue(saldo);
+            row.CreateCell(5).SetCellValue(importe);
+            row.CreateCell(6).SetCellValue(saldo);
         }
     }
 }

@@ -11,8 +11,8 @@ namespace Calderilla.Services.Banks.Ing
         {
             Date = DateOnly.Parse(row.GetCell(0).ToString()!, CultureES);
             Description = row.GetCell(3).ToString()!;
-            Amount = Utils.ParseDecimalAutoDetectCulture(row.GetCell(6).ToString()!);
-            Total = Utils.ParseDecimalAutoDetectCulture(row.GetCell(7).ToString()!);
+            Amount = Utils.ParseDecimalAutoDetectCulture(row.GetCell(5).ToString()!);
+            Total = Utils.ParseDecimalAutoDetectCulture(row.GetCell(6).ToString()!);
         }
 
         public DateOnly Date { get; set; }

@@ -32,7 +32,7 @@ namespace Calderilla.Services.Tests.Banks.Ing
             Assert.NotNull(result.RawData);
             var rawLines = result.RawData;
             Assert.Equal("F. VALOR|CATEGORÍA|SUBCATEGORÍA|DESCRIPCIÓN|COMENTARIO|IMAGEN|IMPORTE (€)|SALDO (€)", rawLines[3]);
-            Assert.Equal("01/12/2023|Categoría|Subcategoría|Mock Description 1||No|100,00|1.000,00", rawLines[4]);
+            Assert.Equal("01/12/2023|Categoría|Subcategoría|Mock Description 1||100,00|1.000,00", rawLines[4]);
 
             Assert.NotNull(result.Operations);
             Assert.Equal(2, result.Operations.Count);
