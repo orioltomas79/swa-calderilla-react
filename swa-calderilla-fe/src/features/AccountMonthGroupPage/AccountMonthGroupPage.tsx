@@ -17,7 +17,10 @@ import apiClient from "../../api/apiClient";
 import type { Operation } from "../../api/types";
 
 const AccountMonthGroupPage = () => {
-  const [groupedOperations, setGroupedOperations] = useState<{ [type: string]: number }>({});
+  // grouped data includes total amount and full list of operations for each type
+  const [groupedOperations, setGroupedOperations] = useState<{
+    [type: string]: { total: number; operations: Operation[] };
+  }>({});
   const [loading, setLoading] = useState(false);
 
   const { accountId, year, month } = useParams<{
@@ -38,14 +41,19 @@ const AccountMonthGroupPage = () => {
           Number(year),
           Number(month)
         );
-        // Group by type and sum amounts, excluding ignored operations
-        const grouped: { [type: string]: number } = {};
+        // Group by type, sum amounts and retain operations list, excluding ignored operations
+        const grouped: {
+          [type: string]: { total: number; operations: Operation[] };
+        } = {};
         operationsResponse
           .filter((op: Operation) => !op.ignore)
           .forEach((op: Operation) => {
             const type = op.type ?? "Sin tipo";
-            if (!grouped[type]) grouped[type] = 0;
-            grouped[type] += op.amount;
+            if (!grouped[type]) {
+              grouped[type] = { total: 0, operations: [] };
+            }
+            grouped[type].total += op.amount;
+            grouped[type].operations.push(op);
           });
         setGroupedOperations(grouped);
       } catch (err) {
@@ -85,14 +93,33 @@ const AccountMonthGroupPage = () => {
               <TableBody>
                 {groupedOperations && Object.keys(groupedOperations).length > 0 ? (
                   Object.entries(groupedOperations)
-                    .sort((a, b) => a[1] - b[1]) // Sort by amount ascending
-                    .map(([type, amount]) => (
-                      <TableRow key={type}>
-                        <TableCell>{type}</TableCell>
-                        <TableCell align="right" sx={{ color: amount >= 0 ? "green" : "red" }}>
-                          {amount.toFixed(2)}
-                        </TableCell>
-                      </TableRow>
+                    .sort((a, b) => a[1].total - b[1].total) // Sort by amount ascending
+                    .map(([type, info]) => (
+                      <>
+                        <TableRow key={type}>
+                          <TableCell>{type}</TableCell>
+                          <TableCell
+                            align="right"
+                            sx={{ color: info.total >= 0 ? "green" : "red" }}
+                          >
+                            {info.total.toFixed(2)}
+                          </TableCell>
+                        </TableRow>
+                        {/* operations for this group */}
+                        {info.operations.map((op) => (
+                          <TableRow key={op.id} sx={{ backgroundColor: '#fafafa' }}>
+                            <TableCell sx={{ pl: 4 }}>
+                              {op.description || 'sin descripción'}
+                            </TableCell>
+                            <TableCell
+                              align="right"
+                              sx={{ color: op.amount >= 0 ? 'green' : 'red' }}
+                            >
+                              {op.amount.toFixed(2)}
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </>
                     ))
                 ) : (
                   <TableRow>

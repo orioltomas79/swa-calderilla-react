@@ -25,3 +25,8 @@ dist-ssr
 
 # Coverage files
 coverage/
+
+# Azurite
+__blobstorage__/
+/__azurite*
+/AzuriteConfig
